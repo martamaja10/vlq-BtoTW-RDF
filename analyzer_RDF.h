@@ -75,7 +75,7 @@ public :
  
    rdf(TString inputFileName, TString preselFileName, TString finalselFileName);
    virtual ~rdf();
-   virtual void     step1RDF_forLJMet(std::string sample, TString chan, TString testNum, int year);
+   virtual void     analyzer_RDF(std::string sample, TString chan, TString testNum, int year);
    //virtual void     histoDrawRDF(vector<std::string> inputFile);
 };
 
