@@ -25,10 +25,10 @@ In order to run the code, the user must have access to cmslpc-sl7.fnal.gov and t
 
 Once access is set up and the user has the github repository configured along with a working GRID certificate, the program should be runnable.
 
-To actually run the analysis, use the following command: root -l -b -q callRDF.C\(\"[Channel]\",\"[testNum]\",\"[inputfile]\"\)
+To actually run the analysis, use the following command: root -l -b -q callRDF.C\\(\\"`Channel`\\",\\"`testNum`\\",\\"`inputfile`\\"\\)
 
-- Channel = “Muon” or “Electron”
-- testNum = an integer
-- inputfile = path to input file
+- `Channel` = “Muon” or “Electron”
+- `testNum` = an integer
+- `inputfile` = path to input file
 
 It's important to note that every parenthesis and quotation must be escaped for proper syntax. 
