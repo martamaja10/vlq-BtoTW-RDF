@@ -447,7 +447,10 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	  .Define("isValidBDecay","tj_vec[5]")\
 	  .Define("taggedWbjetJet","tj_vec[6]")\
 	  .Define("taggedTjet","tj_vec[7]")\
-	  .Define("taggedWjet","tj_vec[8]");
+	  .Define("taggedWjet","tj_vec[8]")\
+	  .Define("pnWvsQCD", "FatJet_particleNet_WvsQCD")\
+	  .Define("pnTvsQCD", "FatJet_particleNet_TvsQCD")\
+	  .Define("pnQCD", "FatJet_particleNet_QCD");
 	// -------------------------------------------------
 	// 		Save Snapshot to file
 	// -------------------------------------------------
