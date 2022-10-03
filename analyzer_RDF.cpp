@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------------------- //
 // Implimentation of RDataFrame in C++.					                   //
 // Comments on creating a singly produced VLQ search			                   //
-// To Run on Command Line:   root -l callRDF.C\(\"Muon(OR)Electron\",\"testNumber\"\)      //
+// To Run on Command Line:   root -l callRDF.C\(\"Muon(OR)Electron\",\"testNumber\"\,\"root://cmsxrootd.fnal.gov//store/...file.root\")      //
 // --------------------------------------------------------------------------------------- //
 
 #define rdf_cxx
@@ -33,25 +33,23 @@ using namespace ROOT::VecOps;
 void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int year)
 {
 	ROOT::EnableImplicitMT();
-//	const std::string samplesBasePath = "root://cmsxrootd.fnal.gov/";
 	TStopwatch time;
 	time.Start();
-// Leptonic decay (1Lep)
 	TString nChan = "n"+chan;
 	const char* stdNChan = nChan;
 	std::cout << "Channel Type: " << chan << std::endl;
 	bool isNominal = isNominal;
-// Regions will be signal and TTTosemileptonic which is background
-	TString region = "Signal";
-	if(isSig == true){region = "Signal";} // BPrimeBPrime
-	else if(isTT == true){region = "TTToSemiLeptonic";} // TTToSemiLeptonic
-	std::cout<< "Region: " << region << std::endl;
+
+	// Samples will be signal, ttbar (a background), and possibly others...
+	TString sample = "signal";
+	if(isTT == true){sample = "ttbar";} 
+	std::cout<< "Sample: " << sample << std::endl;
+	
 	// -------------------------------------------------------
 	// 			DNN Stuff
 	// -------------------------------------------------------
-// Need new json files
-//	std::string dnnFileBB = "vlq_mlp_Sept09_BB_3arch.json";
-	// std::string dnnFileBB = "vlq_mlp_June_08_20_BB_3arch.json";
+	// Need new json files for B -> tW!
+	// std::string dnnFileBB = "vlq_mlp_Sept09_BB_3arch.json";
 	// std::ifstream input_cfgBB( dnnFileBB );
 	// lwt::JSONConfig cfgBB = lwt::parse_json(input_cfgBB);
 	// lwt::LightweightNeuralNetwork* lwtnnBB = new lwt::LightweightNeuralNetwork(cfgBB.inputs, cfgBB.layers, cfgBB.outputs);
@@ -61,13 +59,13 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	// --------------------------------------------------------------------------------------------------------------------
 	
 	// ----------------------------------------------------
-	//   		DEACY/GENTTBAR CALCULATOR:
+	//   		ttbar background mass CALCULATOR:
 	// ----------------------------------------------------
-// Single decay B-->tW
-	auto decayModeSelection_genTTbarMassCalc = [region](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status)
+	
+	auto genttbarMassCalc = [region](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status)
 	{
 		int returnVar = 0;
-		if(region == "TTToSemiLeptonic")
+		if(sample == "ttbar")
 		{
 			int genTTbarMass = -999;
 			double topPtWeight = 1.0;
@@ -123,41 +121,40 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	};
 
 	// ----------------------------------------------------
-	//     minMleppJet VECTOR RETURN + NJETSDEEPFLAV
+	//     minM_lep_jet VECTOR RETURN + NJETSDEEPFLAV
 	// ----------------------------------------------------
-// Minimum mass of lepton plus jet
-	auto minMleppJet_calc = [isNominal](ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector lepton_lv, ROOT::VecOps::RVec<float> Jet_btagDeepFlavB_GCJ)
+	
+	auto minM_lep_jet_calc = [isNominal](ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector lepton_lv, ROOT::VecOps::RVec<float> Jet_btagDeepFlavB_GCJ)
 	{
 		float ind_MinMlj = -1; // This gets changed into int in .Define()
 		float minMleppJet = 1e8;
-		ROOT::VecOps::RVec<int> theJetBTag_JetSubCalc_PtOrdered (jet_pt.size(),0);
-		float NJetsDeepFlavwithSF_JetSubCalc = 0;
+		ROOT::VecOps::RVec<int> jet_DeepFlav (jet_pt.size(),0);
+		float NJetsDeepFlavwithSF = 0;
 		TLorentzVector jet_lv;
 		
 		for(unsigned int ijet=0; ijet < jet_pt.size(); ijet++)
 		{
 			jet_lv.SetPtEtaPhiM(jet_pt.at(ijet),jet_eta.at(ijet),jet_phi.at(ijet),jet_mass.at(ijet));
-			if(Jet_btagDeepFlavB_GCJ[ijet] > 0.3033){theJetBTag_JetSubCalc_PtOrdered.at(ijet) = 1;} // BTagged or not
-			else if(Jet_btagDeepFlavB_GCJ[ijet] < 0.3033){theJetBTag_JetSubCalc_PtOrdered.at(ijet) = 0;}
+			if(jet_DeepFlav_GCJ[ijet] > 0.3033){theJetBTag_JetSubCalc_PtOrdered.at(ijet) = 1;} // BTagged or not
+			else if(jet_DeepFlav_GCJ[ijet] < 0.3033){theJetBTag_JetSubCalc_PtOrdered.at(ijet) = 0;}
 			
 			if((lepton_lv + jet_lv).M() < minMleppJet)
 			{
 				minMleppJet = fabs((lepton_lv + jet_lv).M());
 				ind_MinMlj = ijet;
 			}
-			if(isNominal && theJetBTag_JetSubCalc_PtOrdered.at(ijet) == 1){NJetsDeepFlavwithSF_JetSubCalc += 1;}
+			if(isNominal && jet_DeepFlav.at(ijet) == 1){NJetsDeepFlavwithSF += 1;}
+			// EXPANSION FOR BTAG UNCERTS GOES HERE!!
 		}
-		ROOT::VecOps::RVec<float> minMlj = {minMleppJet,ind_MinMlj,NJetsDeepFlavwithSF_JetSubCalc};
+		ROOT::VecOps::RVec<float> minMlj = {minMleppJet,ind_MinMlj,NJetsDeepFlavwithSF};
 		return minMlj;
 	};
 
 	// -----------------------------------------------
 	//   LWTNN IMPLIMENTATION AND MYMAP CALCULATION
-	// -----------------------------------------------
-// jec_ TBD
-// Slim down for only B version 
+	// -----------------------------------------------	
 
- 	auto predictMLP = [lwtnnBB](float corr_met_MultiLepCalc, float AK4HT, int NJets_JetSubCalc, int NJetsAK8_JetSubCalc, float AK4HTpMETpLepPt, float jetPt_1, float jetPt_2, float jetPt_3, float sdMass_1, float sdMass_2, float sdMass_3, float dnnJ_1, float dnnJ_2, float dnnJ_3, float dnnT_1, float dnnT_2, float dnnT_3, float dnnH_1, float dnnH_2, float dnnH_3, float dnnZ_1, float dnnZ_2, float dnnZ_3, float dnnW_1, float dnnW_2, float dnnW_3, float dnnB_1, float dnnB_2, float dnnB_3, int dnnLargest_1, int dnnLargest_2, int dnnLargest_3, int nJ_DeepAK8, int nT_DeepAK8, int nH_DeepAK8, int nZ_DeepAK8, int nW_DeepAK8, int nB_DeepAK8, float tau21_1, float tau21_2, float tau21_3, float minDR_leadAK8otherAK8)
+	auto predictMLP = [lwtnnBB](float MET_pt, float Jet_HT, int NJets, int NFatJets, float Jet_ST, float FatJet_pt_1, float FatJet_pt_2, float FatJet_sdMass_1, float FatJet_sdMass_2, float dpak8_J_1, float dpak8_J_2, float dpak8_T_1, float dpak8_T_2, float dpak8_W_1, float dpak8_W_2, int dpak8_tag_1, int dpak8_tag_2, int nJ_DeepAK8, int nT_DeepAK8, int nW_DeepAK8, float tau21_1, float tau21_2, float minDR_leadAK8otherAK8)
 	{
 	  ROOT::VecOps::RVec<float> dnn_SigWjetTtbar (6,0);
 	  std::map<std::string,double> varMapBB;
@@ -170,29 +167,21 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	  };
 	  
 	  varMapBB = {
-	    {"corr_met_MultiLepCalc", corr_met_MultiLepCalc},
-	    {"AK4HTpMETpLepPt", AK4HTpMETpLepPt},
-	    {"AK4HT", AK4HT},
-	    {"NJets_JetSubCalc", NJets_JetSubCalc},
-	    {"NJetsAK8_JetSubCalc", NJetsAK8_JetSubCalc},
+	    {"MET_pt", MET_pt},
+	    {"Jet_ST", Jet_ST},
+	    {"Jet_HT", Jet_HT},
+	    {"NJets", NJets},
+	    {"NFatJets", NFatJets},
 	    {"minDR_leadAK8otherAK8", minDR_leadAK8otherAK8},
-	    {"nH_DeepAK8", nH_DeepAK8},
 	    {"nT_DeepAK8", nT_DeepAK8},
-	    {"jetPt_1", jetPt_1},
-	    {"jetPt_2", jetPt_2},
-	    {"jetPt_3", jetPt_3},
-	    {"sdMass_1", sdMass_1},
-	    {"sdMass_2", sdMass_2},
-	    {"sdMass_3", sdMass_3},
-	    {"dnnLargest_1", dnnLargest_1},
-	    {"dnnLargest_2", dnnLargest_2},
-	    {"dnnLargest_3", dnnLargest_3},
-	    {"dnnJ_1", dnnJ_1},
-	    {"dnnJ_2", dnnJ_2},
-	    {"dnnJ_3", dnnJ_3},
-	    {"dnnH_2", dnnH_2},
-	    {"dnnH_3", dnnH_3},
-	    {"dnnT_1", dnnT_1},
+	    {"FatJet_pt_1", FatJet_pt_1},
+	    {"FatJet_pt_2", FatJet_pt_2},
+	    {"FatJet_sdMass_1", FatJet_sdMass_1},
+	    {"FatJet_sdMass_2", FatJet_sdMass_2},
+	    {"dpak8_tag_1", dpak8_tag_1},
+	    {"dpak8_tag_2", dpak8_tag_2},
+	    {"dpak8_J_1", dpak8_J_1},
+	    {"dpak8_J_2", dpak8_J_2},
 	  };
 	  
 	  myMapBB = lwtnnBB->compute(varMapBB);
@@ -206,18 +195,14 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	// -------------------------------------------------------
 	//               Flags and First Filter 
 	// -------------------------------------------------------
-// Twiki with reccommended ultralegacy values
+	// Twiki with reccommended ultralegacy values
 	auto rdf = ROOT::RDataFrame("Events",sample); // Initial data
 	std::cout << "Number of Events: " << rdf.Count().GetValue() << std::endl;
 
-	//	auto largeFlags = rdf.Filter("Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalTightHalo2016Filter == 1")
-
-	auto largeFlags = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1")
-			     .Define("corr_met_MultiLepCalc","MET_pt")\
-			     .Define("corr_met_phi_MultiLepCalc","MET_phi")\
-			     .Filter("corr_met_MultiLepCalc > 50");
-	std::cout << "Number of Events post Flags: " << largeFlags.Count().GetValue() << std::endl;
-	auto Lep_df0 = largeFlags.Define("nLeptons", stdNChan)\
+	auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1")
+			     .Filter("MET_pt > 50");
+	std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
+	auto Lep_df0 = METfilters.Define("nLeptons", stdNChan)\
 				 .Filter("nLeptons > 0");  // REQUIRED to come before any .Define operators for channels
 	std::cout << "Number of Events with Leptons: " << Lep_df0.Count().GetValue() << std::endl;
 
@@ -232,121 +217,129 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	//Compare triggers to gridpacks and cut out unneccessary or bad ones
 	if(chan == "Muon")
 	{
-		auto HLTTriggers = Lep_df0.Filter("HLT_Mu50 == 1 || HLT_Mu15_IsoVVVL_PFHT450 == 1 || \
-						   HLT_Mu15_IsoVVVL_PFHT600 == 1 || HLT_Mu50_IsoVVVL_PFHT450 == 1");
+		auto HLTTriggers = Lep_df0.Filter("HLT_Mu50 == 1");
+		
 		auto Lep_df1 = HLTTriggers.Define("LPassMu","Muon_pt > 10 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 1 && Muon_looseId == true")\
 					  .Define("nLPassMu","(int) Sum(LPassMu)")\
 					  .Filter("nLPassMu == 1");
-		std::cout << "Number of Events with Loose Muons: " << Lep_df1.Count().GetValue() << std::endl;
+		std::cout << "Number of Events with 1 loose muon: " << Lep_df1.Count().GetValue() << std::endl;
+		
 		auto Lep_df2 = Lep_df1.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3")\
 				      .Define("nTPassMu","(int) Sum(TPassMu)")\
 				      .Filter("nTPassMu == 1");
-		std::cout << "Number of Events with Tight Muons: " << Lep_df2.Count().GetValue() << std::endl;
+		std::cout << "Number of Events with 1 Tight Muon: " << Lep_df2.Count().GetValue() << std::endl;
+		
 		auto Lep_dfEl = Lep_df2.Define("passEl","Electron_pt > 10 && Electron_miniPFRelIso_all < 0.4 && \
 							 Electron_mvaFall17V2noIso_WPL == true && abs(Electron_eta) < 2.5")\
 				       .Define("nPassEl","(int) Sum(passEl)")\
-				       .Filter("nElectron == 0 || (nElectron > 0 && nPassEl == 0)","Good Muon events if no electrons existed or if ");
-		std::cout << "Good Muon Events with or without the existance of Electrons: " << Lep_dfEl.Count().GetValue() << std::endl;
-		xLep = Lep_dfEl.Define("leptonPt_MultiLepCalc","Muon_pt[TPassMu == true]")\
-			       .Define("leptonEta_MultiLepCalc","Muon_eta[TPassMu == true]")\
-			       .Define("leptonPhi_MultiLepCalc","Muon_phi[TPassMu == true]")\
-			       .Define("leptonMass_MultiLepCalc","Muon_mass[TPassMu == true]")\
-			       .Define("leptonMiniIso_MultiLepCalc","Muon_miniPFRelIso_all[TPassMu == true]");
+				       .Filter("nElectron == 0 || (nElectron > 0 && nPassEl == 0)","Electron veto: none passing loose");
+		std::cout << "Number of Events passing the electron veto: " << Lep_dfEl.Count().GetValue() << std::endl;
+		
+		xLep = Lep_dfEl.Define("lepton_pt","Muon_pt[TPassMu == true]")\
+			       .Define("lepton_eta","Muon_eta[TPassMu == true]")\
+			       .Define("lepton_phi","Muon_phi[TPassMu == true]")\
+			       .Define("lepton_mass","Muon_mass[TPassMu == true]")\
+			       .Define("lepton_miniIso","Muon_miniPFRelIso_all[TPassMu == true]");
 	}
 	else if(chan == "Electron")
 	{
-		auto HLTTriggers = Lep_df0.Filter("HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1 || \
-						   HLT_Ele15_IsoVVVL_PFHT450 == 1 || HLT_Ele50_IsoVVVL_PFHT450 == 1");
+		auto HLTTriggers = Lep_df0.Filter("HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1"); // THINK ABOUT THIS! TOO TIGHT...?
 		auto Lep_df1 = HLTTriggers.Define("LPassEl","Electron_pt > 10 && Electron_miniPFRelIso_all < 0.4 && \
 							     Electron_mvaFall17V2noIso_WPL == true && abs(Electron_eta) < 2.5")\
 					  .Define("nLPassEl","(int) Sum(LPassEl)")\
 					  .Filter("nLPassEl == 1");
-		std::cout << "Number of Events with Loose Electrons: " << Lep_df1.Count().GetValue() << std::endl;
+		std::cout << "Number of Events with 1 Loose Electron: " << Lep_df1.Count().GetValue() << std::endl;
+		
 		auto Lep_df2 = Lep_df1.Define("TPassEl","Electron_pt > 30 && Electron_mvaFall17V2noIso_WP90 == true && \
 							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
 				      .Define("nTPassEl","(int) Sum(TPassEl)")\
 				      .Filter("nTPassEl == 1");
-		std::cout << "Number of Events with Tight Electrons: " << Lep_df2.Count().GetValue() << std::endl;
+		std::cout << "Number of Events with 1 Tight Electron: " << Lep_df2.Count().GetValue() << std::endl;
+		
 		auto Lep_dfMu = Lep_df2.Define("passMu","Muon_pt > 10 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 1 && Muon_looseId == true")\
 				       .Define("nPassMu","(int) Sum(passMu)")\
-				       .Filter("nMuon == 0 || (nMuon > 0 && nPassMu == 0)","Good Electron events if no Muons existed");
-		std::cout << "Good Electron Events with or without the existance of Muons: " << Lep_dfMu.Count().GetValue() << std::endl;
-		xLep = Lep_dfMu.Define("leptonPt_MultiLepCalc","Electron_pt[TPassEl == true]")\
-			       .Define("leptonEta_MultiLepCalc","Electron_eta[TPassEl == true]")\
-			       .Define("leptonPhi_MultiLepCalc","Electron_phi[TPassEl == true]")\
-			       .Define("leptonMass_MultiLepCalc","Electron_mass[TPassEl == true]")\
-			       .Define("leptonMiniIso_MultiLepCalc","Electron_miniPFRelIso_all[TPassEl == true]");
+				       .Filter("nMuon == 0 || (nMuon > 0 && nPassMu == 0)","Muon veto: none past loose");
+		std::cout << "Number of Events passing the muon veto: " << Lep_dfMu.Count().GetValue() << std::endl;
+		
+		xLep = Lep_dfMu.Define("lepton_pt","Electron_pt[TPassEl == true]")\
+			       .Define("lepton_eta","Electron_eta[TPassEl == true]")\
+			       .Define("lepton_phi","Electron_phi[TPassEl == true]")\
+			       .Define("lepton_mass","Electron_mass[TPassEl == true]")\
+			       .Define("lepton_miniIso","Electron_miniPFRelIso_all[TPassEl == true]");
 	}
+	
 	// --------------------------------------------------------
-	// 		     AK4 JETS w/ cleaning
+	// 		      JET SELECTION w/ cleaning
 	// --------------------------------------------------------
-	// Supposedly, this is where the particleNet variables will go
+	
 	auto jet_ft0 = xLep.Filter("nJet > 0 && nFatJet > 0");
 	std::cout << "Number of Events with at least one AK4 and AK8 Jet: " << jet_ft0.Count().GetValue() << std::endl;
 
-	auto jet_df0 = jet_ft0.Define("goodAK4Jets","Jet_pt > 30 && abs(Jet_eta) < 2.4 && Jet_jetId > 1")\
+	auto jet_df0 = jet_ft0.Define("goodJets","Jet_pt > 30 && abs(Jet_eta) < 2.4 && Jet_jetId > 1")\
 			      .Define("dR_LIM_AK4","(float) 0.4")\
-			      .Define("GCAK4Jets","cleanJets(Jet_pt,Jet_mass,goodAK4Jets,Jet_eta,Jet_phi,\
-			      					      leptonPt_MultiLepCalc,leptonMass_MultiLepCalc,\
-			      					      leptonEta_MultiLepCalc,leptonPhi_MultiLepCalc,dR_LIM_AK4)")\
-                             .Define("NJets_JetSubCalc","(int) Sum(GCAK4Jets)")\
-			      .Define("theJetPt_JetSubCalc_PtOrdered","Jet_pt[GCAK4Jets == true]")\
-			      .Define("theJetEta_JetSubCalc_PtOrdered","Jet_eta[GCAK4Jets == true]")\
-			      .Define("theJetPhi_JetSubCalc_PtOrdered","Jet_phi[GCAK4Jets == true]")\
-			      .Define("theJetMass_JetSubCalc_PtOrdered","Jet_mass[GCAK4Jets == true]")\
-			      .Define("Jet_btagDeepFlavB_GCJ","Jet_btagDeepFlavB[GCAK4Jets == true]")\
-			      .Define("goodAK8Jets","FatJet_jetId > 1 && abs(FatJet_eta) < 2.4 && FatJet_pt > 200")\
+			      .Define("goodcleanJets","cleanJets(Jet_pt,Jet_mass,goodJets,Jet_eta,Jet_phi,\
+			      					 lepton_pt,lepton_mass,lepton_eta,lepton_phi,dR_LIM_AK4)")\
+                              .Define("NJets_central","(int) Sum(goodcleanJets)")\
+			      .Define("gcJet_pt","Jet_pt[goodcleanJets == true]")\
+			      .Define("gcJet_eta","Jet_eta[goodcleanJets == true]")\
+			      .Define("gcJet_phi","Jet_phi[goodcleanJets == true]")\
+			      .Define("gcJet_mass","Jet_mass[goodcleanJets == true]")\
+			      .Define("gcJet_DeepFlav","Jet_btagDeepFlavB[goodcleanJets == true]")\
+			      .Define("forwardJets","Jet_pt > 30 && abs(Jet_eta) >= 2.4 && Jet_jetId > 1")\
+			      .Define("dR_LIM_AK4","(float) 0.4")\
+			      .Define("goodcleanForwardJets","cleanJets(Jet_pt,Jet_mass,forwardJets,Jet_eta,Jet_phi,\
+			      					 lepton_pt,lepton_mass,lepton_eta,lepton_phi,dR_LIM_AK4)")\
+                              .Define("NJets_forward","(int) Sum(goodcleanForwardJets)")\
+			      .Define("gcforwJet_pt","Jet_pt[goodcleanForwardJets == true]")\
+			      .Define("gcforwJet_eta","Jet_eta[goodcleanForwardJets == true]")\
+			      .Define("gcforwJet_phi","Jet_phi[goodcleanForwardJets == true]")\
+			      .Define("gcforwJet_mass","Jet_mass[goodcleanForwardJets == true]")\
+			      .Define("gcforwJet_DeepFlav","Jet_btagDeepFlavB[goodcleanForwardJets == true]")\
+			      .Define("goodFatJets","FatJet_jetId > 1 && abs(FatJet_eta) < 2.4 && FatJet_pt > 200")\
 			      .Define("dR_LIM_AK8","(float) 0.8")\
-			      .Define("GCAK8Jets","cleanJets(FatJet_pt,FatJet_mass,goodAK8Jets,FatJet_eta,FatJet_phi,\
-			      				     leptonPt_MultiLepCalc,leptonMass_MultiLepCalc,leptonEta_MultiLepCalc,\
-			      				     leptonPhi_MultiLepCalc,dR_LIM_AK8)")\
-			      .Define("NJetsAK8_JetSubCalc","(int) Sum(GCAK8Jets)")\
-			      .Define("theJetAK8Pt_JetSubCalc_PtOrdered","FatJet_pt[GCAK8Jets == true]")\
-			      .Define("theJetAK8Eta_JetSubCalc_PtOrdered","FatJet_eta[GCAK8Jets == true]")\
-			      .Define("theJetAK8Phi_JetSubCalc_PtOrdered","FatJet_phi[GCAK8Jets == true]")\
-			      .Define("theJetAK8Mass_JetSubCalc_PtOrdered","FatJet_mass[GCAK8Jets == true]")\
-			      .Define("theJetAK8SoftDropCorr_PtOrdered","FatJet_msoftdrop[GCAK8Jets == true]");
+			      .Define("goodcleanFatJets","cleanJets(FatJet_pt,FatJet_mass,goodFatJets,FatJet_eta,FatJet_phi,\
+			      				            lepton_pt,lepton_mass,lepton_eta,lepton_phi,dR_LIM_AK8)")\
+			      .Define("NFatJets","(int) Sum(goodcleanFatJets)")\
+			      .Define("gcFatJet_pt","FatJet_pt[goodcleanFatJets == true]")\
+			      .Define("gcFatJet_eta","FatJet_eta[goodcleanFatJets == true]")\
+			      .Define("gcFatJet_phi","FatJet_phi[goodcleanFatJets == true]")\
+			      .Define("gcFatJet_mass","FatJet_mass[goodcleanFatJets == true]")\
+			      .Define("gcFatJet_msoftdrop","FatJet_msoftdrop[goodcleanFatJets == true]");
 
 	// ---------------------------------------------------------
 	// 	  HT Calculation and Final Preselection Cut
 	// ---------------------------------------------------------
-	auto HT_calc = jet_df0.Define("AK4HT","Sum(Jet_pt[GCAK4Jets == true])")\
-			      .Filter("AK4HT > 510");
+	auto HT_calc = jet_df0.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])")\
+			      .Filter("Jet_HT > 510");
 	std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
 
 	// ---------------------------------------------------------
 	//    Uncomment to save seperate Preselection .root file
 	// ---------------------------------------------------------
-// 	TString outputFilePS = "RDF_"+region+"_FullPreselectionHFIles_"+chan+"_PS.root";
-// 	const char* stdOutputFilePS = outputFilePS;
-// 	std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
-// 	HT_calc.Snapshot("Events", stdOutputFilePS);
-// 	std::cout << "Output File: " << outputFilePS << std::endl << "-------------------------------------------------" << std::endl;
-// }
+	// TString outputFilePS = "RDF_"+sample+"_presel_"+chan+".root";
+	// const char* stdOutputFilePS = outputFilePS;
+	// std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
+	// HT_calc.Snapshot("Events", stdOutputFilePS);
+	// std::cout << "Output File: " << outputFilePS << std::endl << "-------------------------------------------------" << std::endl;
+	// }
 	//----------------------------------------------------------
-	//       Uncomment if using a preselection file
+	//       Uncomment from here to the bottom if starting from a preselection file!!
 	//----------------------------------------------------------
 	//	auto HT_calc = rdf;	
-
 
 	// ---------------------------------------------------------
 	// 		Post Preselection Analysis
 	// ---------------------------------------------------------
-//      Look for particle net instead of deepAK8 (look at the large chart with variable names)
-	auto postPresel = HT_calc.Define("decayMode_or_genTTbarMass",decayModeSelection_genTTbarMassCalc,{"nGenPart","GenPart_pdgId","GenPart_mass", \
+	auto postPresel = HT_calc.Define("genTTbarMass",genTTbarMassCalc,{"nGenPart","GenPart_pdgId","GenPart_mass", \
 	      "GenPart_pt","GenPart_phi","GenPart_eta",			\
 	      "GenPart_genPartIdxMother","GenPart_status"})		\
-	  .Filter("NJetsAK8_JetSubCalc > 0")				\
-	  .Define("lepton_lv","fVectorConstructor(leptonPt_MultiLepCalc,leptonEta_MultiLepCalc,\
-				      					 leptonPhi_MultiLepCalc,leptonMass_MultiLepCalc)")\
-	  .Define("AK4jet_lv","fVectorConstructor(theJetPt_JetSubCalc_PtOrdered,theJetEta_JetSubCalc_PtOrdered,\
-				      					 theJetPhi_JetSubCalc_PtOrdered,theJetMass_JetSubCalc_PtOrdered)")\
-	  .Define("AK8jet_lv","fVectorConstructor(theJetAK8Pt_JetSubCalc_PtOrdered,theJetAK8Eta_JetSubCalc_PtOrdered,\
-				      					 theJetAK8Phi_JetSubCalc_PtOrdered,theJetAK8Mass_JetSubCalc_PtOrdered)")\
-	  .Define("AK4HTpMETpLepPt","AK4HT + leptonPt_MultiLepCalc[0] + corr_met_MultiLepCalc")	\
-	  .Define("jetPt_1","theJetAK8Pt_JetSubCalc_PtOrdered[0]")	\
-	  .Define("jetPt_2","theJetAK8Pt_JetSubCalc_PtOrdered[1]")	\
-	  .Define("jetPt_3","theJetAK8Pt_JetSubCalc_PtOrdered[2]")	\
+	  .Filter("NFatJets > 0")				        \
+	  .Define("lepton_lv","fVectorConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
+	  .Define("Jets_lv","fVectorConstructor(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass)")\
+	  .Define("FatJet_lv","fVectorConstructor(gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass)")\
+	  .Define("Jet_ST","Jet_HT + lepton_pt[0] + MET_pt")	\
+	  .Define("FatJet_pt_1","FatJet_pt[0]")	\
+	  .Define("FatJet_pt_2","FatJet_pt[1]")	\
 	  .Define("sdMass","FatJet_msoftdrop[GCAK8Jets == true]")	\
 	  .Define("sdMass_1","sdMass[0]")				\
 	  .Define("sdMass_2","sdMass[1]")				\
