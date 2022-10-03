@@ -311,12 +311,13 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	// ---------------------------------------------------------
 	auto HT_calc = jet_df0.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])")\
 			      .Filter("Jet_HT > 510");
+		  	      .Filter("NFatJets > 0")				        \
 	std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
 
 	// ---------------------------------------------------------
 	//    Uncomment to save seperate Preselection .root file
 	// ---------------------------------------------------------
-	// TString outputFilePS = "RDF_"+sample+"_presel_"+chan+".root";
+	// TString outputFilePS = "RDF_"+sample+"_presel_"+chan+"_"+testnum+".root";
 	// const char* stdOutputFilePS = outputFilePS;
 	// std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
 	// HT_calc.Snapshot("Events", stdOutputFilePS);
@@ -331,129 +332,89 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	// 		Post Preselection Analysis
 	// ---------------------------------------------------------
 	auto postPresel = HT_calc.Define("genTTbarMass",genTTbarMassCalc,{"nGenPart","GenPart_pdgId","GenPart_mass", \
-	      "GenPart_pt","GenPart_phi","GenPart_eta",			\
-	      "GenPart_genPartIdxMother","GenPart_status"})		\
-	  .Filter("NFatJets > 0")				        \
-	  .Define("lepton_lv","fVectorConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
-	  .Define("Jets_lv","fVectorConstructor(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass)")\
-	  .Define("FatJet_lv","fVectorConstructor(gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass)")\
-	  .Define("Jet_ST","Jet_HT + lepton_pt[0] + MET_pt")	\
-	  .Define("FatJet_pt_1","FatJet_pt[0]")	\
-	  .Define("FatJet_pt_2","FatJet_pt[1]")	\
-	  .Define("sdMass","FatJet_msoftdrop[GCAK8Jets == true]")	\
-	  .Define("sdMass_1","sdMass[0]")				\
-	  .Define("sdMass_2","sdMass[1]")				\
-	  .Define("sdMass_3","sdMass[2]")				\
-	  .Define("dnnJ","FatJet_deepTag_QCDothers[GCAK8Jets == true]")	\
-	  .Define("dnnJ_1","dnnJ[0]")					\
-	  .Define("dnnJ_2","dnnJ[1]")					\
-	  .Define("dnnJ_3","dnnJ[2]")					\
-	  .Define("int_dnnT","(FatJet_deepTag_TvsQCD * FatJet_deepTag_QCD) / (1 - FatJet_deepTag_TvsQCD)") \
-	  .Define("dnnT","int_dnnT[GCAK8Jets == true]")			\
-	  .Define("dnnT_1","dnnT[0]")					\
-	  .Define("dnnT_2","dnnT[1]")					\
-	  .Define("dnnT_3","dnnT[2]")					\
-	  .Define("dnnH","FatJet_deepTag_H[GCAK8Jets == true]")		\
-	  .Define("dnnH_1","dnnH[0]")					\
-	  .Define("dnnH_2","dnnH[1]")					\
-	  .Define("dnnH_3","dnnH[2]")					\
-	  .Define("int_dnnZ","(FatJet_deepTag_ZvsQCD * FatJet_deepTag_QCD) / (1 - FatJet_deepTag_ZvsQCD)") \
-	  .Define("dnnZ","int_dnnZ[GCAK8Jets == true]")			\
-	  .Define("dnnZ_1","dnnZ[0]")					\
-	  .Define("dnnZ_2","dnnZ[1]")					\
-	  .Define("dnnZ_3","dnnZ[2]")					\
-	  .Define("int_dnnW","(FatJet_deepTag_WvsQCD * FatJet_deepTag_QCD) / (1 - FatJet_deepTag_WvsQCD)") \
-	  .Define("dnnW","int_dnnW[GCAK8Jets == true]")			\
-	  .Define("dnnW_1","dnnW[0]")					\
-	  .Define("dnnW_2","dnnW[1]")					\
-	  .Define("dnnW_3","dnnW[2]")					\
-	  .Define("int_dnnB","(FatJet_deepTag_QCD - FatJet_deepTag_QCDothers)")	\
-	  .Define("dnnB","int_dnnB[GCAK8Jets == true]")			\
-	  .Define("dnnB_1","dnnB[0]")					\
-	  .Define("dnnB_2","dnnB[1]")					\
-	  .Define("dnnB_3","dnnB[2]")					\
-	  .Define("dnnLargest","maxFxn(dnnJ,dnnT,dnnH,dnnZ,dnnW,dnnB)")	\
-	  .Define("dnnLargest_1","dnnLargest[0]")			\
-	  .Define("dnnLargest_2","dnnLargest[1]")			\
-	  .Define("dnnLargest_3","dnnLargest[2]")			\
-	  .Define("nJ_DeepAK8","Sum(dnnLargest == 0)")			\
-	  .Define("nT_DeepAK8","Sum(dnnLargest == 1)")			\
-	  .Define("nH_DeepAK8","Sum(dnnLargest == 2)")			\
-	  .Define("nZ_DeepAK8","Sum(dnnLargest == 3)")			\
-	  .Define("nW_DeepAK8","Sum(dnnLargest == 4)")			\
-	  .Define("nB_DeepAK8","Sum(dnnLargest == 5)")			\
-	  .Define("int_tau21","(FatJet_tau2 / FatJet_tau1)")		\
-	  .Define("tau21","int_tau21[GCAK8Jets == true]")		\
-	  .Define("tau21_1","tau21[0]")					\
-	  .Define("tau21_2","tau21[1]")					\
-	  .Define("tau21_3","tau21[2]")					\
-	  .Define("minDR_ptRel_lead_lepAK8","minDR_ptRel_lead_calc(theJetAK8Pt_JetSubCalc_PtOrdered,\
-											  theJetAK8Eta_JetSubCalc_PtOrdered, \
-				      							  theJetAK8Phi_JetSubCalc_PtOrdered, \
-											  theJetAK8Mass_JetSubCalc_PtOrdered, \
-				      							  lepton_lv)")\
-	  .Define("minDR_lepAK8","minDR_ptRel_lead_lepAK8[0]")		\
-	  .Define("ptRel_lepAK8","minDR_ptRel_lead_lepAK8[1]")		\
-	  .Define("minDR_leadAK8otherAK8","minDR_ptRel_lead_lepAK8[2]")	\
-	  .Define("minDR_ptRel_lead_lepJets","minDR_ptRel_lead_calc(theJetPt_JetSubCalc_PtOrdered,\
-				      							   theJetEta_JetSubCalc_PtOrdered, \
-				      							   theJetPhi_JetSubCalc_PtOrdered, \
-				      							   theJetMass_JetSubCalc_PtOrdered, \
-				      							   lepton_lv)")\
-	  .Define("minDR_lepJet","minDR_ptRel_lead_lepJets[0]")		\
-	  .Define("ptRel_lepJet","minDR_ptRel_lead_lepJets[1]")		\
-	  .Define("DR_lepAK8s","DR_calc(theJetAK8Pt_JetSubCalc_PtOrdered,theJetAK8Eta_JetSubCalc_PtOrdered,\
-				      			       theJetAK8Phi_JetSubCalc_PtOrdered,theJetAK8Mass_JetSubCalc_PtOrdered, \
-				      			       leptonPt_MultiLepCalc,leptonEta_MultiLepCalc, \
-				      			       leptonPhi_MultiLepCalc,leptonMass_MultiLepCalc)")\
-	  .Define("DR_lepJets","DR_calc(theJetPt_JetSubCalc_PtOrdered,theJetEta_JetSubCalc_PtOrdered,\
-				      			       theJetPhi_JetSubCalc_PtOrdered,theJetMass_JetSubCalc_PtOrdered, \
-				      			       leptonPt_MultiLepCalc,leptonEta_MultiLepCalc, \
-				      			       leptonPhi_MultiLepCalc,leptonMass_MultiLepCalc)")\
-	  .Define("W_lv","lpNu_WCalc(corr_met_MultiLepCalc,corr_met_phi_MultiLepCalc,lepton_lv)") \
-	  .Define("minMlj",minMleppJet_calc,{"theJetPt_JetSubCalc_PtOrdered","theJetEta_JetSubCalc_PtOrdered", \
-		"theJetPhi_JetSubCalc_PtOrdered","theJetMass_JetSubCalc_PtOrdered", \
-		"lepton_lv","Jet_btagDeepFlavB_GCJ"})			\
-	  .Define("W_dRLep","dR_Wt_Calc(W_lv,lepton_lv)")		\
-	  .Define("minMleppJet","minMlj[0]")				\
-	  .Define("ind_MinMlj","(int) minMlj[1]")			\
-	  .Define("NJetsDeepFlavwithSF_JetSubCalc","(int) minMlj[2]")	\
-	  .Define("isLeptonic","isLeptonic_X(minMleppJet)")		\
-	  .Define("t_lv","lpNu_t_Calc(isLeptonic,theJetPt_JetSubCalc_PtOrdered,theJetEta_JetSubCalc_PtOrdered,\
-				   			     theJetPhi_JetSubCalc_PtOrdered,theJetMass_JetSubCalc_PtOrdered, \
-				   			     W_lv,minMleppJet,ind_MinMlj)")\
-	  .Define("t_pt","t_lv[0]")					\
-	  .Define("t_eta","t_lv[1]")					\
-	  .Define("t_phi","t_lv[2]")					\
-	  .Define("t_mass","t_lv[3]")					\
-	  .Define("t_dRWb","t_lv[4]")					\
-	  .Define("top_lv","top_lvConstructor(t_pt,t_eta,t_phi,t_mass)")
-	  .Define("tj_vec","three_jet(top_lv,W_lv,isLeptonic,theJetAK8Pt_JetSubCalc_PtOrdered,theJetAK8Eta_JetSubCalc_PtOrdered,\
-	  			      			     theJetAK8Phi_JetSubCalc_PtOrdered,theJetAK8Mass_JetSubCalc_PtOrdered,dnnT,dnnH,dnnZ, \
-	  			      			     dnnW,dnnB,dnnLargest,theJetAK8SoftDropCorr_PtOrdered)")\
-	  .Define("Bprime1_DeepAK8_Mass","tj_vec[0]")			\
-	  .Define("Bprime1_DeepAK8_Pt","tj_vec[1]")			\
-	  .Define("Bprime1_DeepAK8_Eta","tj_vec[2]")			\
-	  .Define("Bprime1_DeepAK8_Phi","tj_vec[3]")			\
-	  .Define("Bprime1_DeepAK8_deltaR","tj_vec[4]")			\
-	  .Define("BPrime1_lv","top_lvConstructor(Bprime1_DeepAK8_Pt,Bprime1_DeepAK8_Eta,Bprime1_DeepAK8_Phi,Bprime1_DeepAK8_Mass)")\
-	  .Define("isValidBDecay","tj_vec[5]")\
-	  .Define("taggedWbjetJet","tj_vec[6]")\
-	  .Define("taggedTjet","tj_vec[7]")\
-	  .Define("taggedWjet","tj_vec[8]");
+	      				 "GenPart_pt","GenPart_phi","GenPart_eta",			\
+	      				 "GenPart_genPartIdxMother","GenPart_status"})		\
+	  	.Define("lepton_lv","fVectorConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
+	  	.Define("Jets_lv","fVectorConstructor(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass)")\
+	  	.Define("FatJet_lv","fVectorConstructor(gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass)")\
+	  	.Define("Jet_ST","Jet_HT + lepton_pt[0] + MET_pt")	\
+	  	.Define("FatJet_pt_1","FatJet_pt[0]")	\
+	  	.Define("FatJet_pt_2","FatJet_pt[1]")	\
+	  	.Define("FatJet_sdMass","FatJet_msoftdrop[goodcleanFatJets == true]")	\
+	  	.Define("FatJet_sdMass_1","FatJet_sdMass[0]")				\
+	  	.Define("FatJet_sdMass_2","FatJet_sdMass[1]")				\
+	  	.Define("dpak8_J","FatJet_deepTag_QCDothers[goodcleanFatJets == true]")	\
+	  	.Define("dpak8_J_1","dnnJ[0]")					\
+	  	.Define("dpak8_J_2","dnnJ[1]")					\
+	  	.Define("raw_dpak8_T","(FatJet_deepTag_TvsQCD * FatJet_deepTag_QCD) / (1 - FatJet_deepTag_TvsQCD)") \
+	  	.Define("dpak8_T","raw_dpak8T[goodcleanFatJets == true]")			\
+	  	.Define("dpak8_T_1","dpak8_T[0]")					\
+	  	.Define("dpak8_T_2","dpak8_T[1]")					\
+	  	.Define("raw_dpak8_W","(FatJet_deepTag_WvsQCD * FatJet_deepTag_QCD) / (1 - FatJet_deepTag_WvsQCD)") \
+	  	.Define("dpak8_W","raw_dpak8_W[goodcleanFatJets == true]")			\
+	  	.Define("dpak8_W_1","dpak8_W[0]")					\
+	  	.Define("dpak8_W_2","dpak8_W[1]")					\
+	  	.Define("dpak8_tag","maxFxn(dpak8_J,dpak8_T,dpak8_W)")	\
+	  	.Define("dpak8_tag_1","dpak8_tag[0]")			\
+	  	.Define("dpak8_tag_2","dpak8_tag[1]")			\
+	  	.Define("nJ_DeepAK8","Sum(dnnLargest == 0)")			\
+	  	.Define("nT_DeepAK8","Sum(dnnLargest == 1)")			\
+	  	.Define("nW_DeepAK8","Sum(dnnLargest == 2)")			\
+	  	.Define("raw_tau21","(FatJet_tau2 / FatJet_tau1)")		\
+	  	.Define("tau21","raw_tau21[goodcleanFatJets == true]")		\
+	  	.Define("tau21_1","tau21[0]")					\
+	  	.Define("tau21_2","tau21[1]")					\
+	  	.Define("minDR_ptRel_lead_lepAK8","minDR_ptRel_lead_calc(gcFatJet_pt,gcFatJet_eta,gcFatJet_phi, \
+									   gcFatJet_mass,lepton_lv)")\
+	  	.Define("minDR_lep_FatJet","minDR_ptRel_lead_lepAK8[0]")		\
+	  	.Define("ptRel_lep_FatJet","minDR_ptRel_lead_lepAK8[1]")		\
+	  	.Define("minDR_leadAK8otherAK8","minDR_ptRel_lead_lepAK8[2]")	\
+	  	.Define("minDR_ptRel_lead_lepAK4","minDR_ptRel_lead_calc(gcJet_pt,gcJet_eta,gcJet_phi, \
+					      				   gcJet_mass,lepton_lv)")\
+	  	.Define("minDR_lep_Jet","minDR_ptRel_lead_lepJets[0]")		\
+	  	.Define("ptRel_lep_Jet","minDR_ptRel_lead_lepJets[1]")		\
+	  	.Define("DR_lep_FatJets","DR_calc(gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass, \
+					      	    lepton_pt,lepton_eta, lepton_phi,lepton_mass)")\
+	  	.Define("DR_lep_Jets","DR_calc(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
+					   	 lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
+	  	.Define("W_lv","WCalc(MET_pt,MET_phi,lepton_lv)") \
+	  	.Define("minMlj_output",minM_lep_Jet_calc,{"gcJet_pt","gcJet_eta", "gcJet_phi","gcJet_mass", \
+			  "lepton_lv","gcJet_DeepFlav"})			\
+	  	.Define("DR_W_lep","dR_Wt_Calc(W_lv,lepton_lv)")		\
+	  	.Define("minM_lep_Jet","minMlj_output[0]")				\
+	  	.Define("minM_lep_Jet_jetID","(int) minMlj_output[1]")			\
+	  	.Define("NJetsDeepFlavwithSF","(int) minMlj_output[2]")	\
+	  	.Define("leptonicParticle","isLeptonic_X(minM_lep_Jet)")		\
+	  	.Define("t_output","t_Calc(leptonicParticle,gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
+					 W_lv,minM_lep_Jet,MinM_lep_Jet_jetID)")\
+	  	.Define("t_pt","t_lv[0]")					\
+	  	.Define("t_eta","t_lv[1]")					\
+	  	.Define("t_phi","t_lv[2]")					\
+	  	.Define("t_mass","t_lv[3]")					\
+	  	.Define("DR_W_b","t_lv[4]")					\
+	  	.Define("t_lv","top_lvConstructor(t_pt,t_eta,t_phi,t_mass)")
+	  	.Define("Bprime_output","Bprime_reco(t_lv,W_lv,leptonicParticle,\
+	  				       gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass,dpak8_tag,gcFatJet_msoftdrop)")\
+	  	.Define("Bprime_mass","tj_vec[0]")			\
+	  	.Define("Bprime_pt","tj_vec[1]")			\
+	  	.Define("Bprime_eta","tj_vec[2]")			\
+	  	.Define("Bprime_phi","tj_vec[3]")			\
+	  	.Define("Bprime_DRdecay","tj_vec[4]")			\
+	  	.Define("BPrime_lv","top_lvConstructor(Bprime_pt,Bprime_eta,Bprime_phi,Bprime_mass)")\
+	  	.Define("isValidBDecay","tj_vec[5]")\
+	  	.Define("taggedWbjetJet","tj_vec[6]")\
+	  	.Define("taggedTjet","tj_vec[7]")\
+	  	.Define("taggedWjet","tj_vec[8]");
+
 	// -------------------------------------------------
 	// 		Save Snapshot to file
 	// -------------------------------------------------
-	// Change final snapshot file under new name so we don't get confused
-	std::cout << "Number of Events passing post preselection: " << postPresel.Count().GetValue() << std::endl;
-	auto dfFinal = postPresel;
-	std::cout << "Number of Events passing post preselection(dfFinal Check): " << dfFinal.Count().GetValue() << std::endl;
 
-	std::cout << "-------------------------------------------------" << std::endl << ">>> Saving " << region << " Snapshot..." << std::endl;
-	TString outputFileFNAL = "RDF_"+region+"_seniorResearch_"+chan+"_HnanoAOD"+testNum+".root";
-	const char* stdOutputFileFNAL = outputFileFNAL;
-	dfFinal.Snapshot("Events", stdOutputFileFNAL);
-	std::cout << "Output File: " << outputFileFNAL << std::endl << "-------------------------------------------------" << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl << ">>> Saving " << sample << " Snapshot..." << std::endl;
+	TString finalFile = "RDF_"+sample+"_finalsel_"+chan+"_"+testNum+".root";
+	const char* stdfinalFile = finalFile;
+	dfFinal.Snapshot("Events", stdfinalFile);
+	std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
 	time.Stop();
 	time.Print();
 }
