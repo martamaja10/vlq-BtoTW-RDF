@@ -3,7 +3,7 @@
 // 	(Fxn to find max variable for dnnLargest)
 // --------------------------------------------------------
 
-ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnH, ROOT::VecOps::RVec<float>& dnnZ, ROOT::VecOps::RVec<float>& dnnW, ROOT::VecOps::RVec<float>& dnnB)
+ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW)
 {
 	ROOT::VecOps::RVec<int> maxInt (dnnJ.size(),-1);
 	for(int i = 0; i < dnnJ.size(); i++)
@@ -11,10 +11,7 @@ ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RV
 		float maxVar = -999;
 		if(maxVar < dnnJ[i]){maxVar = dnnJ[i]; maxInt[i] = 0;}
 		if(maxVar < dnnT[i]){maxVar = dnnT[i]; maxInt[i] = 1;}
-		if(maxVar < dnnH[i]){maxVar = dnnH[i]; maxInt[i] = 2;}
-		if(maxVar < dnnZ[i]){maxVar = dnnZ[i]; maxInt[i] = 3;}
-		if(maxVar < dnnW[i]){maxVar = dnnW[i]; maxInt[i] = 4;}
-		if(maxVar < dnnB[i]){maxVar = dnnB[i]; maxInt[i] = 5;}
+		if(maxVar < dnnW[i]){maxVar = dnnW[i]; maxInt[i] = 2;}
 	}
 	return maxInt;
 };
