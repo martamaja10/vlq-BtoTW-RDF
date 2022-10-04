@@ -63,6 +63,7 @@ if year == 'all': maxtest = 30000
 
 # %%
 ### Set up logging
+# TODO
 outdir = outdir + '/'
 if testnum == 1:
    ofile = open(outdir+"BB_output_Jan21_"+year+".txt","a+")
@@ -88,12 +89,15 @@ if not os.path.exists(outdir): os.system('mkdir '+outdir)
 
 # %% 
 ### Define input variables
+
+# TODO
 ## List of possible variables for the MVA
 varList = ['dnnJ_1','dnnJ_2','jetPt_1','jetPt_3','sdMass_1','sdMass_3','tau21_3','AK4HT','t_pt','t_mass','t_dRWb','AK4HTpMETpLepPt','corr_met_MultiLepCalc','NJets_JetSubCalc', 'NJetsDeepFlavwithSF_JetSubCalc','NJetsAK8_JetSubCalc','minDR_leadAK8otherAK8'] 
 #'jetPt_2','sdMass_2','dnnJ_3', removed for bad data/bkg agreement  #'tau21_1','tau21_2', removed since not used before
 
 if year == '2016':
-   varList = ['dnnJ_1','dnnJ_2','dnnJ_3','jetPt_1','jetPt_3','sdMass_1','tau21_3','AK4HT','t_pt','t_mass','t_dRWb','AK4HTpMETpLepPt','corr_met_MultiLepCalc','NJets_JetSubCalc', 'NJetsDeepFlavwithSF_JetSubCalc','NJetsAK8_JetSubCalc','minDR_leadAK8otherAK8'] 
+   # varList = ['dnnJ_1','dnnJ_2','dnnJ_3','jetPt_1','jetPt_3','sdMass_1','tau21_3','AK4HT','t_pt','t_mass','t_dRWb','AK4HTpMETpLepPt','corr_met_MultiLepCalc','NJets_JetSubCalc', 'NJetsDeepFlavwithSF_JetSubCalc','NJetsAK8_JetSubCalc','minDR_leadAK8otherAK8'] 
+   varList = ['dpak8_J_1', 'dpak8_J_2', 'FatJet_pt_1', 'FatJet_pt_2', 'FatJet_sdMass_1', 'FatJet_sdMass_2', 'AK4HT', 'pnT_1', 'pnT_2', 'pnT_3', 'pnH_1', 'pnH_2', 'pnH_3', 'pnZ_1', 'pnZ_2', 'pnZ_3', 'pnW_1','pnW_2', 'pnW_3', 'NJetsDeepFlavwithSF', 'Bprime_eta', 'Bprime_phi']
    #'jetPt_2','sdMass_2','sdMass_3', removed for bad data/bkg agreement  #'tau21_1','tau21_2', removed since not used before
 elif year == '2018':
    varList = ['dnnJ_1','dnnJ_2','dnnJ_3','jetPt_1','jetPt_3','sdMass_3','tau21_3','AK4HT','t_pt','t_mass','t_dRWb','AK4HTpMETpLepPt','corr_met_MultiLepCalc','NJets_JetSubCalc', 'NJetsDeepFlavwithSF_JetSubCalc','NJetsAK8_JetSubCalc','minDR_leadAK8otherAK8'] 
@@ -104,6 +108,7 @@ elif year == 'all':
 # %%
 ### Perform permuations calculations
 ## Make a big list of lists of different lengths and combinations
+# TODO
 combos = []
 for size in range(7,len(varList)):
    thissize = list(itertools.combinations(varList,size))
@@ -155,6 +160,7 @@ if year == 'all':
 
 # %%
 ### Select input for training and testing
+# TODO
 vars = list(combos[vararray])
 print 'Vars = ',vars
 
@@ -201,6 +207,7 @@ testTTToSemiLep = scaler.transform(testTTToSemiLep)
 testWJets = scaler.transform(testWJets)
 
 # %%
+# TODO
 ### Train _____ 
 print('Training...')
 mlp = neural_network.MLPClassifier(hidden_layer_sizes=arch2tuple(arch), activation='relu',early_stopping=True)
