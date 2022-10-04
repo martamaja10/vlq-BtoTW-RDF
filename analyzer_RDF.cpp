@@ -404,7 +404,35 @@ void rdf::analyzer_RDF(std::string sample, TString chan, TString testNum, int ye
 	  	.Define("isValidBDecay","tj_vec[5]")\
 	  	.Define("taggedWbjetJet","tj_vec[6]")\
 	  	.Define("taggedTjet","tj_vec[7]")\
-	  	.Define("taggedWjet","tj_vec[8]");
+	  	.Define("taggedWjet","tj_vec[8]")
+		.Define("int_pnT","(FatJet_particleNet_TvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_TvsQCD)") \
+		.Define("pnT","int_pnT[GCAK8Jets == true]")			\
+		.Define("pnT_1","pnT[0]")					\
+		.Define("pnT_2","pnT[1]")					\
+		.Define("pnT_3","pnT[2]")					\
+		.Define("pnH","FatJet_particleNet_H4qvsQCD[GCAK8Jets == true]")		\ //I'm not sure about this function
+		.Define("pnH_1","pnH[0]")					\
+		.Define("pnH_2","pnH[1]")					\
+		.Define("pnH_3","pnH[2]")					\
+		.Define("int_pnZ","(FatJet_particleNet_ZvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_ZvsQCD)") \
+		.Define("pnZ","int_pnZ[GCAK8Jets == true]")			\
+		.Define("pnZ_1","pnZ[0]")					\
+		.Define("pnZ_2","pnZ[1]")					\
+		.Define("pnZ_3","pnZ[2]")					\
+		.Define("int_pnW","(FatJet_particleNet_WvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_WvsQCD)") \
+		.Define("pnW","int_pnW[GCAK8Jets == true]")			\
+		.Define("pnW_1","pnW[0]")					\
+		.Define("pnW_2","pnW[1]")					\
+		.Define("pnW_3","pnW[2]")					\
+		.Define("int_dnnB","(FatJet_deepTag_QCD - FatJet_deepTag_QCDothers)") //Can't find corrolary for QCDothers
+	//   .Define("dnnB","int_dnnB[GCAK8Jets == true]")			\
+	//   .Define("dnnB_1","dnnB[0]")					\
+	//   .Define("dnnB_2","dnnB[1]")					\
+	//   .Define("dnnB_3","dnnB[2]")					\
+	//   .Define("dnnLargest","maxFxn(dnnJ,dnnT,dnnH,dnnZ,dnnW,dnnB)")	\
+	//   .Define("dnnLargest_1","dnnLargest[0]")			\
+	//   .Define("dnnLargest_2","dnnLargest[1]")			\
+	//   .Define("dnnLargest_3","dnnLargest[2]");
 
 	// -------------------------------------------------
 	// 		Save Snapshot to file
