@@ -76,9 +76,9 @@ ofile.write(str(vararray)+", ")
 
 # %% 
 ### Signal selection
-Tprime = 1.0
-Tprime2 = 1.8
-test1100 = False #use if Tprime = 1800
+Bprime = 1.0
+Bprime2 = 1.8
+test1100 = False #use if Bprime = 1800
 
 # %%
 ### Configure output
