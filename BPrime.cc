@@ -32,24 +32,30 @@ RVec<float> BPrime_reco(TLorentzVector top_lv, TLorentzVector Wlv, int leptonicP
   }
 
   float Bprime_mass = -999;
-  float Bprime_pt = -9999;
+  float Bprime_pt = -999;
   float Bprime_eta = 9;
   float Bprime_phi = 9;
   float Bprime_DR = -9;
+  float Bprime_ptbal = -999;
+  float Bprime_chi2 = -999;
   
+  TLorentzVector Wcand_lv;
+  TLorentzVector Tcand_lv;
   TLorentzVector Bprime_lv;
   float validBDecay = -1;
   
   float taggedTjet = 0;
+  float taggedTjet2nd = 0;
   float taggedWbjetJet = 0;
   float taggedWjet = 0;
+  float taggedWjet2nd = 0;
   bool is2Jet = false;
   
   // ----------------------------------------------------------------------------
-  // VLQ Decay -- 3 AK8 jets away from leptonic particle
+  // VLQ Decay -- 1 or 2 AK8 jets away from leptonic particle
   // ----------------------------------------------------------------------------
-  if(jets_lv.size() > 2) {std::cout << "Problem: > 2 AK8s for Tprime reco" << std::endl;}
-  else if(jets_lv.size() == 0){std::cout << "Problem: Empty jets_lv" << std::endl; }
+  if(jets_lv.size() > 2) {std::cout << "Problem: > 2 AK8s for Bprime reco" << std::endl;}
+  else if(jets_lv.size() == 0){std::cout << "Failed reco event, no jets" << std::endl; }
 	
   int npass_reco = 0;
 
@@ -74,50 +80,73 @@ RVec<float> BPrime_reco(TLorentzVector top_lv, TLorentzVector Wlv, int leptonicP
     // Start forming 2 particle groups
     validBDecay = -1;
     
-    // Only 1 Decay
     // Derived from Previous logic: TT -> tZ bW, BB -> tW bZ
     if(isLeptonic_W){
+
+      Wcand_lv = Wlv; // W candidate is always the leptonic W here
+
       if(decayJets.at(0).first == 1){ // leading jet is top tagged
 	validBDecay = 1;
 	taggedTjet = 1;
-	Bprime_lv = Wlv+jets_lv.at(decayJets.at(0).second).first; // decayJets.second gives the jets_lv index to get 4-vec
-	Bprime_deltaR = Wlv.DeltaR(jets_lv.at(decayJets.at(0).second).first);	    
+	Tcand_lv = jets_lv.at(decayJets.at(0).second).first; // decayJets.second gives the jets_lv index to get 4-vec
       }
-      else{ // leading jet is not top tagged
-	if(!is2Jet){ // all other 1-jet events are invalid
-	  validBDecay = 0;
-	  Bprime_lv = Wlv+jets_lv.at(decayJets.at(0).second).first;
-	  Bprime_deltaR = Wlv.DeltaR(jets_lv.at(decayJets.at(0).second).first);
+      else if(is2Jet && decayJets.at(1).first == 1){ // 2nd-leading jet is top tagged
+	validBDecay = 0; // 0 for suboptimal validity
+	taggedTjet = 1;
+	Tcand_lv = jets_lv.at(decayJets.at(1).second).first;
+      }
+      else{ // leading jets are not top tagged
+	if(!is2Jet){ 
+	  validBDecay = -1; // all other 1-jet events are really mistagged
+	  Tcand_lv = jets_lv.at(decayJets.at(0).second).first; //take the jet as the T candidate with a bad tag
 	}
-	else{ // it's a 2-jet event
-	  if(decayJets.size() < 2) std::cout << "PROBLEM, need 2 elements in decayJets and have " << decayJets.size() << std::endl;
-	  
-	  if(decayJets.at(0).first==2){ // W tag found
-	    validBDecay_DeepAK8 = 1;
+	else{ // it's a 2-jet event, will assume partially-merged top and add the two jets, looking for a W tag
+	  if(decayJets.at(0).first == 2){ // W tag found 
+	    validBDecay = 1;
 	    taggedWbjetJet = 1;
-	    Bprime_lv = Wlv+jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first; // decayJets.second gives the jets_lv index to get 4-vec
-	    Bprime_deltaR = Wlv.DeltaR(jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first);
+	    Tcand_lv = jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first;
+	  }
+	  else if(decayJets.at(1).first == 2){ // W tag found 
+	    validBDecay = 0; // sub-optimal
+	    taggedWbjetJet = 1;
+	    Tcand_lv = jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first;
 	  }
 	  else{ // any other set of tags
-	    validBDecay = 0;
-	    Bprime_lv = Wlv+jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first;
-	    Bprime_deltaR = Wlv.DeltaR(jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first);
+	    validBDecay = -1;
+	    Tcand_lv = jets_lv.at(decayJets.at(0).second).first+jets_lv.at(decayJets.at(1).second).first;
 	  }
 	}
       }
+
+      Bprime_DR = Wcand_lv.DeltaR(Tcand_lv);
+      Bprime_ptbal = Wcand_lv.Pt()/Tcand_lv.Pt();
+      Bprime_chi2 = pow(Tcand_lv.M() - 170.1,2)/(14.29*14.29) + pow(Bprime_DR - TMath::Pi(),2)/(0.2*0.2) + pow(Bprime_ptbal - 1,2)/(0.8*0.8);
+      // hadronic t chi2 with values from 2016 B2G-17-018 (W isn't there because W_lv uses mass constraint)
+
     }else{ //isLeptonic_t
-      if(decayJets.at(0).first==2){ // leading jet is W-tagged	    
+
+      Tcand_lv = top_lv; // T candidate is always the leptonic top here
+
+      if(decayJets.at(0).first == 2){ // leading jet is W-tagged	    
 	validBDecay = 1;
 	taggedWjet = 1;
-	Bprime_lv = top_lv+jets_lv.at(decayJets.at(0).second).first; // decayJets.second gives the jets_lv index to get 4-vec
-	Bprime_deltaR = top_lv.DeltaR(jets_lv.at(decayJets.at(0).second).first);
+	Wcand_lv = jets_lv.at(decayJets.at(0).second).first;
+      }else if(is2Jet && decayJets.at(1).first == 2){ // 2nd-leading jet is W-tagged
+	validBDecay = 0; // sub-optimal
+	taggedWjet = 1;
+	Wcand_lv = jets_lv.at(decayJets.at(1).second).first;
       }else{
-	validBDecay = 0;
-	Bprime_lv = top_lv+jets_lv.at(decayJets.at(0).second).first;
-	Bprime_deltaR = top_lv.DeltaR(jets_lv.at(decayJets.at(0).second).first);
+	validBDecay = -1;
+	Wcand_lv = jets_lv.at(decayJets.at(0).second).first; // let's assume a 1-jet mistag scenario
       }
+
+      Bprime_DR = Wcand_lv.DeltaR(Tcand_lv);
+      Bprime_ptbal = Wcand_lv.Pt()/Tcand_lv.Pt();
+      Bprime_chi2 = pow(Tcand_lv.M() - 172.6,2)/(19.1*19.1) + pow(Wcand_lv.M() - 85.5,2)/(8.7*8.7) + pow(Bprime_DR - TMath::Pi(),2)/(0.2*0.2) + pow(Bprime_ptbal - 1,2)/(0.8*0.8); // leptonic t, hadronic W chi2 with values from 2016 B2G-17-018
+
     }
 
+    Bprime_lv = Wcand_lv + Tcand_lv;
     Bprime_mass = Bprime_lv.M();
     Bprime_pt = Bprime_lv.Pt();
     Bprime_eta = Bprime_lv.Eta();
@@ -126,7 +155,7 @@ RVec<float> BPrime_reco(TLorentzVector top_lv, TLorentzVector Wlv, int leptonicP
 
   // Include validBDecy_DeepAK8 variable and what it's decayed as 
   //leptonic and hadronic jetIDs can be slimmed out, no longer exist
-  RVec<float> BPrimeVec = {Bprime_mass,Bprime_pt,Bprime_eta,Bprime_phi,Bprime_deltaR,validBDecay,taggedWbjetJet,taggedTjet,taggedWjet};
+  RVec<float> BPrimeVec = {Bprime_mass,Bprime_pt,Bprime_eta,Bprime_phi,Bprime_DR,Bprime_ptbal,Bprime_chi2,validBDecay,taggedWbjetJet,taggedTjet,taggedWjet};
   return BPrimeVec;
 };
 
