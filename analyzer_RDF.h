@@ -22,8 +22,8 @@
 #include "ROOT/RDataFrame.hxx"
 #include "ROOT/RVec.hxx"
 
-#include "lwtnn/lwtnn/interface/parse_json.hh"
 #include "lwtnn/lwtnn/interface/LightweightNeuralNetwork.hh"
+#include "lwtnn/lwtnn/interface/parse_json.hh"
 
 enum shift:char;
 
@@ -38,8 +38,6 @@ public :
    Int_t           fCurrent; //!current Tree number in a TChain
 
    Bool_t          isSig;
-   Bool_t          isTpTp;
-   Bool_t          isBpBp;
    Bool_t          isTOP;
    Bool_t          isMadgraphBkg; // W, Z, QCD
    Bool_t          isMC;
@@ -51,18 +49,6 @@ public :
    Bool_t          isTTincMtt0to700;
    Bool_t          isTTincMtt700to1000;
    Bool_t          isTTincMtt1000toInf;
-   Bool_t          outBWBW;
-   Bool_t          outTZBW;
-   Bool_t          outTHBW;
-   Bool_t          outTZTH;
-   Bool_t          outTZTZ;
-   Bool_t          outTHTH;
-   Bool_t          outTWTW;
-   Bool_t          outBZTW;
-   Bool_t          outBHTW;
-   Bool_t          outBZBH;
-   Bool_t          outBZBZ;
-   Bool_t          outBHBH;
    Bool_t          isNominal;
    Bool_t          isBUp;
    Bool_t          isBDn;
@@ -75,7 +61,7 @@ public :
  
    rdf(TString inputFileName, TString preselFileName, TString finalselFileName);
    virtual ~rdf();
-   virtual void     analyzer_RDF(std::string sample, TString chan, TString testNum, int year);
+   virtual void     analyzer_RDF(std::string filename, TString chan, TString testNum, int year);
    //virtual void     histoDrawRDF(vector<std::string> inputFile);
 };
 
@@ -95,12 +81,7 @@ rdf::rdf(TString inputFileName, TString preselFileName, TString finalselFileName
   lwt::JSONConfig cfgTT = lwt::parse_json(input_cfgTT);
   lwtnnTT = new lwt::LightweightNeuralNetwork(cfgTT.inputs, cfgTT.layers, cfgTT.outputs);
 
-  isSig  = (inputFileName.Contains("prime") || inputFileName.Contains("X53") || inputFileName.Contains("ChargedHiggs_Hplus"));
-  if(isSig){
-    if(inputFileName.Contains("Tprime")) isTpTp = true;
-    else if(inputFileName.Contains("Bprime")) isBpBp = true;
-  }
-
+  isSig  = (inputFileName.Contains("Bprime"));
   isMadgraphBkg = (inputFileName.Contains("QCD") || inputFileName.Contains("madgraphMLM"));
   isTOP = (inputFileName.Contains("Mtt") || inputFileName.Contains("ST") || inputFileName.Contains("ttZ") || inputFileName.Contains("ttW") || inputFileName.Contains("ttH") || inputFileName.Contains("TTTo"));
   isTT = (inputFileName.Contains("TT_Tune") || inputFileName.Contains("Mtt") || inputFileName.Contains("TTTo"));
@@ -118,18 +99,6 @@ rdf::rdf(TString inputFileName, TString preselFileName, TString finalselFileName
   isTTincMtt0to1000   = preselFileName.Contains("Mtt0to1000");
   isTTincMtt700to1000 = preselFileName.Contains("Mtt700to1000");
   isTTincMtt1000toInf = preselFileName.Contains("Mtt1000toInf");
-  outBWBW = preselFileName.Contains("BWBW");
-  outTZBW = preselFileName.Contains("TZBW");
-  outTHBW = preselFileName.Contains("THBW");
-  outTZTH = preselFileName.Contains("TZTH");
-  outTZTZ = preselFileName.Contains("TZTZ");
-  outTHTH = preselFileName.Contains("THTH");
-  outTWTW = preselFileName.Contains("TWTW");
-  outBZTW = preselFileName.Contains("BZTW");
-  outBHTW = preselFileName.Contains("BHTW");
-  outBZBH = preselFileName.Contains("BZBH");
-  outBZBZ = preselFileName.Contains("BZBZ");
-  outBHBH = preselFileName.Contains("BHBH");
 
   /* std::cout<<"Opening file: "<<inputFileName<<std::endl; */
   /* if(!(inputFile=TFile::Open(inputFileName))){ */
@@ -150,7 +119,7 @@ rdf::rdf(TString inputFileName, TString preselFileName, TString finalselFileName
 
 rdf::~rdf()
 {
-  delete lwtnnTT;
+  //  delete lwtnnTT;
   if (!inputTree) return;
   delete inputTree->GetCurrentFile();
 }

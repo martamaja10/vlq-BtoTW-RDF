@@ -22,4 +22,10 @@ ROOT::VecOps::RVec<float> cleanJets(ROOT::VecOps::RVec<float>& jt_pt, ROOT::VecO
 		if(isClean == true){cleanJets_[i] = 1;}
 	}
 	return cleanJets_;
+
+	// FIXME: this is just the 2D cut. Try Electron/Muon/Jet_cleanmask, try Electron/Muon_jetidx, try Electron/Muon_jetPtRelv2, 
+	// Can I implement the adjustment and re-JEC of jets? 
+	// Better to just add it to CRAB job when getting the JEC unc?
+	// Leptonic W events...this should be fine
+	// Leptonic t events...is the ptRel enough to keep a b-jet?
 };
