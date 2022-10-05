@@ -400,27 +400,7 @@ void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int 
     .Define("isValidBDecay","Bprime_output[7]")				\
     .Define("taggedWbjetJet","Bprime_output[8]")			\
     .Define("taggedTjet","Bprime_output[9]")				\
-    .Define("taggedWjet","Bprime_output[10]")   			\
-	.Define("FatJet_sdMass_2","FatJet_sdMass[1]")			\
-
-    .Define("pNet_J","FatJet_particleNet_QCD[goodcleanFatJets == true]") \
-    .Define("pNet_J_1","pNet_J[0]")					\
-    .Define("pNet_J_2","pNet_J[1]")					\
-    .Define("raw_pNet_T","(FatJet_particleNet_TvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_TvsQCD)") \
-    .Define("pNet_T","raw_pNet_T[goodcleanFatJets == true]")		\
-    .Define("pNet_T_1","pNet_T[0]")					\
-    .Define("pNet_T_2","pNet_T[1]")					\
-    .Define("raw_pNet_W","(FatJet_particleNet_WvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_WvsQCD)") \
-    .Define("pNet_W","raw_pNet_W[goodcleanFatJets == true]")		\
-    .Define("pNet_W_1","pNet_W[0]")					\
-    .Define("pNet_W_2","pNet_W[1]")					\
-    .Define("pNet_tag","maxFxn(pNet_J,pNet_T,pNet_W)")		\
-    .Define("pNet_tag_1","pNet_tag[0]")				\
-    .Define("pNet_tag_2","pNet_tag[1]")				\
-    .Define("nJ_pNet","Sum(pNet_tag == 0)")				\
-    .Define("nT_pNet","Sum(pNet_tag == 1)")				\
-    .Define("nW_pNet","Sum(pNet_tag == 2)")
-	;
+    .Define("taggedWjet","Bprime_output[10]");
   
   // -------------------------------------------------
   // 		Save Snapshot to file
