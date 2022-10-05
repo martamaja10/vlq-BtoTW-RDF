@@ -78,8 +78,8 @@ ofile.write(arch+", ")
 
 # %%
 ### Signal selection
-Bprime = 1.0
-Bprime2 = 1.8
+Bprime = 0.8
+Bprime2 = 2.0
 test1100 = False #use if Tprime = 1800
 WithBprimeVars = False
 # %%
@@ -96,16 +96,27 @@ vars = ['weight','dnnJ_1','dnnJ_2','dnnJ_3','jetPt_1','jetPt_3','sdMass_3','tau2
 trainTTToSemiLepT = []
 trainTTToSemiLepTb = []
 trainTprime    = []
+trainWJets200   = []
 trainWJets400    = []
 trainWJets600    = []
 trainWJets800    = []
 trainWJets1200    = []
 trainWJets2500    = []
 
+# TODO - copy naming scheme
+trainSingleT = []
+trainSingleTb = []
+
+
+testTTToSemiLepT = []
+testTTToSemiLepTb = []
+
+
 testTTToSemiLepT = []
 testTTToSemiLepTb = []
 testTprime      = []
 testTprime2   = []
+testWJets200   = []
 testWJets400    = []
 testWJets600    = []
 testWJets800    = []
@@ -118,7 +129,8 @@ print 'Opening files...'
 eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/MVAtraining_2018_Jan2021/"
 
 ## Choosing valid events with appropriate characteristics and cutting the rest
-seltrain = "isValidTTDecayMode_DeepAK8 == 0 && Tprime2_DeepAK8_Mass < 0 && NJetsAK8_JetSubCalc > 2"
+# TODO - isvalidBDecay == 0
+seltrain = "isValidBDecayMode_DeepAK8 == 0 && Tprime2_DeepAK8_Mass < 0 && NJetsAK8_JetSubCalc > 2"
 seltest = "isValidTTDecayMode_DeepAK8 == 0 && Tprime2_DeepAK8_Mass >= 0"
 
 treeVars = vars
@@ -189,6 +201,7 @@ max1200 = int(round(multiplier*34.15))
 max800 = int(round(multiplier*141.36))
 max600 = int(round(multiplier*309.66))
 max400 = int(round(multiplier*1256.89))
+# max200 = int(rount(multiplyer*_______))
 maxtest2500 = int(round(multipliertest*1.))
 maxtest1200 = int(round(multipliertest*34.15))
 maxtest800 = int(round(multipliertest*141.36))
@@ -237,8 +250,8 @@ print "number of WJets testing events: ", len(testWJets)
 ## in the training arrays for signal and ttbar
 ## This is allowed because we will not use 1000-GeV signal for analysis and because
 ## we have a special ttbar MC sample for this training
-trainTprime = np.concatenate([testTprime[maxtest:],trainTprime]) #put the better events first
-trainTTToSemiLep = np.concatenate([testTTToSemiLep[maxtest:],trainTTToSemiLep])
+# trainTprime = np.concatenate([testTprime[maxtest:],trainTprime]) #put the better events first
+# trainTTToSemiLep = np.concatenate([testTTToSemiLep[maxtest:],trainTTToSemiLep])
 
 ## Shorten the testing arrays to the chosen length
 testTprime = testTprime[:maxtest]
