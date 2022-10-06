@@ -44,14 +44,14 @@ if makelists:
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM" > WJets2500NanoList.txt')
 
 else:
-    textlist = 'BprimeBToTW_M-800.txt'
-    prefix = 'Bp800'
+    textlist = 'WJets2500NanoList.txt'
+    prefix = 'WJets2500'
 
     rootfiles = []
     with open(os.path.abspath(textlist),'r') as rootlist:
         for line in rootlist:
-            #rootfiles.append('root://cmsxrootd.fnal.gov/'+line.strip())
-            rootfiles.append('root://cmseos.fnal.gov/'+line.strip())
+            rootfiles.append('root://cmsxrootd.fnal.gov/'+line.strip())
+            #rootfiles.append('root://cmseos.fnal.gov/'+line.strip())
     print '\tTotal files:',len(rootfiles)
 
     os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
