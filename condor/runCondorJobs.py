@@ -44,8 +44,11 @@ if makelists:
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM" > WJets2500NanoList.txt')
 
 else:
+    textlist = 'TTbarNanoList.txt'
+    prefix = 'TTbar'
+
     rootfiles = []
-    with open(os.path.abspath('TTbarNanoList.txt'),'r') as rootlist:
+    with open(os.path.abspath(textlist),'r') as rootlist:
         for line in rootlist:
             rootfiles.append('root://cmsxrootd.fnal.gov/'+line.strip())
     print '\tTotal files:',len(rootfiles)
@@ -58,8 +61,8 @@ else:
         count+=1
         #if count == 1: continue
     
-        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir, 'TARBALL':tarfile, 'TESTNUM':count}
-        jdfName=condorDir+'/TTbar_%(TESTNUM)s.job'%dict
+        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix}
+        jdfName=condorDir+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
         print "jdfname: ",jdfName
         jdf=open(jdfName,'w')
         jdf.write(
@@ -69,16 +72,16 @@ Executable = %(RUNDIR)s/condorRDF.sh
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
 Transfer_Input_Files = %(TARBALL)s
-Output = TTbarRDF_%(TESTNUM)s.out
-Error = TTbarRDF_%(TESTNUM)s.err
-Log = TTbarRDF_%(TESTNUM)s.log
+Output = %(PREFIX)s_RDF_%(TESTNUM)s.out
+Error = %(PREFIX)s_RDF_%(TESTNUM)s.err
+Log = %(PREFIX)s_RDF_%(TESTNUM)s.log
 Notification = Never
 Arguments = %(FILENAME)s %(OUTPUTDIR)s %(TESTNUM)s
 
 Queue 1"""%dict)
         jdf.close()
         os.chdir('%s/'%(condorDir))
-        os.system('condor_submit TTbar_%(TESTNUM)s.job'%dict)
+        os.system('condor_submit %(PREFIX)s_%(TESTNUM)s.job'%dict)
         os.system('sleep 0.5')                                
         os.chdir('%s'%(runDir))
         print count, "jobs submitted!!!"
