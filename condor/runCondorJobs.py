@@ -6,7 +6,7 @@ execfile("/uscms_data/d3/jmanagan/EOSSafeUtils.py")
 start_time = time.time()
 
 makelists = False
-if len(sys.argv) > 1: makelists = eval(bool(sys.argv[1]))
+if len(sys.argv) > 1: makelists = bool(eval(sys.argv[1]))
 
 relbase = '/uscms_data/d3/jmanagan/BtoTW/CMSSW_11_0_0/'
 outDir='/store/user/jmanagan/BtoTW_RDF'
