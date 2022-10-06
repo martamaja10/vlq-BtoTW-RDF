@@ -44,24 +44,25 @@ if makelists:
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM" > WJets2500NanoList.txt')
 
 else:
-    textlist = 'TTbarNanoList.txt'
-    prefix = 'TTbar'
+    textlist = 'BprimeBToTW_M-800.txt'
+    prefix = 'Bp800'
 
     rootfiles = []
     with open(os.path.abspath(textlist),'r') as rootlist:
         for line in rootlist:
-            rootfiles.append('root://cmsxrootd.fnal.gov/'+line.strip())
+            #rootfiles.append('root://cmsxrootd.fnal.gov/'+line.strip())
+            rootfiles.append('root://cmseos.fnal.gov/'+line.strip())
     print '\tTotal files:',len(rootfiles)
 
-    os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir)
-    os.system('mkdir -p '+condorDir)
+    os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
+    os.system('mkdir -p '+condorDir+'/'+prefix)
 
     for ifile in rootfiles:
 
         count+=1
         #if count == 1: continue
     
-        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix}
+        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir+'/'+prefix, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix}
         jdfName=condorDir+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
         print "jdfname: ",jdfName
         jdf=open(jdfName,'w')
