@@ -61,7 +61,7 @@ public :
  
    rdf(TString inputFileName, TString preselFileName, TString finalselFileName);
    virtual ~rdf();
-   virtual void     analyzer_RDF(std::string filename, TString chan, TString testNum, int year);
+   virtual void     analyzer_RDF(std::string filename, TString testNum, int year);
    //virtual void     histoDrawRDF(vector<std::string> inputFile);
 };
 

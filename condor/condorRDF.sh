@@ -22,7 +22,7 @@ cd src/vlq-BtoTW-RDF/
 export PATH=$PATH:$macroDir
 
 echo "Running RDF:"
-root -l -b -q callRDF.C\(\"Muon\",\"${testnum}\",\"${infilename}\"\)
+root -l -b -q callRDF.C\(\"${testnum}\",\"${infilename}\"\)
 
 echo "ROOT Files:"
 ls -l *.root

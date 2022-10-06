@@ -2,7 +2,7 @@
 //         W-BOSON TLORENTZVECTOR CALCULATOR
 // -------------------------------------------------
 //This is needed for single search
-TLorentzVector WCalc(float corr_met, float corr_met_phi, TLorentzVector lepton_lv)
+TLorentzVector W_reco(float corr_met, float corr_met_phi, TLorentzVector lepton_lv)
 {
 	const double MW = 80.4;
 	double metpx = corr_met * cos(corr_met_phi);
@@ -74,7 +74,7 @@ bool isLeptonic_X(float minMleppJet)
 // 	  HOMEMADE TLORENTZVECTOR CONSTRUCTOR
 // -----------------------------------------------------
 
-ROOT::VecOps::RVec<float> t_Calc(int isLeptonic, ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector Wlv, float minMleppJet, int ind_MinMlj)
+ROOT::VecOps::RVec<float> t_reco(int isLeptonic, ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector Wlv, float minMleppJet, int ind_MinMlj)
 {
 	float t_mass = -999;
 	float t_pt = -999;
@@ -121,7 +121,7 @@ ROOT::VecOps::RVec<float> t_Calc(int isLeptonic, ROOT::VecOps::RVec<float>& jet_
 // -------------------------------------------------
 //    TLORENTZVECTOR CONSTRUCTOR FOR FLOAT ONLYS
 // -------------------------------------------------
-TLorentzVector top_lvConstructor(float pt, float eta, float phi, float mass)
+TLorentzVector lvConstructor(float pt, float eta, float phi, float mass)
 {
 	TLorentzVector lv;
 	lv.SetPtEtaPhiM(pt,eta,phi,mass);
