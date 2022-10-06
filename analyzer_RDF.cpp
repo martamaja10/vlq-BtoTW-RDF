@@ -30,14 +30,14 @@
 //#include "lwtnn/lwtnn/interface/LightweightNeuralNetwork.hh"
 
 using namespace ROOT::VecOps;
-void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int year)
+void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 {
   ROOT::EnableImplicitMT();
   TStopwatch time;
   time.Start();
-  TString nChan = "n"+chan;
-  const char* stdNChan = nChan;
-  std::cout << "Channel Type: " << chan << std::endl;
+  // TString nChan = "n"+chan;
+  // const char* stdNChan = nChan;
+  // std::cout << "Channel Type: " << chan << std::endl;
   bool isNominal = isNominal;
   
   // Samples will be signal, ttbar (a background), and possibly others...
@@ -195,78 +195,97 @@ void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int 
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1")
     .Filter("MET_pt > 50");
   std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
-  auto Lep_df0 = METfilters.Define("nLeptons", stdNChan)		\
-    .Filter("nLeptons > 0");  // REQUIRED to come before any .Define operators for channels
-  std::cout << "Number of Events with Leptons: " << Lep_df0.Count().GetValue() << std::endl;
+
+  // ---------------------------------------------------------
+  //                    Lepton Filters
+  // ---------------------------------------------------------
+
+  // auto Lep_df0 = METfilters.Define("nLeptons", stdNChan)		\
+  //   .Filter("nLeptons > 0");  // REQUIRED to come before any .Define operators for channels
+  //  std::cout << "Number of Events with Leptons: " << Lep_df0.Count().GetValue() << std::endl;
+  
+  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
+    .Define("nTPassMu","(int) Sum(TPassMu)")				\
+    .Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
+							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
+    .Define("nTPassEl","(int) Sum(TPassEl)")				\
+    .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_Mu50 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
+    .Define("isEl","(nElectron > 0 && nTPassEl == 1 && (HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1) && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
+    .Filter("isMu || isEl");
+  
+  auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,TPassMu,TPassEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
+    .Define("lepton_pt","assignleps[0]")				\
+    .Define("lepton_eta","assignleps[1]")				\
+    .Define("lepton_phi","assignleps[2]")				\
+    .Define("lepton_mass","assignleps[3]")				\
+    .Define("lepton_miniIso","assignleps[4]");
+  
   
   // --------------------------------------------------------
   //      Initialize Stuff - careful where you put these
   // --------------------------------------------------------
-  auto xLep = Lep_df0;
-  
-  // ---------------------------------------------------------
-  //                    Lepton Filters
-  // ---------------------------------------------------------
-  //Compare triggers to gridpacks and cut out unneccessary or bad ones
-  if(chan == "Muon")
-    {
-      auto HLTTriggers = Lep_df0.Filter("HLT_Mu50 == 1");
-      
-      // auto Lep_df1 = HLTTriggers.Define("LPassMu","Muon_pt > 10 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 1 && Muon_looseId == true")	\
-      // 	.Define("nLPassMu","(int) Sum(LPassMu)")			\
-      // 	.Filter("nLPassMu == 1");
-      // std::cout << "Number of Events with 1 loose muon: " << Lep_df1.Count().GetValue() << std::endl;
-      
-      auto Lep_df2 = HLTTriggers.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
-	.Define("nTPassMu","(int) Sum(TPassMu)")			\
-	.Filter("nTPassMu == 1");
-      std::cout << "Number of Events with 1 Tight Muon: " << Lep_df2.Count().GetValue() << std::endl;
-      
-      auto Lep_dfEl = Lep_df2.Define("passEl","Electron_pt > 50 && Electron_miniPFRelIso_all < 0.1 && \
-							 Electron_mvaFall17V2noIso_WP90 == true && abs(Electron_eta) < 2.5")\
-	.Define("nPassEl","(int) Sum(passEl)")				\
-	.Filter("nElectron == 0 || (nElectron > 0 && nPassEl == 0)","Electron veto: none passing tight");
-      std::cout << "Number of Events passing the tight electron veto: " << Lep_dfEl.Count().GetValue() << std::endl;
-      
-      xLep = Lep_dfEl.Define("lepton_pt","Muon_pt[TPassMu == true]")	\
-	.Define("lepton_eta","Muon_eta[TPassMu == true]")		\
-	.Define("lepton_phi","Muon_phi[TPassMu == true]")		\
-	.Define("lepton_mass","Muon_mass[TPassMu == true]")		\
-	.Define("lepton_miniIso","Muon_miniPFRelIso_all[TPassMu == true]");
-    }
-  else if(chan == "Electron")
-    {
-      auto HLTTriggers = Lep_df0.Filter("HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1"); // THINK ABOUT THIS! TOO TIGHT...?
+  //  auto xLep = Lep_df1;
 
-      // auto Lep_df1 = HLTTriggers.Define("LPassEl","Electron_pt > 10 && Electron_miniPFRelIso_all < 0.4 && \
-      // 							     Electron_mvaFall17V2noIso_WPL == true && abs(Electron_eta) < 2.5")\
-      // 	.Define("nLPassEl","(int) Sum(LPassEl)")			\
-      // 	.Filter("nLPassEl == 1");
-      // std::cout << "Number of Events with 1 Loose Electron: " << Lep_df1.Count().GetValue() << std::endl;
+  //Compare triggers to gridpacks and cut out unneccessary or bad ones
+  // if(chan == "Muon")
+  //   {
+  //     auto HLTTriggers = Lep_df0.Filter("HLT_Mu50 == 1");
       
-      auto Lep_df2 = HLTTriggers.Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
-							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
-	.Define("nTPassEl","(int) Sum(TPassEl)")			\
-	.Filter("nTPassEl == 1");
-      std::cout << "Number of Events with 1 Tight Electron: " << Lep_df2.Count().GetValue() << std::endl;
+  //     // auto Lep_df1 = HLTTriggers.Define("LPassMu","Muon_pt > 10 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 1 && Muon_looseId == true")	\
+  //     // 	.Define("nLPassMu","(int) Sum(LPassMu)")			\
+  //     // 	.Filter("nLPassMu == 1");
+  //     // std::cout << "Number of Events with 1 loose muon: " << Lep_df1.Count().GetValue() << std::endl;
       
-      auto Lep_dfMu = Lep_df2.Define("passMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 3 && Muon_tightId == true") \
-	.Define("nPassMu","(int) Sum(passMu)")				\
-	.Filter("nMuon == 0 || (nMuon > 0 && nPassMu == 0)","Muon veto: none past tight");
-      std::cout << "Number of Events passing the tight muon veto: " << Lep_dfMu.Count().GetValue() << std::endl;
+  //     auto Lep_df2 = HLTTriggers.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
+  // 	.Define("nTPassMu","(int) Sum(TPassMu)")			\
+  // 	.Filter("nTPassMu == 1");
+  //     std::cout << "Number of Events with 1 Tight Muon: " << Lep_df2.Count().GetValue() << std::endl;
       
-      xLep = Lep_dfMu.Define("lepton_pt","Electron_pt[TPassEl == true]") \
-	.Define("lepton_eta","Electron_eta[TPassEl == true]")		\
-	.Define("lepton_phi","Electron_phi[TPassEl == true]")		\
-	.Define("lepton_mass","Electron_mass[TPassEl == true]")		\
-	.Define("lepton_miniIso","Electron_miniPFRelIso_all[TPassEl == true]");
-    }
+  //     auto Lep_dfEl = Lep_df2.Define("passEl","Electron_pt > 50 && Electron_miniPFRelIso_all < 0.1 && \
+  // 							 Electron_mvaFall17V2noIso_WP90 == true && abs(Electron_eta) < 2.5")\
+  // 	.Define("nPassEl","(int) Sum(passEl)")				\
+  // 	.Filter("nElectron == 0 || (nElectron > 0 && nPassEl == 0)","Electron veto: none passing tight");
+  //     std::cout << "Number of Events passing the tight electron veto: " << Lep_dfEl.Count().GetValue() << std::endl;
+      
+  //     xLep = Lep_dfEl.Define("lepton_pt","Muon_pt[TPassMu == true]")	\
+  // 	.Define("lepton_eta","Muon_eta[TPassMu == true]")		\
+  // 	.Define("lepton_phi","Muon_phi[TPassMu == true]")		\
+  // 	.Define("lepton_mass","Muon_mass[TPassMu == true]")		\
+  // 	.Define("lepton_miniIso","Muon_miniPFRelIso_all[TPassMu == true]");
+  //   }
+  // else if(chan == "Electron")
+  //   {
+  //     auto HLTTriggers = Lep_df0.Filter("HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1"); // THINK ABOUT THIS! TOO TIGHT...?
+
+  //     // auto Lep_df1 = HLTTriggers.Define("LPassEl","Electron_pt > 10 && Electron_miniPFRelIso_all < 0.4 && \
+  //     // 							     Electron_mvaFall17V2noIso_WPL == true && abs(Electron_eta) < 2.5")\
+  //     // 	.Define("nLPassEl","(int) Sum(LPassEl)")			\
+  //     // 	.Filter("nLPassEl == 1");
+  //     // std::cout << "Number of Events with 1 Loose Electron: " << Lep_df1.Count().GetValue() << std::endl;
+      
+  //     auto Lep_df2 = HLTTriggers.Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
+  // 							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
+  // 	.Define("nTPassEl","(int) Sum(TPassEl)")			\
+  // 	.Filter("nTPassEl == 1");
+  //     std::cout << "Number of Events with 1 Tight Electron: " << Lep_df2.Count().GetValue() << std::endl;
+      
+  //     auto Lep_dfMu = Lep_df2.Define("passMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 3 && Muon_tightId == true") \
+  // 	.Define("nPassMu","(int) Sum(passMu)")				\
+  // 	.Filter("nMuon == 0 || (nMuon > 0 && nPassMu == 0)","Muon veto: none past tight");
+  //     std::cout << "Number of Events passing the tight muon veto: " << Lep_dfMu.Count().GetValue() << std::endl;
+      
+  //     xLep = Lep_dfMu.Define("lepton_pt","Electron_pt[TPassEl == true]") \
+  // 	.Define("lepton_eta","Electron_eta[TPassEl == true]")		\
+  // 	.Define("lepton_phi","Electron_phi[TPassEl == true]")		\
+  // 	.Define("lepton_mass","Electron_mass[TPassEl == true]")		\
+  // 	.Define("lepton_miniIso","Electron_miniPFRelIso_all[TPassEl == true]");
+  //   }
   
   // --------------------------------------------------------
   // 		      JET SELECTION w/ cleaning
   // --------------------------------------------------------
   
-  auto jet_ft0 = xLep.Filter("nJet > 0 && nFatJet > 0");
+  auto jet_ft0 = Lep_df1.Filter("nJet > 0 && nFatJet > 0");
   std::cout << "Number of Events with at least one AK4 and AK8 Jet: " << jet_ft0.Count().GetValue() << std::endl;
   
   auto jet_df0 = jet_ft0.Define("goodJets","Jet_pt > 30 && abs(Jet_eta) < 2.4 && Jet_jetId > 1") \
@@ -329,10 +348,10 @@ void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int 
   auto postPresel = HT_calc.Define("genttbarMass",genttbarMassCalc,{"nGenPart","GenPart_pdgId","GenPart_mass", \
 	"GenPart_pt","GenPart_phi","GenPart_eta",			\
 	"GenPart_genPartIdxMother","GenPart_status"})			\
-    .Define("lepton_lv","fVectorConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
+    .Define("lepton_lv","lvConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
     .Define("Jets_lv","fVectorConstructor(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass)") \
     .Define("FatJet_lv","fVectorConstructor(gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass)") \
-    .Define("Jet_ST","Jet_HT + lepton_pt[0] + MET_pt")			\
+    .Define("Jet_ST","Jet_HT + lepton_pt + MET_pt")			\
     .Define("FatJet_pt_1","FatJet_pt[0]")				\
     .Define("FatJet_pt_2","FatJet_pt[1]")				\
     .Define("FatJet_sdMass","FatJet_msoftdrop[goodcleanFatJets == true]") \
@@ -352,9 +371,26 @@ void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int 
     .Define("dpak8_tag","maxFxn(dpak8_J,dpak8_T,dpak8_W)")		\
     .Define("dpak8_tag_1","dpak8_tag[0]")				\
     .Define("dpak8_tag_2","dpak8_tag[1]")				\
-    .Define("nJ_DeepAK8","Sum(dpak8_tag == 0)")				\
-    .Define("nT_DeepAK8","Sum(dpak8_tag == 1)")				\
-    .Define("nW_DeepAK8","Sum(dpak8_tag == 2)")				\
+    .Define("nJ_dpak8","Sum(dpak8_tag == 0)")				\
+    .Define("nT_dpak8","Sum(dpak8_tag == 1)")				\
+    .Define("nW_dpak8","Sum(dpak8_tag == 2)")				\
+    .Define("pNet_J","FatJet_particleNet_QCD[goodcleanFatJets == true]") \
+    .Define("pNet_J_1","pNet_J[0]")					\
+    .Define("pNet_J_2","pNet_J[1]")					\
+    .Define("raw_pNet_T","(FatJet_particleNet_TvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_TvsQCD)") \
+    .Define("pNet_T","raw_pNet_T[goodcleanFatJets == true]")		\
+    .Define("pNet_T_1","pNet_T[0]")					\
+    .Define("pNet_T_2","pNet_T[1]")					\
+    .Define("raw_pNet_W","(FatJet_particleNet_WvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_WvsQCD)") \
+    .Define("pNet_W","raw_pNet_W[goodcleanFatJets == true]")		\
+    .Define("pNet_W_1","pNet_W[0]")					\
+    .Define("pNet_W_2","pNet_W[1]")					\
+    .Define("pNet_tag","maxFxn(pNet_J,pNet_T,pNet_W)")			\
+    .Define("pNet_tag_1","pNet_tag[0]")					\
+    .Define("pNet_tag_2","pNet_tag[1]")					\
+    .Define("nJ_pNet","Sum(pNet_tag == 0)")				\
+    .Define("nT_pNet","Sum(pNet_tag == 1)")				\
+    .Define("nW_pNet","Sum(pNet_tag == 2)")				\
     .Define("raw_tau21","(FatJet_tau2 / FatJet_tau1)")			\
     .Define("tau21","raw_tau21[goodcleanFatJets == true]")		\
     .Define("tau21_1","tau21[0]")					\
@@ -372,23 +408,23 @@ void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int 
 					      	    lepton_pt,lepton_eta, lepton_phi,lepton_mass)")\
     .Define("DR_lep_Jets","DR_calc(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
 					   	 lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
-    .Define("W_lv","WCalc(MET_pt,MET_phi,lepton_lv)")			\
+    .Define("W_lv","W_reco(MET_pt,MET_phi,lepton_lv)")			\
     .Define("minMlj_output",minM_lep_jet_calc,{"gcJet_pt","gcJet_eta", "gcJet_phi","gcJet_mass", \
 	  "lepton_lv"})							\
     .Define("DR_W_lep","dR_Wt_Calc(W_lv,lepton_lv)")			\
     .Define("minM_lep_Jet","minMlj_output[0]")				\
     .Define("minM_lep_Jet_jetID","(int) minMlj_output[1]")		\
     .Define("leptonicParticle","isLeptonic_X(minM_lep_Jet)")		\
-    .Define("t_output","t_Calc(leptonicParticle,gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
+    .Define("t_output","t_reco(leptonicParticle,gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
 					 W_lv,minM_lep_Jet,minM_lep_Jet_jetID)")\
     .Define("t_pt","t_output[0]")					\
     .Define("t_eta","t_output[1]")					\
     .Define("t_phi","t_output[2]")					\
     .Define("t_mass","t_output[3]")					\
     .Define("DR_W_b","t_output[4]")					\
-    .Define("t_lv","top_lvConstructor(t_pt,t_eta,t_phi,t_mass)")
+    .Define("t_lv","lvConstructor(t_pt,t_eta,t_phi,t_mass)")
     .Define("Bprime_output","BPrime_reco(t_lv,W_lv,leptonicParticle,\
-	  				       gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass,dpak8_tag,gcFatJet_msoftdrop)")\
+	  				       gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass,pNet_tag,gcFatJet_msoftdrop)")\
     .Define("Bprime_mass","Bprime_output[0]")				\
     .Define("Bprime_pt","Bprime_output[1]")				\
     .Define("Bprime_eta","Bprime_output[2]")				\
@@ -396,36 +432,18 @@ void rdf::analyzer_RDF(std::string filename, TString chan, TString testNum, int 
     .Define("Bprime_DR","Bprime_output[4]")				\
     .Define("Bprime_ptbal","Bprime_output[5]")				\
     .Define("Bprime_chi2","Bprime_output[6]")				\
-    .Define("BPrime_lv","top_lvConstructor(Bprime_pt,Bprime_eta,Bprime_phi,Bprime_mass)") \
+    .Define("BPrime_lv","lvConstructor(Bprime_pt,Bprime_eta,Bprime_phi,Bprime_mass)") \
     .Define("isValidBDecay","Bprime_output[7]")				\
     .Define("taggedWbjetJet","Bprime_output[8]")			\
     .Define("taggedTjet","Bprime_output[9]")				\
-    .Define("taggedWjet","Bprime_output[10]")
-    
-    .Define("pNet_J","FatJet_particleNet_QCD[goodcleanFatJets == true]") \
-    .Define("pNet_J_1","pNet_J[0]")					\
-    .Define("pNet_J_2","pNet_J[1]")					\
-    .Define("raw_pNet_T","(FatJet_particleNet_TvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_TvsQCD)") \
-    .Define("pNet_T","raw_pNet_T[goodcleanFatJets == true]")		\
-    .Define("pNet_T_1","pNet_T[0]")					\
-    .Define("pNet_T_2","pNet_T[1]")					\
-    .Define("raw_pNet_W","(FatJet_particleNet_WvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_WvsQCD)") \
-    .Define("pNet_W","raw_pNet_W[goodcleanFatJets == true]")		\
-    .Define("pNet_W_1","pNet_W[0]")					\
-    .Define("pNet_W_2","pNet_W[1]")					\
-    .Define("pNet_tag","maxFxn(pNet_J,pNet_T,pNet_W)")		\
-    .Define("pNet_tag_1","pNet_tag[0]")				\
-    .Define("pNet_tag_2","pNet_tag[1]")				\
-    .Define("nJ_pNet","Sum(pNet_tag == 0)")				\
-    .Define("nT_pNet","Sum(pNet_tag == 1)")				\
-    .Define("nW_pNet","Sum(pNet_tag == 2)");
-  
+    .Define("taggedWjet","Bprime_output[10]");
+      
   // -------------------------------------------------
   // 		Save Snapshot to file
   // -------------------------------------------------
   
   std::cout << "-------------------------------------------------" << std::endl << ">>> Saving " << sample << " Snapshot..." << std::endl;
-  TString finalFile = "RDF_"+sample+"_finalsel_"+chan+"_"+testNum+".root";
+  TString finalFile = "RDF_"+sample+"_finalsel_"+testNum+".root";
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;

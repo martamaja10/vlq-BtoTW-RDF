@@ -5,11 +5,11 @@
 #include "BPrime.cc"
 // Going to need new root files
 
-void runRDF(TString channel,TString testNum, std::string inputFile)
+void runRDF(TString testNum, std::string inputFile)
 {
 
-	rdf t(inputFile,"preselTree_"+channel+"_"+testNum,"finalselTree_"+channel+"_"+testNum); // names get set to class members, should be known w/o passing
+	rdf t(inputFile,"preselTree_"+testNum,"finalselTree_"+testNum); // names get set to class members, should be known w/o passing
 	int year = 2017;
 
-	t.analyzer_RDF(inputFile, channel, testNum ,year);
+	t.analyzer_RDF(inputFile, testNum ,year);
 };

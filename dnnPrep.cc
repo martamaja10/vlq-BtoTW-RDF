@@ -29,10 +29,10 @@ TLorentzVector fVectorConstructor(ROOT::VecOps::RVec<float>& pt, ROOT::VecOps::R
 // --------------------------------------------
 // 		 DR CALCULATOR
 // --------------------------------------------
-ROOT::VecOps::RVec<float> DR_calc(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, ROOT::VecOps::RVec<float>& lep_pt, ROOT::VecOps::RVec<float>& lep_eta, ROOT::VecOps::RVec<float>& lep_phi, ROOT::VecOps::RVec<float>& lep_mass)
+ROOT::VecOps::RVec<float> DR_calc(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, float lep_pt, float lep_eta, float lep_phi, float lep_mass)
 {
 	ROOT::VecOps::RVec<float> DR (jet_pt.size(),0);
-	for(int i = 0; i < jet_pt.size(); i++) {DR[i] = DeltaR(jet_eta[i],lep_eta[0],jet_phi[i],lep_phi[0]);}
+	for(int i = 0; i < jet_pt.size(); i++) {DR[i] = DeltaR(jet_eta[i],lep_eta,jet_phi[i],lep_phi);}
 	return DR;
 };
 
