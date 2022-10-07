@@ -63,7 +63,7 @@ else:
         #if count == 1: continue
     
         dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir+'/'+prefix, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix}
-        jdfName=condorDir+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
+        jdfName=condorDir+'/'+prefix+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
         print "jdfname: ",jdfName
         jdf=open(jdfName,'w')
         jdf.write(
@@ -81,7 +81,7 @@ Arguments = %(FILENAME)s %(OUTPUTDIR)s %(TESTNUM)s
 
 Queue 1"""%dict)
         jdf.close()
-        os.chdir('%s/'%(condorDir))
+        os.chdir('%s/'%(condorDir+'/'+prefix))
         os.system('condor_submit %(PREFIX)s_%(TESTNUM)s.job'%dict)
         os.system('sleep 0.5')                                
         os.chdir('%s'%(runDir))
