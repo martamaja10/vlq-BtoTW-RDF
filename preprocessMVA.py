@@ -1,7 +1,7 @@
 # %%
 ### Imports 
 
-from ROOT import TTree, TH1D, TFile
+from ROOT import TTree, TH1D, TFile, RDataFrame
 from root_numpy import tree2array
 import time
 import numpy as np
@@ -89,7 +89,24 @@ print 'Outstr:',outStr,'Outdir:',outdir
 
 # %%
 ### Defining variables for model input
-vars = ['weight','dnnJ_1','dnnJ_2','dnnJ_3','jetPt_1','jetPt_3','sdMass_3','tau21_3','AK4HT','t_pt','t_mass','t_dRWb','AK4HTpMETpLepPt','corr_met_MultiLepCalc','NJets_JetSubCalc', 'NJetsDeepFlavwithSF_JetSubCalc','NJetsAK8_JetSubCalc','minDR_leadAK8otherAK8'] 
+vars = ['weight',
+        'pNetJ_1','pNetJ_2',
+        'pNetT_1','pNetT_2',
+        'pNetW_1','pNetW_2',
+        'dpak8J_1','dpak8J_2',
+        'dpak8T_1','dpak8T_2',
+        'dpak8W_1','dpak8W_2',
+        'FatJet_pt_1','FatJet_pt_2',
+        'FatJet_sdMass_1','FatJet_sdMass_2',
+        'tau21_1','tau21_2',
+        'nJ_dpak8','nT_dpak8','nW_dpak8',
+        'nJ_pNet','nT_pNet','nW_pNet',
+        'Jet_HT','Jet_ST','MET_pt',
+        't_pt','t_mass','t_dRWb',
+        'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
+        'Bprime_DR','Bprime_ptbal','Bprime_chi2',
+        'minDR_leadAK8otherAK8'] 
+
 #'jetPt_2','sdMass_2','sdMass_1', removed for bad data/bkg agreement  #'tau21_1','tau21_2', removed since not used before
 
 ## Initialize/create Arrays to put things in
@@ -130,10 +147,33 @@ eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/MVAtraining_2018_Jan2021/"
 
 ## Choosing valid events with appropriate characteristics and cutting the rest
 # TODO - isvalidBDecay == 0
-seltrain = "isValidBDecayMode_DeepAK8 == 0 && Tprime2_DeepAK8_Mass < 0 && NJetsAK8_JetSubCalc > 2"
-seltest = "isValidTTDecayMode_DeepAK8 == 0 && Tprime2_DeepAK8_Mass >= 0"
+seltrain = ""
+seltest = "NJets_forward > 0"
 
 treeVars = vars
+
+####################################################################
+#
+#   KYLE: let's try a new thing.... 
+#   I think this type of syntax might be pretty close...
+#   Biggest question is whether seltrain/seltest and treeVars are formatted right for .Filter() and .AsNumpy()
+#
+####################################################################
+
+treeTTbarT = TDataFrame("Events",eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root")
+treeTTbarT.Define("weight", []() { return 1.0; })
+trainTTbarT = treeTTbarT.Filter(seltrain).AsNumpy(treeVars)
+testTTbarT = treeTTbarT.Filter(seltest).AsNumpy(treeVars)
+
+####################################################################
+#
+#   End of new thing, which would be done for each of the samples:
+#   TTbarTb, SingleT, SingleTb, Bprime800, Bprime2000
+#   WJets200, 400, 600, 800, 1200, 2500
+#   WEIGHT VALUES FOR EACH ARE IN THE GOOGLE DOC, to go in the .Define
+#
+####################################################################
+
 
 ## Getting values from trees for each parent particle and either keeping them in an array or adding them together
 
@@ -141,6 +181,7 @@ fileTTToSemiLepT  = TFile.Open(eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-ma
 treeTTToSemiLepT  = fileTTToSemiLepT.Get("ljmet")
 trainTTToSemiLepT = tree2array(treeTTToSemiLepT, treeVars, seltrain)
 testTTToSemiLepT  = tree2array(treeTTToSemiLepT, treeVars, seltest)
+
 
 # %%
 ### Perform selections on data
@@ -201,7 +242,7 @@ max1200 = int(round(multiplier*34.15))
 max800 = int(round(multiplier*141.36))
 max600 = int(round(multiplier*309.66))
 max400 = int(round(multiplier*1256.89))
-# max200 = int(rount(multiplyer*_______))
+max200 = int(rount(multiplyer*))
 maxtest2500 = int(round(multipliertest*1.))
 maxtest1200 = int(round(multipliertest*34.15))
 maxtest800 = int(round(multipliertest*141.36))
