@@ -25,7 +25,7 @@ echo "Running RDF:"
 root -l -b -q callRDF.C\(\"${testnum}\",\"${infilename}\"\)
 
 echo "ROOT Files:"
-ls -l *.root
+ls -l *${testnum}*.root
 
 echo "Removing presel files:"
 rm *preselTree*.root
@@ -33,7 +33,7 @@ rm *preselTree*.root
 # copy output to eos
 
 echo "xrdcp output for condor"
-for FILE in *.root
+for FILE in *${testnum}*.root
 do
   echo "xrdcp -f ${FILE} root://cmseos.fnal.gov/${outputDir}/${FILE}"
   xrdcp -f ${FILE} root://cmseos.fnal.gov/${outputDir}/${FILE} 2>&1

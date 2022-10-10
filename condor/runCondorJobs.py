@@ -6,7 +6,7 @@ execfile("/uscms_data/d3/jmanagan/EOSSafeUtils.py")
 start_time = time.time()
 
 makelists = False
-if len(sys.argv) > 1: makelists = eval(bool(sys.argv[1]))
+if len(sys.argv) > 1: makelists = bool(eval(sys.argv[1]))
 
 relbase = '/uscms_data/d3/jmanagan/BtoTW/CMSSW_11_0_0/'
 outDir='/store/user/jmanagan/BtoTW_RDF'
@@ -44,22 +44,26 @@ if makelists:
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM" > WJets2500NanoList.txt')
 
 else:
+    textlist = 'WJets2500NanoList.txt'
+    prefix = 'WJets2500'
+
     rootfiles = []
-    with open(os.path.abspath('TTbarNanoList.txt'),'r') as rootlist:
+    with open(os.path.abspath(textlist),'r') as rootlist:
         for line in rootlist:
             rootfiles.append('root://cmsxrootd.fnal.gov/'+line.strip())
+            #rootfiles.append('root://cmseos.fnal.gov/'+line.strip())
     print '\tTotal files:',len(rootfiles)
 
-    os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir)
-    os.system('mkdir -p '+condorDir)
+    os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
+    os.system('mkdir -p '+condorDir+'/'+prefix)
 
     for ifile in rootfiles:
 
         count+=1
         #if count == 1: continue
     
-        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir, 'TARBALL':tarfile, 'TESTNUM':count}
-        jdfName=condorDir+'/TTbar_%(TESTNUM)s.job'%dict
+        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'FILENAME':ifile, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir+'/'+prefix, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix}
+        jdfName=condorDir+'/'+prefix+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
         print "jdfname: ",jdfName
         jdf=open(jdfName,'w')
         jdf.write(
@@ -69,16 +73,16 @@ Executable = %(RUNDIR)s/condorRDF.sh
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
 Transfer_Input_Files = %(TARBALL)s
-Output = TTbarRDF_%(TESTNUM)s.out
-Error = TTbarRDF_%(TESTNUM)s.err
-Log = TTbarRDF_%(TESTNUM)s.log
+Output = %(PREFIX)s_RDF_%(TESTNUM)s.out
+Error = %(PREFIX)s_RDF_%(TESTNUM)s.err
+Log = %(PREFIX)s_RDF_%(TESTNUM)s.log
 Notification = Never
 Arguments = %(FILENAME)s %(OUTPUTDIR)s %(TESTNUM)s
 
 Queue 1"""%dict)
         jdf.close()
-        os.chdir('%s/'%(condorDir))
-        os.system('condor_submit TTbar_%(TESTNUM)s.job'%dict)
+        os.chdir('%s/'%(condorDir+'/'+prefix))
+        os.system('condor_submit %(PREFIX)s_%(TESTNUM)s.job'%dict)
         os.system('sleep 0.5')                                
         os.chdir('%s'%(runDir))
         print count, "jobs submitted!!!"

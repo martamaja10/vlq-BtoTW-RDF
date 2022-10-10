@@ -1,32 +1,3 @@
-
-Skip to content
-Pull requests
-Issues
-Marketplace
-Explore
-@kyh57363
-jmhogan /
-vlq-BtoTW-RDF
-Public
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-
-    Insights
-
-vlq-BtoTW-RDF/preprocessMVA.py /
-@jmhogan
-jmhogan idea about using RDF in the preprocess
-Latest commit e8ccc7c 7 minutes ago
-History
-2 contributors
-@kyh57363
-@jmhogan
-543 lines (467 sloc) 21.1 KB
 # %%
 ### Imports 
 
@@ -570,21 +541,3 @@ np.savez(outdir+'Arrays'+outStr,trainData=trainData, trainLabel=trainLabel, test
 
 print 'Done'
 print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-
-    Terms
-    Privacy
-    Security
-    Status
-    Docs
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
-
-Comparing jmhogan:main...kyh57363:main · jmhogan/vlq-BtoTW-RDF
-vlq-BtoTW-RDF/preprocessMVA.py at main · jmhogan/vlq-BtoTW-RDF
