@@ -1,16 +1,13 @@
 # %%
 ### Imports 
 
-from ROOT import TTree, TH1D, TFile
+from ROOT import TTree, TH1D, TFile, RDataFrame
 from root_numpy import tree2array
 import time
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import sys
-import os
-import math
 
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
@@ -28,7 +25,6 @@ from sklearn import tree
 
 # %%
 ### Defining assisting functions
-
 def millify(n):
    n = float(n)
    millnames = ['','k','M','G','T']
@@ -50,9 +46,9 @@ def resample_with_replacement(X_train, sample_weight):
    sample_weight = sample_weight / sample_weight.sum(dtype=np.float64)
    
    X_train_resampled = np.zeros((len(X_train), len(X_train[0])), dtype=np.float32)
-   print('\t Resampling:')
+   print '\t Resampling:'
    for i in range(len(X_train)):
-      if i%10000 == 0: print('\t\t ...',i,'...')
+      if i%10000 == 0: print '\t\t ...',i,'...'
       # draw a number from 0 to len(X_train)-1
       draw = np.random.choice(np.arange(len(X_train)), p=sample_weight)
 
@@ -71,10 +67,11 @@ testnum = 0
 
 # %%
 ### Setup logs
+
+# TODO
 outdir = outdir + '/'
 if not os.path.exists(outdir): os.system('mkdir '+outdir)
-filetime = time.strftime("%Y-%m-%d-%H:%M")
-ofile = open(outdir+"BB_PreprocessLog_" + filetime + ".txt","a+")
+ofile = open(outdir+"TT_output_Jan21_2018.txt","a+")
 ofile.write('\narch, Original ttbar Training Events, Original TT 1.0 Training Events, Original WJets Training events, Original ttbar testing events, Original TT 1.0 testing events, Original TT 1.8 testing events, Original WJets Testing Events, Final Training ttbar, Final Training TT 1.0, Final Training WJets, Final Testing ttbar, Final Testing TT 1.0, Final Testing Tprime1.8, Final Testing WJets'+'\n')
 ofile.write(arch+", ")
 
@@ -88,17 +85,34 @@ WithBprimeVars = False
 # %%
 ### Setup output directory
 outStr = '_2018TT_'+str(arch)+'_' + str(millify(maxtest)) +'test'
-print('Outstr:',outStr,'Outdir:',outdir)
+print 'Outstr:',outStr,'Outdir:',outdir
 
 # %%
 ### Defining variables for model input
-vars = ['weight','dnnJ_1','dnnJ_2','dnnJ_3','jetPt_1','jetPt_3','sdMass_3','tau21_3','AK4HT','t_pt','t_mass','t_dRWb','AK4HTpMETpLepPt','corr_met_MultiLepCalc','NJets_JetSubCalc', 'NJetsDeepFlavwithSF_JetSubCalc','NJetsAK8_JetSubCalc','minDR_leadAK8otherAK8'] 
+vars = ['weight',
+        'pNetJ_1','pNetJ_2',
+        'pNetT_1','pNetT_2',
+        'pNetW_1','pNetW_2',
+        'dpak8J_1','dpak8J_2',
+        'dpak8T_1','dpak8T_2',
+        'dpak8W_1','dpak8W_2',
+        'FatJet_pt_1','FatJet_pt_2',
+        'FatJet_sdMass_1','FatJet_sdMass_2',
+        'tau21_1','tau21_2',
+        'nJ_dpak8','nT_dpak8','nW_dpak8',
+        'nJ_pNet','nT_pNet','nW_pNet',
+        'Jet_HT','Jet_ST','MET_pt',
+        't_pt','t_mass','t_dRWb',
+        'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
+        'Bprime_DR','Bprime_ptbal','Bprime_chi2',
+        'minDR_leadAK8otherAK8'] 
+
 #'jetPt_2','sdMass_2','sdMass_1', removed for bad data/bkg agreement  #'tau21_1','tau21_2', removed since not used before
 
 ## Initialize/create Arrays to put things in
 trainTTToSemiLepT = []
 trainTTToSemiLepTb = []
-trainBprime    = []
+trainTprime    = []
 trainWJets200   = []
 trainWJets400    = []
 trainWJets600    = []
@@ -106,16 +120,19 @@ trainWJets800    = []
 trainWJets1200    = []
 trainWJets2500    = []
 
+# TODO - copy naming scheme
 trainSingleT = []
 trainSingleTb = []
 
-testSingleT = []
-testSingleTb = []
 
 testTTToSemiLepT = []
 testTTToSemiLepTb = []
-testBprime      = []
-testBprime2   = []
+
+
+testTTToSemiLepT = []
+testTTToSemiLepTb = []
+testTprime      = []
+testTprime2   = []
 testWJets200   = []
 testWJets400    = []
 testWJets600    = []
@@ -125,81 +142,98 @@ testWJets2500    = []
 
 # %%
 ### Open ROOT files and get data
-print('Opening files...')
-eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/MVAtraining_2018_Jan2021/"
+print 'Opening files...'
+eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 ## Choosing valid events with appropriate characteristics and cutting the rest
-# TODO - isvalidBDecay == 0
-seltrain = "isValidBDecay == 0"
-seltest = "isValidBDecay == 0"
+seltrain = "isvalidBDecay == 0"
+seltest = "isvalidBDecay == 0"
 
 treeVars = vars
 
+####################################################################
+#
+#   KYLE: let's try a new thing.... 
+#   I think this type of syntax might be pretty close...
+#   Biggest question is whether seltrain/seltest and treeVars are formatted right for .Filter() and .AsNumpy()
+#
+####################################################################
+
+treeTTbarT = TDataFrame("Events",eosdir + "ttbarTb_hadd.root")
+treeTTbarT.Define("weight", []() { return 1.0; })
+trainTTbarT = treeTTbarT.Filter(seltrain).AsNumpy(treeVars)
+testTTbarT = treeTTbarT.Filter(seltest).AsNumpy(treeVars)
+
+####################################################################
+#
+#   End of new thing, which would be done for each of the samples:
+#   TTbarTb, SingleT, SingleTb, Bprime800, Bprime2000
+#   WJets200, 400, 600, 800, 1200, 2500
+#   WEIGHT VALUES FOR EACH ARE IN THE GOOGLE DOC, to go in the .Define
+#
+####################################################################
+
+
 ## Getting values from trees for each parent particle and either keeping them in an array or adding them together
 
-fileTTToSemiLepT  = TFile.Open(eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeTTToSemiLepT  = fileTTToSemiLepT.Get("ljmet")
-trainTTToSemiLepT = tree2array(treeTTToSemiLepT, treeVars, seltrain)
-testTTToSemiLepT  = tree2array(treeTTToSemiLepT, treeVars, seltest)
+# fileTTToSemiLepT  = TFile.Open(eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeTTToSemiLepT  = fileTTToSemiLepT.Get("ljmet")
+# trainTTToSemiLepT = tree2array(treeTTToSemiLepT, treeVars, seltrain)
+# testTTToSemiLepT  = tree2array(treeTTToSemiLepT, treeVars, seltest)
+
 
 # %%
 ### Perform selections on data
 ## Selection with Single Lept from TBar
-fileTTToSemiLepTb = TFile.Open(eosdir + "TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeTTToSemiLepTb = fileTTToSemiLepTb.Get("ljmet")  
-trainTTToSemiLepTb = tree2array(treeTTToSemiLepTb, treeVars, seltrain)
-testTTToSemiLepTb  = tree2array(treeTTToSemiLepTb, treeVars, seltest)
+# fileTTToSemiLepTb = TFile.Open(eosdir + "TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeTTToSemiLepTb = fileTTToSemiLepTb.Get("ljmet")  
+# trainTTToSemiLepTb = tree2array(treeTTToSemiLepTb, treeVars, seltrain)
+# testTTToSemiLepTb  = tree2array(treeTTToSemiLepTb, treeVars, seltest)
 
-## Selection with signals   
-fileBprime  = TFile.Open(eosdir + "TprimeTprime_M-1000_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
-fileBprime2 = TFile.Open(eosdir + "TprimeTprime_M-1800_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
-if Bprime == 1.8:
-   temp = fileBprime
-   fileBprime = fileBprime2
-   fileBprime2 = temp
-treeBprime = fileBprime.Get("ljmet")
-treeBprime2 = fileBprime2.Get("ljmet")
-trainBprime= tree2array(treeBprime, treeVars, seltrain)
-testBprime= tree2array(treeBprime, treeVars, seltest)
-testBprime2= tree2array(treeBprime2, treeVars, seltest)
+# ## Selection with signals   
+# fileTprime  = TFile.Open(eosdir + "TprimeTprime_M-1000_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
+# fileTprime2 = TFile.Open(eosdir + "TprimeTprime_M-1800_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
+# if Tprime == 1.8:
+#    temp = fileTprime
+#    fileTprime = fileTprime2
+#    fileTprime2 = temp
+# treeTprime = fileTprime.Get("ljmet")
+# treeTprime2 = fileTprime2.Get("ljmet")
+# trainTprime= tree2array(treeTprime, treeVars, seltrain)
+# testTprime= tree2array(treeTprime, treeVars, seltest)
+# testTprime2= tree2array(treeTprime2, treeVars, seltest)
 
-## Section with W Jets
+# ## Section with W Jets
 
-fileWJets1200   = TFile.Open(eosdir + "WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets1200   = fileWJets1200.Get("ljmet")
-trainWJets1200= tree2array(treeWJets1200, treeVars, seltrain)
-testWJets1200= tree2array(treeWJets1200, treeVars, seltest)
+# fileWJets1200   = TFile.Open(eosdir + "WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets1200   = fileWJets1200.Get("ljmet")
+# trainWJets1200= tree2array(treeWJets1200, treeVars, seltrain)
+# testWJets1200= tree2array(treeWJets1200, treeVars, seltest)
 
-fileWJets2500    = TFile.Open(eosdir + "WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets2500    = fileWJets2500.Get("ljmet")
-trainWJets2500= tree2array(treeWJets2500, treeVars, seltrain)
-testWJets2500= tree2array(treeWJets2500, treeVars, seltest)
+# fileWJets2500    = TFile.Open(eosdir + "WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets2500    = fileWJets2500.Get("ljmet")
+# trainWJets2500= tree2array(treeWJets2500, treeVars, seltrain)
+# testWJets2500= tree2array(treeWJets2500, treeVars, seltest)
 
-fileWJets400    = TFile.Open(eosdir + "WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets400    = fileWJets400.Get("ljmet")
-trainWJets400= tree2array(treeWJets400, treeVars, seltrain)
-testWJets400= tree2array(treeWJets400, treeVars, seltest)
+# fileWJets400    = TFile.Open(eosdir + "WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets400    = fileWJets400.Get("ljmet")
+# trainWJets400= tree2array(treeWJets400, treeVars, seltrain)
+# testWJets400= tree2array(treeWJets400, treeVars, seltest)
 
-fileWJets600  = TFile.Open(eosdir + "WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets600  = fileWJets600.Get("ljmet")
-trainWJets600= tree2array(treeWJets600, treeVars, seltrain)
-testWJets600= tree2array(treeWJets600, treeVars, seltest)
+# fileWJets600  = TFile.Open(eosdir + "WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets600  = fileWJets600.Get("ljmet")
+# trainWJets600= tree2array(treeWJets600, treeVars, seltrain)
+# testWJets600= tree2array(treeWJets600, treeVars, seltest)
 
-fileWJets800  = TFile.Open(eosdir + "WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets800  = fileWJets800.Get("ljmet")
-trainWJets800= tree2array(treeWJets800, treeVars, seltrain)
-testWJets800= tree2array(treeWJets800, treeVars, seltest)
-
-#TODO - Not sure what this filename should be
-fileWJets200  = TFile.Open(eosdir + "WJetsToLNu_HT-200To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets200  = fileWJets200.Get("ljmet")
-trainWJets200= tree2array(treeWJets200, treeVars, seltrain)
-testWJets200= tree2array(treeWJets200, treeVars, seltest)
+# fileWJets800  = TFile.Open(eosdir + "WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets800  = fileWJets800.Get("ljmet")
+# trainWJets800= tree2array(treeWJets800, treeVars, seltrain)
+# testWJets800= tree2array(treeWJets800, treeVars, seltest)
 
 # %%
 ### Further data preprocessing
 ## Get the WJets HT bins combined in (close to) the right ratios for smoothness
-print('Weighting WJets...')
+print 'Weighting WJets...'
 multiplier = 550000./1743.  ## tweak numerator until original N training is large enough in print below
 multipliertest = 40. ## less than printout from 600 sample above
 max2500 = int(round(multiplier*1.))
@@ -207,15 +241,12 @@ max1200 = int(round(multiplier*34.15))
 max800 = int(round(multiplier*141.36))
 max600 = int(round(multiplier*309.66))
 max400 = int(round(multiplier*1256.89))
-max200 = int(round(multiplier*1500))
-#TODO - Waiting on input from Dr. H to see what 200 multiplier should be
-
+max200 = int(rount(multiplyer*))
 maxtest2500 = int(round(multipliertest*1.))
 maxtest1200 = int(round(multipliertest*34.15))
 maxtest800 = int(round(multipliertest*141.36))
 maxtest600 = int(round(multipliertest*309.66))
 maxtest400 = int(round(multipliertest*1256.89))
-maxtest200 = int(round(multipliertest*1500))
 
 ## Shuffle, cuz why not...
 np.random.shuffle(trainWJets400)
@@ -229,10 +260,10 @@ np.random.shuffle(testWJets800)
 np.random.shuffle(testWJets1200)
 np.random.shuffle(testWJets2500)
 
-print("Concatenating, manipulating, shuffling...")
+print "Concatenating, manipulating, shuffling..."
 ## Add them together as if they were one sample, then shuffle
-trainWJets = np.concatenate([trainWJets200[:max200],trainWJets400[:max400],trainWJets600[:max600],trainWJets800[:max800],trainWJets1200[:max1200],trainWJets2500[:max2500]])
-testWJets = np.concatenate([testWJets200[:maxtest200],testWJets400[:maxtest400],testWJets600[:maxtest600],testWJets800[:maxtest800],testWJets1200[:maxtest1200],testWJets2500[:maxtest2500]])
+trainWJets = np.concatenate([trainWJets400[:max400],trainWJets600[:max600],trainWJets800[:max800],trainWJets1200[:max1200],trainWJets2500[:max2500]])
+testWJets = np.concatenate([testWJets400[:maxtest400],testWJets600[:maxtest600],testWJets800[:maxtest800],testWJets1200[:maxtest1200],testWJets2500[:maxtest2500]])
 np.random.shuffle(trainWJets)
 np.random.shuffle(testWJets)
 
@@ -243,17 +274,17 @@ np.random.shuffle(trainTTToSemiLep)
 np.random.shuffle(testTTToSemiLep)
 
 ## Print initial information to the log file and the screen
-ofile.write(str(len(trainTTToSemiLep)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTToSemiLep)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets)) + ", ")
+ofile.write(str(len(trainTTToSemiLep)) + ", " + str(len(trainTprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTToSemiLep)) + ", " +str(len(testTprime)) + ", " +str(len(testTprime2)) + ", " +str(len(testWJets)) + ", ")
 
 ## Use this pring when you've changed samples and need to check!
-print("-------Before Concatenate---------")
-print("number of TTToSemiLep training events: ", len(trainTTToSemiLep))
-print("number of Tprime " + str(Bprime) + " training events: ", len(trainBprime))
-print("number of WJets training events: ", len(trainWJets))
-print("number of TTToSemiLep testing events: ", len(testTTToSemiLep))
-print("number of Tprime " + str(Bprime) + " testing events: ", len(testBprime))
-print("number of Tprime " + str(Bprime2) + " testing events: ", len(testBprime2))
-print("number of WJets testing events: ", len(testWJets))
+print "-------Before Concatenate---------"
+print "number of TTToSemiLep training events: ", len(trainTTToSemiLep)
+print "number of Tprime " + str(Tprime) + " training events: ", len(trainTprime)
+print "number of WJets training events: ", len(trainWJets)
+print "number of TTToSemiLep testing events: ", len(testTTToSemiLep)
+print "number of Tprime " + str(Tprime) + " testing events: ", len(testTprime)
+print "number of Tprime " + str(Tprime2) + " testing events: ", len(testTprime2)
+print "number of WJets testing events: ", len(testWJets)
 
 ## "Testing" events are the most signal-like, so we want as many as possible
 ## in the training arrays for signal and ttbar
@@ -263,8 +294,8 @@ print("number of WJets testing events: ", len(testWJets))
 # trainTTToSemiLep = np.concatenate([testTTToSemiLep[maxtest:],trainTTToSemiLep])
 
 ## Shorten the testing arrays to the chosen length
-testBprime = testBprime[:maxtest]
-testBprime2 = testBprime2[:maxtest]
+testTprime = testTprime[:maxtest]
+testTprime2 = testTprime2[:maxtest]
 testWJets = testWJets[:maxtest]
 testTTToSemiLep = testTTToSemiLep[:maxtest]
 
@@ -280,35 +311,35 @@ testTTToSemiLep = testTTToSemiLep[:maxtest]
 
 ## Calculate the maximum number of allowed training events in each group
 ## We'll allow up to 10% imbalance between the samples.
-maxpersample = int(round(1.1*min(len(trainTTToSemiLep), len(trainBprime), len(trainWJets)),0))
+maxpersample = int(round(1.1*min(len(trainTTToSemiLep), len(trainTprime), len(trainWJets)),0))
 #print 'MAX TRAINING = ',maxpersample 
 
 ## Shorten the training arrays to the max allowed length
 ## These are not shuffled yet, so we will chop off fewer "good" testing events
-trainBprime = trainBprime[:maxpersample]
+trainTprime = trainTprime[:maxpersample]
 trainWJets = trainWJets[:maxpersample]
 trainTTToSemiLep = trainTTToSemiLep[:maxpersample]
 
 ## Now shuffle everything up!
 np.random.shuffle(trainTTToSemiLep)
-np.random.shuffle(trainBprime)
+np.random.shuffle(trainTprime)
 np.random.shuffle(trainWJets)
 np.random.shuffle(testTTToSemiLep)
 np.random.shuffle(testWJets)
-np.random.shuffle(testBprime)
-np.random.shuffle(testBprime2)
+np.random.shuffle(testTprime)
+np.random.shuffle(testTprime2)
 
 ## Final size print to the screen -- use when changing samples!
-print('-------- Final sizes ------')
-print('Training ttbar',len(trainTTToSemiLep))
-print('Training Tprime',len(trainBprime))
-print('Training WJets',len(trainWJets))
-print('Testing ttbar',len(testTTToSemiLep))
-print('Testing Tprime 1.0',len(testBprime))
-print('Testing Tprime 1.8',len(testBprime2))
-print('Testing WJets',len(testWJets))
+print '-------- Final sizes ------'
+print 'Training ttbar',len(trainTTToSemiLep)
+print 'Training Tprime',len(trainTprime)
+print 'Training WJets',len(trainWJets)
+print 'Testing ttbar',len(testTTToSemiLep)
+print 'Testing Tprime 1.0',len(testTprime)
+print 'Testing Tprime 1.8',len(testTprime2)
+print 'Testing WJets',len(testWJets)
 
-ofile.write(str(len(trainTTToSemiLep)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTToSemiLep)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets)) + ", ")
+ofile.write(str(len(trainTTToSemiLep)) + ", " + str(len(trainTprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTToSemiLep)) + ", " +str(len(testTprime)) + ", " +str(len(testTprime2)) + ", " +str(len(testWJets)) + ", ")
 ofile.close()
 
 ## build arrays where each entry is a list of all training variables
@@ -324,7 +355,7 @@ newTestWJets = []
 for entry in trainTTToSemiLep:
     a = list(entry)
     newTrainTTToSemiLep.append(a)
-for entry in trainBprime:
+for entry in trainTprime:
     a = list(entry)
     newTrainTprime.append(a)
 for entry in trainWJets:
@@ -333,10 +364,10 @@ for entry in trainWJets:
 for entry in testTTToSemiLep:
     a = list(entry)
     newTestTTToSemiLep.append(a)
-for entry in testBprime:
+for entry in testTprime:
     a = list(entry)
     newTestTprime.append(a)
-for entry in testBprime2:
+for entry in testTprime2:
     a = list(entry)
     newTestTprime2.append(a)
 for entry in testWJets:
@@ -371,30 +402,30 @@ RStestWJets = (resample_with_replacement(newTestWJets,weightsTestWJets)).tolist(
 ## copy.copy means we can edit them separately, else they are magically linked...
 ## we will use the "new" versions for merging and save the copies for plots
 trainTTToSemiLep = copy.copy(RStrainTTToSemiLep)
-trainBprime = copy.copy(RStrainTprime)
+trainTprime = copy.copy(RStrainTprime)
 trainWJets = copy.copy(RStrainWJets)
 testTTToSemiLep = copy.copy(RStestTTToSemiLep)
-testBprime = copy.copy(RStestTprime)
-testBprime2 = copy.copy(RStestTprime2)
+testTprime = copy.copy(RStestTprime)
+testTprime2 = copy.copy(RStestTprime2)
 testWJets = copy.copy(RStestWJets)
 
 ## Transpose these arrays to get arrays for plotting
 ## Each entry is one variable for all the events
 ## We will make sure all samples are the same size for plots
-numPerSample = min(len(trainTTToSemiLep),len(trainBprime),len(trainWJets))
+numPerSample = min(len(trainTTToSemiLep),len(trainTprime),len(trainWJets))
 
 histsTTToSemiLep = np.array(trainTTToSemiLep[:numPerSample]).T
-histsTprime = np.array(trainBprime[:numPerSample]).T
+histsTprime = np.array(trainTprime[:numPerSample]).T
 #histsTprime2 = np.array(trainTprime2[:numPerSample]).T
 histsWJets = np.array(trainWJets[:numPerSample]).T
 
 # %% 
 ###Plot input data
-print("Plotting input variables...")
+print "Plotting input variables..."
 for index, hist in enumerate(histsWJets):
    plt.figure()
    plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
-   plt.hist(histsTprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
+   plt.hist(histsTprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Tprime)+'\,TeV)}$', histtype='step', normed=True)
    #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
    plt.hist(histsTTToSemiLep[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
    plt.title('CMS Simulation',loc='left',size=18)
@@ -402,13 +433,13 @@ for index, hist in enumerate(histsWJets):
    plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
    plt.xlabel(vars[index],horizontalalignment='right',x=1.0,size=14)
    plt.legend(loc='best',fontsize=14)
-   if not WithBprimeVars: plt.savefig(outdir+'plots_'+str(vars[index])+outStr)
-   if WithBprimeVars: plt.savefig(outdir+'plots_'+str(vars[index])+outStr)
+   if not WithTprimeVars: plt.savefig(outdir+'plots_'+str(vars[index])+outStr)
+   if WithTprimeVars: plt.savefig(outdir+'plots_'+str(vars[index])+outStr)
    plt.close()
 
 # %%
 ### Make arrays of testing data
-print("Merging samples...")
+print "Merging samples..."
 
 trainData = []
 trainLabel = []
@@ -505,7 +536,7 @@ while nEventsTest > 0:
 
 
 ## save the output of the setup
-np.savez(outdir+'Arrays'+outStr,trainData=trainData, trainLabel=trainLabel, testData=testData, testLabel=testLabel, testWJets=testWJets, testTTToSemilep=testTTToSemiLep, testTprime=testBprime, testTprime2=testBprime2) ## for the sake of space, we won't save this stuff right now. 
+np.savez(outdir+'Arrays'+outStr,trainData=trainData, trainLabel=trainLabel, testData=testData, testLabel=testLabel, testWJets=testWJets, testTTToSemilep=testTTToSemiLep, testTprime=testTprime, testTprime2=testTprime2) ## for the sake of space, we won't save this stuff right now. 
 
-print('Done')
+print 'Done'
 print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))

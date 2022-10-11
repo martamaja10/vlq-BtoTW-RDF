@@ -41,8 +41,10 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   bool isNominal = isNominal;
   
   // Samples will be signal, ttbar (a background), and possibly others...
-  TString sample = "signal";
+  TString sample = "singletop";
   if(isTT == true){sample = "ttbar";} 
+  else if(isSig == true}{sample = "Bprime";}
+  else if(isMadgraphBkg == true){sample = "wjets";}
   std::cout<< "Sample: " << sample << std::endl;
   
   // -------------------------------------------------------

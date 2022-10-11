@@ -84,7 +84,7 @@ test1100 = False #use if Bprime = 1800
 # %%
 ### Configure output
 outStr = '_'+year+'BB_'+str(arch)+'_' + str(millify(maxtest)) +'test_vars'+str(vararray)+'_Test'+str(testnum)
-print 'Outstr:',outStr,'Outdir:',outdir
+print('Outstr:',outStr,'Outdir:',outdir)
 if not os.path.exists(outdir): os.system('mkdir '+outdir)
 
 # %% 
@@ -162,7 +162,7 @@ if year == 'all':
 ### Select input for training and testing
 # TODO
 vars = list(combos[vararray])
-print 'Vars = ',vars
+print('Vars = ',vars)
 
 indexKill = range(0,len(varList))
 for item in vars:
@@ -196,9 +196,9 @@ for i in range(0,len(testWJets)):
 
 # %% 
 ### Perform scaling
-print 'Building the scaler...'
+print('Building the scaler...')
 scaler = preprocessing.StandardScaler().fit(trainData)
-print 'Transforming...'
+print('Transforming...')
 trainData = scaler.transform(trainData)
 testData = scaler.transform(testData)
 testTprime2 = scaler.transform(testTprime2)
@@ -214,8 +214,8 @@ mlp = neural_network.MLPClassifier(hidden_layer_sizes=arch2tuple(arch), activati
 mlp.fit(trainData, trainLabel)
 # %%
 ### Get scores for training and test data
-print 'Test data score =',mlp.score(testData, testLabel)
-print 'Train data score =',mlp.score(trainData, trainLabel)
+print('Test data score =',mlp.score(testData, testLabel))
+print('Train data score =',mlp.score(trainData, trainLabel))
 ofile.write(str(round(mlp.score(testData, testLabel),5)) + ", ")
 
 # %%
@@ -309,7 +309,7 @@ if mlp.score(testData,testLabel) > threshold:
    classRep = open('ClassificationReportsBB.txt', 'a+')
    cRep = classification_report(testLabel,mlp.predict(testData),target_names=['Wjets', 'ttbar', 'BBbar'], digits = 6)
    classRep.write('\n================================\n     Test #:' + str(testnum) +'\n================================\n' + cRep)
-   classRep.close(
+   classRep.close()
 
 # %%
 ### Save outputs and close
@@ -324,5 +324,5 @@ joblib.dump(scaler, outdir+'Dnn_scaler_3bin'+outStr+'.pkl')
 ofile.write(str(round(prec,5)) + ', ' + str(round(recall,5)) + ', ' + str(round(fscore,5))+ '\n')
 ofile.close()
 
-print 'Done'
+print('Done')
 print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
