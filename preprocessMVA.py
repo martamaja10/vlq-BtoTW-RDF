@@ -143,12 +143,11 @@ testWJets2500    = []
 # %%
 ### Open ROOT files and get data
 print 'Opening files...'
-eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/MVAtraining_2018_Jan2021/"
+eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 ## Choosing valid events with appropriate characteristics and cutting the rest
-# TODO - isvalidBDecay == 0
-seltrain = ""
-seltest = "NJets_forward > 0"
+seltrain = "isvalidBDecay == 0"
+seltest = "isvalidBDecay == 0"
 
 treeVars = vars
 
@@ -160,7 +159,7 @@ treeVars = vars
 #
 ####################################################################
 
-treeTTbarT = TDataFrame("Events",eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root")
+treeTTbarT = TDataFrame("Events",eosdir + "ttbarTb_hadd.root")
 treeTTbarT.Define("weight", []() { return 1.0; })
 trainTTbarT = treeTTbarT.Filter(seltrain).AsNumpy(treeVars)
 testTTbarT = treeTTbarT.Filter(seltest).AsNumpy(treeVars)
@@ -177,59 +176,59 @@ testTTbarT = treeTTbarT.Filter(seltest).AsNumpy(treeVars)
 
 ## Getting values from trees for each parent particle and either keeping them in an array or adding them together
 
-fileTTToSemiLepT  = TFile.Open(eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeTTToSemiLepT  = fileTTToSemiLepT.Get("ljmet")
-trainTTToSemiLepT = tree2array(treeTTToSemiLepT, treeVars, seltrain)
-testTTToSemiLepT  = tree2array(treeTTToSemiLepT, treeVars, seltest)
+# fileTTToSemiLepT  = TFile.Open(eosdir + "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeTTToSemiLepT  = fileTTToSemiLepT.Get("ljmet")
+# trainTTToSemiLepT = tree2array(treeTTToSemiLepT, treeVars, seltrain)
+# testTTToSemiLepT  = tree2array(treeTTToSemiLepT, treeVars, seltest)
 
 
 # %%
 ### Perform selections on data
 ## Selection with Single Lept from TBar
-fileTTToSemiLepTb = TFile.Open(eosdir + "TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeTTToSemiLepTb = fileTTToSemiLepTb.Get("ljmet")  
-trainTTToSemiLepTb = tree2array(treeTTToSemiLepTb, treeVars, seltrain)
-testTTToSemiLepTb  = tree2array(treeTTToSemiLepTb, treeVars, seltest)
+# fileTTToSemiLepTb = TFile.Open(eosdir + "TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeTTToSemiLepTb = fileTTToSemiLepTb.Get("ljmet")  
+# trainTTToSemiLepTb = tree2array(treeTTToSemiLepTb, treeVars, seltrain)
+# testTTToSemiLepTb  = tree2array(treeTTToSemiLepTb, treeVars, seltest)
 
-## Selection with signals   
-fileTprime  = TFile.Open(eosdir + "TprimeTprime_M-1000_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
-fileTprime2 = TFile.Open(eosdir + "TprimeTprime_M-1800_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
-if Tprime == 1.8:
-   temp = fileTprime
-   fileTprime = fileTprime2
-   fileTprime2 = temp
-treeTprime = fileTprime.Get("ljmet")
-treeTprime2 = fileTprime2.Get("ljmet")
-trainTprime= tree2array(treeTprime, treeVars, seltrain)
-testTprime= tree2array(treeTprime, treeVars, seltest)
-testTprime2= tree2array(treeTprime2, treeVars, seltest)
+# ## Selection with signals   
+# fileTprime  = TFile.Open(eosdir + "TprimeTprime_M-1000_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
+# fileTprime2 = TFile.Open(eosdir + "TprimeTprime_M-1800_TuneCP5_PSweights_13TeV-madgraph-pythia8_hadd.root", "READ")
+# if Tprime == 1.8:
+#    temp = fileTprime
+#    fileTprime = fileTprime2
+#    fileTprime2 = temp
+# treeTprime = fileTprime.Get("ljmet")
+# treeTprime2 = fileTprime2.Get("ljmet")
+# trainTprime= tree2array(treeTprime, treeVars, seltrain)
+# testTprime= tree2array(treeTprime, treeVars, seltest)
+# testTprime2= tree2array(treeTprime2, treeVars, seltest)
 
-## Section with W Jets
+# ## Section with W Jets
 
-fileWJets1200   = TFile.Open(eosdir + "WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets1200   = fileWJets1200.Get("ljmet")
-trainWJets1200= tree2array(treeWJets1200, treeVars, seltrain)
-testWJets1200= tree2array(treeWJets1200, treeVars, seltest)
+# fileWJets1200   = TFile.Open(eosdir + "WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets1200   = fileWJets1200.Get("ljmet")
+# trainWJets1200= tree2array(treeWJets1200, treeVars, seltrain)
+# testWJets1200= tree2array(treeWJets1200, treeVars, seltest)
 
-fileWJets2500    = TFile.Open(eosdir + "WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets2500    = fileWJets2500.Get("ljmet")
-trainWJets2500= tree2array(treeWJets2500, treeVars, seltrain)
-testWJets2500= tree2array(treeWJets2500, treeVars, seltest)
+# fileWJets2500    = TFile.Open(eosdir + "WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets2500    = fileWJets2500.Get("ljmet")
+# trainWJets2500= tree2array(treeWJets2500, treeVars, seltrain)
+# testWJets2500= tree2array(treeWJets2500, treeVars, seltest)
 
-fileWJets400    = TFile.Open(eosdir + "WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets400    = fileWJets400.Get("ljmet")
-trainWJets400= tree2array(treeWJets400, treeVars, seltrain)
-testWJets400= tree2array(treeWJets400, treeVars, seltest)
+# fileWJets400    = TFile.Open(eosdir + "WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets400    = fileWJets400.Get("ljmet")
+# trainWJets400= tree2array(treeWJets400, treeVars, seltrain)
+# testWJets400= tree2array(treeWJets400, treeVars, seltest)
 
-fileWJets600  = TFile.Open(eosdir + "WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets600  = fileWJets600.Get("ljmet")
-trainWJets600= tree2array(treeWJets600, treeVars, seltrain)
-testWJets600= tree2array(treeWJets600, treeVars, seltest)
+# fileWJets600  = TFile.Open(eosdir + "WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets600  = fileWJets600.Get("ljmet")
+# trainWJets600= tree2array(treeWJets600, treeVars, seltrain)
+# testWJets600= tree2array(treeWJets600, treeVars, seltest)
 
-fileWJets800  = TFile.Open(eosdir + "WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
-treeWJets800  = fileWJets800.Get("ljmet")
-trainWJets800= tree2array(treeWJets800, treeVars, seltrain)
-testWJets800= tree2array(treeWJets800, treeVars, seltest)
+# fileWJets800  = TFile.Open(eosdir + "WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root", "READ")
+# treeWJets800  = fileWJets800.Get("ljmet")
+# trainWJets800= tree2array(treeWJets800, treeVars, seltrain)
+# testWJets800= tree2array(treeWJets800, treeVars, seltest)
 
 # %%
 ### Further data preprocessing
