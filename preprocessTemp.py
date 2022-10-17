@@ -130,6 +130,6 @@ trainBprime= tree2array(treeBprime, treeVars, seltrain)
 testBprime= tree2array(treeBprime, treeVars, seltest)
 testBprime2= tree2array(treeBprime2, treeVars, seltest)
 
-print(testTTbarT.shape())
+
 
 # %%
