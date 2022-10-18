@@ -7,7 +7,7 @@ from root_numpy import tree2array
 
 # %%
 ### Reading in basic parameters
-start_time = time() # collected just for benchmarking
+start_time = time.time() # collected just for benchmarking
 outdirName = sys.argv[1] # user can define this at runtime
 testnum = 0 # currently hard-coded to 0 until it is needed
 
@@ -33,8 +33,7 @@ Bprime2 = 2.0
 
 # %%
 ### Defining variables to be used with model (defined in RDataframe script)
-vars = ['weight',
-        'pNet_J_1','pNet_J_2',
+vars = ['pNet_J_1','pNet_J_2',
         'pNet_T_1','pNet_T_2',
         'pNet_W_1','pNet_W_2',
         'dpak8_J_1','dpak8_J_2',
@@ -46,7 +45,7 @@ vars = ['weight',
         'nJ_dpak8','nT_dpak8','nW_dpak8',
         'nJ_pNet','nT_pNet','nW_pNet',
         'Jet_HT','Jet_ST','MET_pt',
-        't_pt','t_mass','t_dRWb',
+        't_pt','t_mass','t_dRWb', # t_dRWb does not exist, should check RDF script
         'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
         'Bprime_DR','Bprime_ptbal','Bprime_chi2',
         'minDR_leadAK8otherAK8'] 
@@ -57,8 +56,8 @@ print('Opening files...')
 eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 # Defining selection criteria for the events
-seltrain = "isvalidBDecay == 0"
-seltest = "isvalidBDecay == 0"
+seltrain = "NJets_forward == 0"
+seltest = "NJets_forward != 0"
 
 treeVars = vars
 
@@ -69,6 +68,14 @@ fileTTbarT  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
 treeTTbarT  = fileTTbarT.Get("Events")
 trainTTbarT = tree2array(treeTTbarT, treeVars, seltrain)
 testTTbarT  = tree2array(treeTTbarT, treeVars, seltest)
+print(trainTTbarT[0])
+for i, event in enumerate(trainTTbarT):
+    event.insert(0, 1)
+    trainTTbarT[i] = event
+for i, event in enumerate(testTTbarT):
+    event.insert(0, 1)
+    testTTbarT[i] = event
+print(trainTTbarT[0])
 
 fileTTbarTb  = TFile.Open(eosdir + "ttbarTb_hadd.root", "READ")
 treeTTbarTb  = fileTTbarTb.Get("Events")
