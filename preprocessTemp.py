@@ -68,7 +68,6 @@ def animate():
         time.sleep(0.1)
     sys.stdout.write('\rDone            ')
     sys.stdout.flush()
-    waitDone = False
 
 # This function takes in a 1D array of lists (brokenArray) and a weight. 
 # The function then adds the weight to the front of the list and creates
@@ -150,6 +149,7 @@ weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
 arraysTrain = []
 arraysTest = []
 for i,fname in enumerate(filenames):
+    waitDone = False
     fName = fname
     iteration = i
     totalRun = len(filenames)
@@ -187,6 +187,7 @@ testWJets200  = arraysTest.pop()
 fName = fname
 iteration = 1
 totalRun = 1
+waitDone = False
 t = threading.Thread(target = animate)
 t.start()
 weight = 1
