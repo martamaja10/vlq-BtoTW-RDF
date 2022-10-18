@@ -185,7 +185,7 @@ testWJets200  = addWeight(tree2array(treeWJets200, treeVars, seltest), weight)
 # Selection with signals
 weight = 1
 fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
-fileBp2 = TFile.Open(eosdir + "Bp1200_hadd.root", "READ")
+fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
 # Swapping order depending on defined parameters
 if Bprime == 2.0:
     temp = fileBp1
