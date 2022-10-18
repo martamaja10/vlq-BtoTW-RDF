@@ -63,7 +63,7 @@ def animate():
     for c in itertools.cycle(['|', '/', '-', '\\']):
         if waitDone:
             break
-        sys.stdout.write('\rNow processing file {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + '         ')
+        sys.stdout.write('\rNow processing file {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + c + '         ')
         sys.stdout.flush()
         time.sleep(0.1)
     sys.stdout.write('\rDone            ')
@@ -132,7 +132,7 @@ print('Opening files...')
 eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 # Defining selection criteria for the events
-seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_pt_1 <= 0)"
+seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_pt_1 <= 0))"
 seltest = "Bprime_mass > 0 && NJets_forward > 0 && FatJet_pt_1 > 0"
 
 treeVars = vars
