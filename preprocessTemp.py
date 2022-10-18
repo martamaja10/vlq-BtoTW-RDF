@@ -118,79 +118,47 @@ seltest = "NJets_forward != 0"
 
 treeVars = vars
 
+# Potential variable for future loop controller
+filenames = ['ttbarT', 'ttbarTb', 'singleT', 'singleTb', 'WJets2500',
+            'WJets1200', 'WJets800', 'WJets600', 'WJets400', 'WJets200']
+
+weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
+
 ## Performing selections and reads
 
 # Selections on ttbarT(b) and singlet(b)
-sys.stdout.write('\rOpening TTbarT Files...    ')
-sys.stdout.flush()
-weight = 1
-fileTTbarT  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
-treeTTbarT  = fileTTbarT.Get("Events")
-trainTTbarT = addWeight(tree2array(treeTTbarT, treeVars, seltrain), weight)
-testTTbarT  = addWeight(tree2array(treeTTbarT, treeVars, seltest), weight)
 
-sys.stdout.write('\rOpening TTbarTb Files...    ')
-sys.stdout.flush()
-weight = 1
-fileTTbarTb  = TFile.Open(eosdir + "ttbarTb_hadd.root", "READ")
-treeTTbarTb  = fileTTbarTb.Get("Events")
-trainTTbarTb = addWeight(tree2array(treeTTbarTb, treeVars, seltrain), weight)
-testTTbarTb  = addWeight(tree2array(treeTTbarTb, treeVars, seltest), weight)
+arraysTrain = []
+arraysTest = []
+for i,fname in enumerate(filenames):
+    sys.stdout.write('\rOpening File {}/'.format(i) + str(len(filenames)) + ' - ' + fname + '        ')
+    sys.stdout.flush()
+    weight = weights[i]
+    fileOpener  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
+    treeMaker  = fileTTbarT.Get("Events")
+    arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltrain), weight))
+    arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
 
-sys.stdout.write('\rOpening SingleT Files...    ')
-sys.stdout.flush()
-weight = 0.0456
-fileSingleT  = TFile.Open(eosdir + "singleT_hadd.root", "READ")
-treeSingleT  = fileSingleT.Get("Events")
-trainSingleT = addWeight(tree2array(treeSingleT, treeVars, seltrain), weight)
-testSingleT  = addWeight(tree2array(treeSingleT, treeVars, seltest), weight)
-
-sys.stdout.write('\rOpening SingleTb Files...    ')
-sys.stdout.flush()
-weight = 0.0506
-fileSingleTb  = TFile.Open(eosdir + "singleTb_hadd.root", "READ")
-treeSingleTb  = fileSingleTb.Get("Events")
-trainSingleTb = addWeight(tree2array(treeSingleTb, treeVars, seltrain), weight)
-testSingleTb  = addWeight(tree2array(treeSingleTb, treeVars, seltest), weight)
-
-# WJet selection
-sys.stdout.write('\rOpening WJet Files...    ')
-sys.stdout.flush()
-weight = 0.0011
-fileWJets2500  = TFile.Open(eosdir + "WJets2500_hadd.root", "READ")
-treeWJets2500  = fileWJets2500.Get("Events")
-trainWJets2500 = addWeight(tree2array(treeWJets2500, treeVars, seltrain), weight)
-testWJets2500  = addWeight(tree2array(treeWJets2500, treeVars, seltest), weight)
-
-weight = 0.0148
-fileWJets1200  = TFile.Open(eosdir + "WJets1200_hadd.root", "READ")
-treeWJets1200  = fileWJets1200.Get("Events")
-trainWJets1200 = addWeight(tree2array(treeWJets1200, treeVars, seltrain), weight)
-testWJets1200  = addWeight(tree2array(treeWJets1200, treeVars, seltest), weight)
-
-weight = 0.0544
-fileWJets800  = TFile.Open(eosdir + "WJets800_hadd.root", "READ")
-treeWJets800  = fileWJets800.Get("Events")
-trainWJets800 = addWeight(tree2array(treeWJets800, treeVars, seltrain), weight)
-testWJets800  = addWeight(tree2array(treeWJets800, treeVars, seltest), weight)
-
-weight = 0.1128
-fileWJets600  = TFile.Open(eosdir + "WJets600_hadd.root", "READ")
-treeWJets600  = fileWJets600.Get("Events")
-trainWJets600 = addWeight(tree2array(treeWJets600, treeVars, seltrain), weight)
-testWJets600  = addWeight(tree2array(treeWJets600, treeVars, seltest), weight)
-
-weight = 0.4749
-fileWJets400  = TFile.Open(eosdir + "WJets400_hadd.root", "READ")
-treeWJets400  = fileWJets400.Get("Events")
-trainWJets400 = addWeight(tree2array(treeWJets400, treeVars, seltrain), weight)
-testWJets400  = addWeight(tree2array(treeWJets400, treeVars, seltest), weight)
-
-weight = 0.4466
-fileWJets200  = TFile.Open(eosdir + "WJets200_hadd.root", "READ")
-treeWJets200  = fileWJets200.Get("Events")
-trainWJets200 = addWeight(tree2array(treeWJets200, treeVars, seltrain), weight)
-testWJets200  = addWeight(tree2array(treeWJets200, treeVars, seltest), weight)
+trainTTbarT = arraysTrain.pop()
+testTTbarT  = arraysTest.pop()
+trainTTbarTb = arraysTrain.pop()
+testTTbarTb  = arraysTest.pop()
+trainSingleT = arraysTrain.pop()
+testSingleT  = arraysTest.pop()
+trainSingleTb = arraysTrain.pop()
+testSingleTb  = arraysTest.pop()
+trainWJets2500 = arraysTrain.pop()
+testWJets2500  = arraysTest.pop()
+trainWJets1200 = arraysTrain.pop()
+testWJets1200  = arraysTest.pop()
+trainWJets800 = arraysTrain.pop()
+testWJets800  = arraysTest.pop()
+trainWJets600 = arraysTrain.pop()
+testWJets600  = arraysTest.pop()
+trainWJets400 = arraysTrain.pop()
+testWJets400  = arraysTest.pop()
+trainWJets200 = arraysTrain.pop()
+testWJets200  = arraysTest.pop()
 
 # Selection with signals
 sys.stdout.write('\rOpening Bprime Files...    ')
@@ -322,15 +290,15 @@ testBprime2 = [sub[1:] for sub in testBprime2]
 testWJets = [sub[1:] for sub in testWJets]
 testSingleT = [sub[1:] for sub in testSingleT]
 
-RStrainTTbarT = (resample_with_replacement(trainTTbarT)).tolist()
-RStrainBprime = (resample_with_replacement(trainBprime)).tolist()
-RStrainWJets = (resample_with_replacement(trainWJets)).tolist()
-RStrainSingleT = (resample_with_replacement(trainSingleT)).tolist()
-RStestTTbarT = (resample_with_replacement(testTTbarT)).tolist()
-RStestBprime = (resample_with_replacement(testBprime)).tolist()
-RStestBprime2 = (resample_with_replacement(testBprime)).tolist()
-RStestWJets = (resample_with_replacement(testWJets)).tolist()
-RStestSingleT = (resample_with_replacement(testSingleT)).tolist()
+RStrainTTbarT = (resample_with_replacement(trainTTbarT), weightsTrainTTbarT).tolist()
+RStrainBprime = (resample_with_replacement(trainBprime), weightsTrainBprime).tolist()
+RStrainWJets = (resample_with_replacement(trainWJets), weightsTrainWJets).tolist()
+RStrainSingleT = (resample_with_replacement(trainSingleT), weightsTrainSingleT).tolist()
+RStestTTbarT = (resample_with_replacement(testTTbarT), weightsTestTTbarT).tolist()
+RStestBprime = (resample_with_replacement(testBprime), weightsTestBprime).tolist()
+RStestBprime2 = (resample_with_replacement(testBprime), weightsTestBprime2).tolist()
+RStestWJets = (resample_with_replacement(testWJets), weightsTestBprime2).tolist()
+RStestSingleT = (resample_with_replacement(testSingleT), weightsTestSingleT).tolist()
 
 ## New versions are used for merging and copies are used for unaltered plotting
 trainTTbarT = copy.copy(RStrainTTbarT)
