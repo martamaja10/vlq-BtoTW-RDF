@@ -122,6 +122,7 @@ treeVars = vars
 
 # Selections on ttbarT(b) and singlet(b)
 sys.stdout.write('\rOpening TTbarT Files...    ')
+sys.stdout.flush()
 weight = 1
 fileTTbarT  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
 treeTTbarT  = fileTTbarT.Get("Events")
@@ -129,6 +130,7 @@ trainTTbarT = addWeight(tree2array(treeTTbarT, treeVars, seltrain), weight)
 testTTbarT  = addWeight(tree2array(treeTTbarT, treeVars, seltest), weight)
 
 sys.stdout.write('\rOpening TTbarTb Files...    ')
+sys.stdout.flush()
 weight = 1
 fileTTbarTb  = TFile.Open(eosdir + "ttbarTb_hadd.root", "READ")
 treeTTbarTb  = fileTTbarTb.Get("Events")
@@ -136,6 +138,7 @@ trainTTbarTb = addWeight(tree2array(treeTTbarTb, treeVars, seltrain), weight)
 testTTbarTb  = addWeight(tree2array(treeTTbarTb, treeVars, seltest), weight)
 
 sys.stdout.write('\rOpening SingleT Files...    ')
+sys.stdout.flush()
 weight = 0.0456
 fileSingleT  = TFile.Open(eosdir + "singleT_hadd.root", "READ")
 treeSingleT  = fileSingleT.Get("Events")
@@ -143,6 +146,7 @@ trainSingleT = addWeight(tree2array(treeSingleT, treeVars, seltrain), weight)
 testSingleT  = addWeight(tree2array(treeSingleT, treeVars, seltest), weight)
 
 sys.stdout.write('\rOpening SingleTb Files...    ')
+sys.stdout.flush()
 weight = 0.0506
 fileSingleTb  = TFile.Open(eosdir + "singleTb_hadd.root", "READ")
 treeSingleTb  = fileSingleTb.Get("Events")
@@ -151,6 +155,7 @@ testSingleTb  = addWeight(tree2array(treeSingleTb, treeVars, seltest), weight)
 
 # WJet selection
 sys.stdout.write('\rOpening WJet Files...    ')
+sys.stdout.flush()
 weight = 0.0011
 fileWJets2500  = TFile.Open(eosdir + "WJets2500_hadd.root", "READ")
 treeWJets2500  = fileWJets2500.Get("Events")
@@ -189,6 +194,7 @@ testWJets200  = addWeight(tree2array(treeWJets200, treeVars, seltest), weight)
 
 # Selection with signals
 sys.stdout.write('\rOpening Bprime Files...    ')
+sys.stdout.flush()
 weight = 1
 fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
 fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
@@ -202,7 +208,7 @@ treeBprime2 = fileBp2.Get("Events")
 trainBprime= addWeight(tree2array(treeBprime, treeVars, seltrain), weight)
 testBprime= addWeight(tree2array(treeBprime, treeVars, seltest), weight)
 testBprime2= addWeight(tree2array(treeBprime2, treeVars, seltest), weight)
-print()
+print('Done                        ')
 
 # %%
 ### Creaing new arrays for added data
