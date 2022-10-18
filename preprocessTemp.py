@@ -56,7 +56,10 @@ def resample_with_replacement(X_train, sample_weight):
 
 # Solely a user experience improvement
 waitDone = False
-def animate(fName, iteration, totalRun):
+fname = ""
+iteration = 0
+totalRun = 0
+def animate():
     for c in itertools.cycle(['|', '/', '-', '\\']):
         if waitDone:
             break
@@ -147,8 +150,11 @@ weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
 arraysTrain = []
 arraysTest = []
 for i,fname in enumerate(filenames):
+    fName = fname
+    iteration = i
+    totalRun = len(filenames)
     t = threading.Thread(target = animate)
-    t.start(fname, i, len(filenames))
+    t.start()
     weight = weights[i]
     fileOpener  = TFile.Open(eosdir + fname + "_hadd.root", "READ")
     treeMaker  = fileOpener.Get("Events")
@@ -178,8 +184,11 @@ trainWJets200 = arraysTrain.pop()
 testWJets200  = arraysTest.pop()
 
 # Selection with signals
+fName = fname
+iteration = 1
+totalRun = 1
 t = threading.Thread(target = animate)
-t.start(fname, 1, 1)
+t.start()
 weight = 1
 fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
 fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
