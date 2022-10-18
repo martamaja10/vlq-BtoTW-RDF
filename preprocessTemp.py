@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 from ROOT import TTree, TH1D, TFile, RDataFrame
-from preprocessMVA import RStrainWJets, WithBprimeVars, resample_with_replacement
 from root_numpy import tree2array
 
 # %%
