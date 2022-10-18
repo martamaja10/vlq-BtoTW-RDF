@@ -81,7 +81,7 @@ logfile = open(outdirName + 'SingleBLog.txt', 'a+')
 # Defining weight classes
 Bprime = 0.8
 Bprime2 = 2.0
-test2000 = False
+test2000 = True
 
 # Defining plotting parameters
 WithBprimeVars = False
@@ -113,8 +113,9 @@ print('Opening files...')
 eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 # Defining selection criteria for the events
-seltrain = "NJets_forward == 0"
-seltest = "NJets_forward != 0"
+seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_phi <= 0))"
+# FatJet_phi[0] ~ random number integer
+seltest = "NJets_forward > 0 && FatJet_phi[0] > 0 && Bprime_mass > 0"
 
 treeVars = vars
 
@@ -131,13 +132,13 @@ weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
 arraysTrain = []
 arraysTest = []
 for i,fname in enumerate(filenames):
-    sys.stdout.write('\rOpening File {}/'.format(i) + str(len(filenames)) + ' - ' + fname + '        ')
+    sys.stdout.write('\rOpening File {}/'.format(i  + 1) + str(len(filenames)) + ' - ' + fname + '        ')
     sys.stdout.flush()
     weight = weights[i]
-    fileOpener  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
+    fileOpener  = TFile.Open(eosdir + fname + "_hadd.root", "READ")
     treeMaker  = fileOpener.Get("Events")
     arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltrain), weight))
-    arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
+    arraysTest.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
 
 trainTTbarT = arraysTrain.pop()
 testTTbarT  = arraysTest.pop()
@@ -188,7 +189,6 @@ testWJets = np.concatenate([testWJets200, testWJets400, testWJets600, testWJets8
 np.random.shuffle(trainWJets)
 np.random.shuffle(testWJets)
 
-# TODO - Ask if these should be shuffled before the concatenate
 trainTTbarT = np.concatenate([trainTTbarT, trainTTbarTb])
 testTTbarT = np.concatenate([testTTbarT, testTTbarTb])
 np.random.shuffle(trainTTbarT)
@@ -221,10 +221,10 @@ print('Number of singleT: ' + str(len(testSingleT)) + '\n')
 ### Post-processing to prepare date for plotting and export
 
 ## Shorten the testing arrays to the chosen length TODO - Check if this is necessary
-testTprime = testBprime[:maxtest]
-testTprime2 = testBprime2[:maxtest]
+testBprime = testBprime[:maxtest]
+testBprime2 = testBprime2[:maxtest]
 testWJets = testWJets[:maxtest]
-testTTToSemiLep = testTTbarT[:maxtest]
+testTTbarT = testTTbarT[:maxtest]
 testSingleT = testSingleT[:maxtest]
 
 ## Calculate the maximum number of allowed training events in each group
@@ -331,7 +331,7 @@ for index, hist in enumerate(histsWJets):
    plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
    #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
    plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
-   plt.hist(histsSingleT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
+   plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
    plt.title('CMS Simulation',loc='left',size=18)
    plt.title('Work in progress',loc='right',size=14,style='italic')
    plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -394,6 +394,7 @@ while(nEventsTest > 0):
 
     elif(rng == 3 and len(RStestSingleT) > 0):
         testData.append(RStestSingleT.pop()) 
+
 
     else: continue
 
