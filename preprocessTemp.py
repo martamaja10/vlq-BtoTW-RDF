@@ -121,24 +121,28 @@ treeVars = vars
 ## Performing selections and reads
 
 # Selections on ttbarT(b) and singlet(b)
+sys.stdout.write('\rOpening TTbarT Files...    ')
 weight = 1
 fileTTbarT  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
 treeTTbarT  = fileTTbarT.Get("Events")
 trainTTbarT = addWeight(tree2array(treeTTbarT, treeVars, seltrain), weight)
 testTTbarT  = addWeight(tree2array(treeTTbarT, treeVars, seltest), weight)
-    
+
+sys.stdout.write('\rOpening TTbarTb Files...    ')
 weight = 1
 fileTTbarTb  = TFile.Open(eosdir + "ttbarTb_hadd.root", "READ")
 treeTTbarTb  = fileTTbarTb.Get("Events")
 trainTTbarTb = addWeight(tree2array(treeTTbarTb, treeVars, seltrain), weight)
 testTTbarTb  = addWeight(tree2array(treeTTbarTb, treeVars, seltest), weight)
 
+sys.stdout.write('\rOpening SingleT Files...    ')
 weight = 0.0456
 fileSingleT  = TFile.Open(eosdir + "singleT_hadd.root", "READ")
 treeSingleT  = fileSingleT.Get("Events")
 trainSingleT = addWeight(tree2array(treeSingleT, treeVars, seltrain), weight)
 testSingleT  = addWeight(tree2array(treeSingleT, treeVars, seltest), weight)
 
+sys.stdout.write('\rOpening SingleTb Files...    ')
 weight = 0.0506
 fileSingleTb  = TFile.Open(eosdir + "singleTb_hadd.root", "READ")
 treeSingleTb  = fileSingleTb.Get("Events")
@@ -146,6 +150,7 @@ trainSingleTb = addWeight(tree2array(treeSingleTb, treeVars, seltrain), weight)
 testSingleTb  = addWeight(tree2array(treeSingleTb, treeVars, seltest), weight)
 
 # WJet selection
+sys.stdout.write('\rOpening WJet Files...    ')
 weight = 0.0011
 fileWJets2500  = TFile.Open(eosdir + "WJets2500_hadd.root", "READ")
 treeWJets2500  = fileWJets2500.Get("Events")
@@ -183,6 +188,7 @@ trainWJets200 = addWeight(tree2array(treeWJets200, treeVars, seltrain), weight)
 testWJets200  = addWeight(tree2array(treeWJets200, treeVars, seltest), weight)
 
 # Selection with signals
+sys.stdout.write('\rOpening Bprime Files...    ')
 weight = 1
 fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
 fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
