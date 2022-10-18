@@ -63,10 +63,10 @@ def animate():
     for c in itertools.cycle(['|', '/', '-', '\\']):
         if waitDone:
             break
-        sys.stdout.write('\rNow processing file {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + c + '         ')
+        sys.stdout.write('\rNow processing file {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + ' ' + c + '         ')
         sys.stdout.flush()
-        time.sleep(0.1)
-    sys.stdout.write('\rDone            ')
+        time.sleep(0.2)
+    sys.stdout.write('\rDone                                                               ')
     sys.stdout.flush()
 
 # This function takes in a 1D array of lists (brokenArray) and a weight. 
@@ -185,7 +185,7 @@ testWJets200  = arraysTest.pop()
 
 # Selection with signals
 fName = fname
-iteration = 1
+iteration = 0
 totalRun = 1
 waitDone = False
 t = threading.Thread(target = animate)
@@ -324,8 +324,8 @@ RStrainWJets = (resample_with_replacement(trainWJets, weightsTrainWJets)).tolist
 RStrainSingleT = (resample_with_replacement(trainSingleT, weightsTrainSingleT)).tolist()
 RStestTTbarT = (resample_with_replacement(testTTbarT, weightsTestTTbarT)).tolist()
 RStestBprime = (resample_with_replacement(testBprime, weightsTestBprime)).tolist()
-RStestBprime2 = (resample_with_replacement(testBprime, weightsTestBprime2)).tolist()
-RStestWJets = (resample_with_replacement(testWJets, weightsTestBprime2)).tolist()
+RStestBprime2 = (resample_with_replacement(testBprime2, weightsTestBprime2)).tolist()
+RStestWJets = (resample_with_replacement(testWJets, weightsTestWJets)).tolist()
 RStestSingleT = (resample_with_replacement(testSingleT, weightsTestSingleT)).tolist()
 
 ## New versions are used for merging and copies are used for unaltered plotting
