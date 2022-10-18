@@ -8,6 +8,8 @@ import random
 import math
 from ROOT import TTree, TH1D, TFile, RDataFrame
 from root_numpy import tree2array
+import itertools
+import threading
 
 # %%
 ### Reading in basic parameters
@@ -51,6 +53,20 @@ def resample_with_replacement(X_train, sample_weight):
 
    return X_train_resampled
 
+
+# Solely a user experience improvement
+waitDone = False
+def animate(fName, iteration, totalRun):
+    for c in itertools.cycle(['|', '/', '-', '\\']):
+        if waitDone:
+            break
+        sys.stdout.write('\rNow processing file {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + '         ')
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.write('\rDone            ')
+    sys.stdout.flush()
+    waitDone = False
+
 # This function takes in a 1D array of lists (brokenArray) and a weight. 
 # The function then adds the weight to the front of the list and creates
 #       a 2D array
@@ -81,7 +97,7 @@ logfile = open(outdirName + 'SingleBLog.txt', 'a+')
 # Defining weight classes
 Bprime = 0.8
 Bprime2 = 2.0
-test2000 = True
+test2000 = False
 
 # Defining plotting parameters
 WithBprimeVars = False
@@ -113,9 +129,8 @@ print('Opening files...')
 eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 # Defining selection criteria for the events
-seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_phi <= 0))"
-# FatJet_phi[0] ~ random number integer
-seltest = "NJets_forward > 0 && FatJet_phi[0] > 0 && Bprime_mass > 0"
+seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_pt_1 <= 0)"
+seltest = "Bprime_mass > 0 && NJets_forward > 0 && FatJet_pt_1 > 0"
 
 treeVars = vars
 
@@ -132,13 +147,14 @@ weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
 arraysTrain = []
 arraysTest = []
 for i,fname in enumerate(filenames):
-    sys.stdout.write('\rOpening File {}/'.format(i  + 1) + str(len(filenames)) + ' - ' + fname + '        ')
-    sys.stdout.flush()
+    t = threading.Thread(target = animate)
+    t.start(fname, i, len(filenames))
     weight = weights[i]
     fileOpener  = TFile.Open(eosdir + fname + "_hadd.root", "READ")
     treeMaker  = fileOpener.Get("Events")
     arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltrain), weight))
     arraysTest.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
+    waitDone = True
 
 trainTTbarT = arraysTrain.pop()
 testTTbarT  = arraysTest.pop()
@@ -162,8 +178,8 @@ trainWJets200 = arraysTrain.pop()
 testWJets200  = arraysTest.pop()
 
 # Selection with signals
-sys.stdout.write('\rOpening Bprime Files...    ')
-sys.stdout.flush()
+t = threading.Thread(target = animate)
+t.start(fname, 1, 1)
 weight = 1
 fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
 fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
@@ -177,7 +193,8 @@ treeBprime2 = fileBp2.Get("Events")
 trainBprime= addWeight(tree2array(treeBprime, treeVars, seltrain), weight)
 testBprime= addWeight(tree2array(treeBprime, treeVars, seltest), weight)
 testBprime2= addWeight(tree2array(treeBprime2, treeVars, seltest), weight)
-print('Done                        ')
+waitDone = True
+print()
 
 # %%
 ### Creaing new arrays for added data
@@ -189,6 +206,7 @@ testWJets = np.concatenate([testWJets200, testWJets400, testWJets600, testWJets8
 np.random.shuffle(trainWJets)
 np.random.shuffle(testWJets)
 
+# TODO - Ask if these should be shuffled before the concatenate
 trainTTbarT = np.concatenate([trainTTbarT, trainTTbarTb])
 testTTbarT = np.concatenate([testTTbarT, testTTbarTb])
 np.random.shuffle(trainTTbarT)
@@ -290,15 +308,15 @@ testBprime2 = [sub[1:] for sub in testBprime2]
 testWJets = [sub[1:] for sub in testWJets]
 testSingleT = [sub[1:] for sub in testSingleT]
 
-RStrainTTbarT = (resample_with_replacement(trainTTbarT), weightsTrainTTbarT).tolist()
-RStrainBprime = (resample_with_replacement(trainBprime), weightsTrainBprime).tolist()
-RStrainWJets = (resample_with_replacement(trainWJets), weightsTrainWJets).tolist()
-RStrainSingleT = (resample_with_replacement(trainSingleT), weightsTrainSingleT).tolist()
-RStestTTbarT = (resample_with_replacement(testTTbarT), weightsTestTTbarT).tolist()
-RStestBprime = (resample_with_replacement(testBprime), weightsTestBprime).tolist()
-RStestBprime2 = (resample_with_replacement(testBprime), weightsTestBprime2).tolist()
-RStestWJets = (resample_with_replacement(testWJets), weightsTestBprime2).tolist()
-RStestSingleT = (resample_with_replacement(testSingleT), weightsTestSingleT).tolist()
+RStrainTTbarT = (resample_with_replacement(trainTTbarT, weightsTrainTTbarT)).tolist()
+RStrainBprime = (resample_with_replacement(trainBprime, weightsTrainBprime)).tolist()
+RStrainWJets = (resample_with_replacement(trainWJets, weightsTrainWJets)).tolist()
+RStrainSingleT = (resample_with_replacement(trainSingleT, weightsTrainSingleT)).tolist()
+RStestTTbarT = (resample_with_replacement(testTTbarT, weightsTestTTbarT)).tolist()
+RStestBprime = (resample_with_replacement(testBprime, weightsTestBprime)).tolist()
+RStestBprime2 = (resample_with_replacement(testBprime, weightsTestBprime2)).tolist()
+RStestWJets = (resample_with_replacement(testWJets, weightsTestBprime2)).tolist()
+RStestSingleT = (resample_with_replacement(testSingleT, weightsTestSingleT)).tolist()
 
 ## New versions are used for merging and copies are used for unaltered plotting
 trainTTbarT = copy.copy(RStrainTTbarT)
@@ -394,7 +412,6 @@ while(nEventsTest > 0):
 
     elif(rng == 3 and len(RStestSingleT) > 0):
         testData.append(RStestSingleT.pop()) 
-
 
     else: continue
 
