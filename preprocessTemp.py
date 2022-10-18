@@ -135,7 +135,7 @@ for i,fname in enumerate(filenames):
     sys.stdout.flush()
     weight = weights[i]
     fileOpener  = TFile.Open(eosdir + "ttbarT_hadd.root", "READ")
-    treeMaker  = fileTTbarT.Get("Events")
+    treeMaker  = fileOpener.Get("Events")
     arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltrain), weight))
     arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
 
