@@ -70,13 +70,7 @@ treeTTbarT  = fileTTbarT.Get("Events")
 trainTTbarT = tree2array(treeTTbarT, treeVars, seltrain)
 testTTbarT  = tree2array(treeTTbarT, treeVars, seltest)
 print(trainTTbarT[0])
-for i, event in enumerate(trainTTbarT):
-    event.insert(0, 1)
-    trainTTbarT[i] = event
-for i, event in enumerate(testTTbarT):
-    event.insert(0, 1)
-    testTTbarT[i] = event
-print(trainTTbarT[0])
+print(type(trainTTbarT[0]))
 
 fileTTbarTb  = TFile.Open(eosdir + "ttbarTb_hadd.root", "READ")
 treeTTbarTb  = fileTTbarTb.Get("Events")
