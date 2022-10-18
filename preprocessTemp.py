@@ -45,7 +45,8 @@ vars = ['pNet_J_1','pNet_J_2',
         'nJ_dpak8','nT_dpak8','nW_dpak8',
         'nJ_pNet','nT_pNet','nW_pNet',
         'Jet_HT','Jet_ST','MET_pt',
-        't_pt','t_mass','t_dRWb', # t_dRWb does not exist, should check RDF script
+        't_pt','t_mass',
+        #'t_dRWb', # t_dRWb does not exist, should check RDF script
         'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
         'Bprime_DR','Bprime_ptbal','Bprime_chi2',
         'minDR_leadAK8otherAK8'] 
