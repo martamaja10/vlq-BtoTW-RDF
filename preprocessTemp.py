@@ -9,7 +9,7 @@ import math
 from ROOT import TTree, TH1D, TFile, RDataFrame
 from root_numpy import tree2array
 import itertools
-import threading
+import subprocess
 
 # %%
 ### Reading in basic parameters
@@ -52,22 +52,6 @@ def resample_with_replacement(X_train, sample_weight):
       X_train_resampled[i] = X_train[draw]
 
    return X_train_resampled
-
-
-# Solely a user experience improvement
-waitDone = False
-fname = ""
-iteration = 0
-totalRun = 0
-def animate():
-    for c in itertools.cycle(['|', '/', '-', '\\']):
-        if waitDone:
-            break
-        sys.stdout.write('\rNow processing item {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + ' ' + c + '         ')
-        sys.stdout.flush()
-        time.sleep(0.2)
-    sys.stdout.write('\rDone                                                               ')
-    sys.stdout.flush()
 
 # This function takes in a 1D array of lists (brokenArray) and a weight. 
 # The function then adds the weight to the front of the list and creates
@@ -149,12 +133,8 @@ weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
 arraysTrain = []
 arraysTest = []
 for i,fname in enumerate(filenames):
-    waitDone = False
-    fName = fname
-    iteration = i
-    totalRun = len(filenames)
-    t = threading.Thread(target = animate)
-    t.start()
+    sys.stdout.write('\rNow processing file {}/'.format(i + 1) + str(len(filenames)) + ' - ' + fname + '...            ')
+    sys.stdout.flush()
     weight = weights[i]
     fileOpener  = TFile.Open(eosdir + fname + "_hadd.root", "READ")
     treeMaker  = fileOpener.Get("Events")
@@ -185,11 +165,8 @@ testWJets200  = arraysTest.pop()
 
 # Selection with signals
 fName = fname
-iteration = 0
-totalRun = 1
-waitDone = False
-t = threading.Thread(target = animate)
-t.start()
+sys.stdout.write('\rNow processing signal file...                                                                ')
+sys.stdout.flush()
 weight = 1
 fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
 fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
@@ -204,6 +181,7 @@ trainBprime= addWeight(tree2array(treeBprime, treeVars, seltrain), weight)
 testBprime= addWeight(tree2array(treeBprime, treeVars, seltest), weight)
 testBprime2= addWeight(tree2array(treeBprime2, treeVars, seltest), weight)
 waitDone = True
+print('Done                                              ')
 print()
 
 # %%
@@ -354,11 +332,8 @@ histsSingleT = np.array(trainSingleT[:numPerSample]).T
 ### Plotting input variables
 print('Plotting input variables...')
 for index, hist in enumerate(histsWJets):
-   fName = vars[index]
-   iteration = index
-   totalRun = len(histsWJets)
-   t = threading.Thread(target = animate)
-   t.start()
+   sys.stdout.write('\rNow processing plot {}/'.format(index + 1) + str(len(histsWJets)) + ' - ' + vars[index] + '...       ')
+   sys.stdout.flush()
    plt.figure()
    plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
    plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
