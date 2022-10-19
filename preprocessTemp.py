@@ -359,7 +359,7 @@ for index, hist in enumerate(histsWJets):
    plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
    #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
    plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
-   plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
+   plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{singleT}$', histtype='step', normed=True)
    plt.title('CMS Simulation',loc='left',size=18)
    plt.title('Work in progress',loc='right',size=14,style='italic')
    plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -367,6 +367,23 @@ for index, hist in enumerate(histsWJets):
    plt.legend(loc='best',fontsize=14)
    if not WithBprimeVars: plt.savefig(outdirName+'plots_'+str(vars[index])+outStr)
    if WithBprimeVars: plt.savefig(outdirName+'plots_'+str(vars[index])+outStr)
+   plt.close()
+   
+   # Logarithmic option
+   plt.figure()
+   plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
+   plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
+   #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
+   plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
+   plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{singleT}$', histtype='step', normed=True)
+   plt.title('CMS Simulation',loc='left',size=18)
+   plt.title('Work in progress',loc='right',size=14,style='italic')
+   plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
+   plt.yscale('log', nonposy='clip')
+   plt.xlabel(vars[index],horizontalalignment='right',x=1.0,size=14)
+   plt.legend(loc='best',fontsize=14)
+   if not WithBprimeVars: plt.savefig(outdirName+'logscale_plots_'+str(vars[index])+outStr)
+   if WithBprimeVars: plt.savefig(outdirName+'logscale_plots_'+str(vars[index])+outStr)
    plt.close()
 
 # %%
