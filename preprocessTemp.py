@@ -63,7 +63,7 @@ def animate():
     for c in itertools.cycle(['|', '/', '-', '\\']):
         if waitDone:
             break
-        sys.stdout.write('\rNow processing file {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + ' ' + c + '         ')
+        sys.stdout.write('\rNow processing item {}/'.format(iteration + 1) + str(totalRun) + ' - ' + fName + ' ' + c + '         ')
         sys.stdout.flush()
         time.sleep(0.2)
     sys.stdout.write('\rDone                                                               ')
@@ -354,6 +354,11 @@ histsSingleT = np.array(trainSingleT[:numPerSample]).T
 ### Plotting input variables
 print('Plotting input variables...')
 for index, hist in enumerate(histsWJets):
+   fName = vars[index]
+   iteration = index
+   totalRun = len(histsWJets)
+   t = threading.Thread(target = animate)
+   t.start()
    plt.figure()
    plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
    plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
