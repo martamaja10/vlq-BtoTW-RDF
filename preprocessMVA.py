@@ -83,7 +83,7 @@ logfile = open(outdirName + 'SingleBLog.txt', 'a+')
 # Defining weight classes
 Bprime = 0.8
 Bprime2 = 2.0
-test2000 = False
+test2000 = True
 
 # Defining plotting parameters
 WithBprimeVars = False
