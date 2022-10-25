@@ -140,28 +140,27 @@ for i,fname in enumerate(filenames):
     treeMaker  = fileOpener.Get("Events")
     arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltrain), weight))
     arraysTest.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
-    waitDone = True
 
-trainTTbarT = arraysTrain.pop()
-testTTbarT  = arraysTest.pop()
-trainTTbarTb = arraysTrain.pop()
-testTTbarTb  = arraysTest.pop()
-trainSingleT = arraysTrain.pop()
-testSingleT  = arraysTest.pop()
-trainSingleTb = arraysTrain.pop()
-testSingleTb  = arraysTest.pop()
-trainWJets2500 = arraysTrain.pop()
-testWJets2500  = arraysTest.pop()
-trainWJets1200 = arraysTrain.pop()
-testWJets1200  = arraysTest.pop()
-trainWJets800 = arraysTrain.pop()
-testWJets800  = arraysTest.pop()
-trainWJets600 = arraysTrain.pop()
-testWJets600  = arraysTest.pop()
-trainWJets400 = arraysTrain.pop()
-testWJets400  = arraysTest.pop()
-trainWJets200 = arraysTrain.pop()
-testWJets200  = arraysTest.pop()
+trainTTbarT = arraysTrain.pop(0)
+testTTbarT  = arraysTest.pop(0)
+trainTTbarTb = arraysTrain.pop(0)
+testTTbarTb  = arraysTest.pop(0)
+trainSingleT = arraysTrain.pop(0)
+testSingleT  = arraysTest.pop(0)
+trainSingleTb = arraysTrain.pop(0)
+testSingleTb  = arraysTest.pop(0)
+trainWJets2500 = arraysTrain.pop(0)
+testWJets2500  = arraysTest.pop(0)
+trainWJets1200 = arraysTrain.pop(0)
+testWJets1200  = arraysTest.pop(0)
+trainWJets800 = arraysTrain.pop(0)
+testWJets800  = arraysTest.pop(0)
+trainWJets600 = arraysTrain.pop(0)
+testWJets600  = arraysTest.pop(0)
+trainWJets400 = arraysTrain.pop(0)
+testWJets400  = arraysTest.pop(0)
+trainWJets200 = arraysTrain.pop(0)
+testWJets200  = arraysTest.pop(0)
 
 # Selection with signals
 fName = fname
@@ -181,8 +180,8 @@ trainBprime= addWeight(tree2array(treeBprime, treeVars, seltrain), weight)
 testBprime= addWeight(tree2array(treeBprime, treeVars, seltest), weight)
 testBprime2= addWeight(tree2array(treeBprime2, treeVars, seltest), weight)
 waitDone = True
-print('Done                                              ')
-print()
+sys.stdout.write('\rDone\n')
+sys.stdout.flush()
 
 # %%
 ### Creaing new arrays for added data
@@ -426,6 +425,7 @@ while(nEventsTest > 0):
     nEventsTest = nEventsTest - 1
 
 # Save the output to a file
+print('Saving file to ' + outdirName + 'Arrays' + outStr)
 np.savez(outdirName + 'Arrays' + outStr, trainData=trainData, trainLabel = trainLabel, testData = testData, 
     testLabel = testLabel, testWJets = testWJets, testTTbarT = testTTbarT, testBprime = testBprime,
     testBprime2 = testBprime2, testSingleT = testSingleT)
