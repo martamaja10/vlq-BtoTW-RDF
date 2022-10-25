@@ -377,21 +377,25 @@ while nEvents > 0:
     rng = random.randint(0,3)
     if(rng == 0 and len(RStrainWJets) > 0):
         trainData.append(RStrainWJets.pop())
+        trainLabel.append(rng)
+        nEvents -= 1
 
     elif(rng == 1 and len(RStrainTTbarT) > 0):
         trainData.append(RStrainTTbarT.pop())
+        trainLabel.append(rng)
+        nEvents -= 1
 
     elif(rng == 2 and len(RStrainBprime) > 0):
         trainData.append(RStrainBprime.pop())
+        trainLabel.append(rng)
+        nEvents -= 1
 
     elif(rng == 3 and len(RStrainSingleT) > 0):
         trainData.append(RStrainSingleT.pop())
-    
-    # if one of the lists was empty, we skip decrementing our loop counter
-    else: continue
+        trainLabel.append(rng)
+        nEvents -= 1
 
-    trainLabel.append(rng)
-    nEvents -= 1
+    
 
 # If using larger weight class, we use a different variable set
 if test2000: nEventsTest = len(RStestTTbarT) + len(RStestBprime) + len(RStestWJets) + len(RStestSingleT)
@@ -405,24 +409,29 @@ while(nEventsTest > 0):
     rng = random.randint(0, 3)
     if(rng == 0 and len(RStestWJets) > 0):
         testData.append(RStestWJets.pop())
+        trainLabel.append(rng)
+        nEvents -= 1
 
     elif(rng == 1 and len(RStestTTbarT) > 0):
         testData.append(RStestTTbarT.pop())
+        trainLabel.append(rng)
+        nEvents -= 1
 
     elif(rng == 2):
         if(test2000 and len(RStestBprime2) > 0): 
             testData.append(RStestBprime2.pop())
+            trainLabel.append(rng)
+            nEvents -= 1
         elif(not test2000 and len(RStestBprime) > 0):
             testData.append(RStestBprime.pop())
+            trainLabel.append(rng)
+            nEvents -= 1
         else: continue
 
     elif(rng == 3 and len(RStestSingleT) > 0):
         testData.append(RStestSingleT.pop()) 
-
-    else: continue
-
-    testLabel.append(rng)
-    nEventsTest = nEventsTest - 1
+        trainLabel.append(rng)
+        nEvents -= 1
 
 # Save the output to a file
 print('Saving file to ' + outdirName + 'Arrays' + outStr)
