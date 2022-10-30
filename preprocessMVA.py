@@ -17,7 +17,7 @@ start_time = time.time() # collected just for benchmarking
 outdirName = sys.argv[1] # user can define this at runtime
 arch = '3x10'
 testnum = 0 # currently hard-coded to 0 until it is needed
-maxtest = 200000
+maxtest = 300000
 
 # %%
 ### Defining assisting functions
@@ -410,28 +410,26 @@ testLabel = []
 testWeight = [] 
 # Once again else clauses kick in when selected list is empty
 while(nEventsTest > 0):
-   sys.stdout.write('\rnEvents remaining: ' + str(nEvents))
-   sys.stdout.flush()
    rng = random.randint(0, 2)
    if(rng == 0 and len(RStestWJets) > 0):
       testData.append(RStestWJets.pop())
       trainLabel.append(rng)
-      nEvents -= 1
+      nEventsTest -= 1
 
    elif(rng == 1 and len(RStestTTbarT) > 0):
       testData.append(RStestTTbarT.pop())
       trainLabel.append(rng)
-      nEvents -= 1
+      nEventsTest -= 1
 
    elif(rng == 2):
       if(test2000 and len(RStestBprime2) > 0): 
          testData.append(RStestBprime2.pop())
          trainLabel.append(rng)
-         nEvents -= 1
+         nEventsTest -= 1
       elif(not test2000 and len(RStestBprime) > 0):
          testData.append(RStestBprime.pop())
          trainLabel.append(rng)
-         nEvents -= 1
+         nEventsTest -= 1
 
    # elif(rng == 3 and len(RStestSingleT) > 0):
    #    testData.append(RStestSingleT.pop()) 
