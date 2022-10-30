@@ -17,7 +17,7 @@ start_time = time.time() # collected just for benchmarking
 outdirName = sys.argv[1] # user can define this at runtime
 arch = '3x10'
 testnum = 0 # currently hard-coded to 0 until it is needed
-maxtest = 15000 # TODO - check if this is necessary
+maxtest = 75000 # TODO - check if this is necessary
 
 # %%
 ### Defining assisting functions
