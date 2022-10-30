@@ -377,6 +377,8 @@ print('nEvents in the training set '+str(nEvents))
 
 # Pull random data based on a selected random integer
 while nEvents > 0:
+    sys.stdout.write('\rnEvents remaining: ' + str(nEvents))
+    sys.stdout.flush()
     rng = random.randint(0,2)
     if(rng == 0 and len(RStrainWJets) > 0):
         trainData.append(RStrainWJets.pop())
