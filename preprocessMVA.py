@@ -81,9 +81,9 @@ logfile = open(outdirName + 'SingleBLog.txt', 'a+')
 ### Signal Selection
 
 # Defining weight classes
-Bprime = 0.8
-Bprime2 = 2.0
-test2000 = True
+Bprime = 2.0
+Bprime2 = 0.8
+test2000 = False
 
 # Defining plotting parameters
 WithBprimeVars = False
@@ -91,23 +91,23 @@ outStr = '_2018TT_'+str(arch)+'_' + str(millify(maxtest)) +'test'
 
 # %%
 ### Defining variables to be used with model (defined in RDataframe script)
-vars = ['pNet_J_1','pNet_J_2',
-        'pNet_T_1','pNet_T_2',
-        'pNet_W_1','pNet_W_2',
-        'dpak8_J_1','dpak8_J_2',
-        'dpak8_T_1','dpak8_T_2',
-        'dpak8_W_1','dpak8_W_2',
-        'FatJet_pt_1','FatJet_pt_2',
-        'FatJet_sdMass_1','FatJet_sdMass_2',
-        'tau21_1','tau21_2',
+vars = ['pNet_J_1',#'pNet_J_2',
+        'pNet_T_1',#'pNet_T_2',
+        'pNet_W_1',#'pNet_W_2',
+        'dpak8_J_1',#'dpak8_J_2',
+        'dpak8_T_1',#'dpak8_T_2',
+        'dpak8_W_1',#'dpak8_W_2',
+        'FatJet_pt_1',#'FatJet_pt_2',
+        'FatJet_sdMass_1',#'FatJet_sdMass_2',
+        'tau21_1',#'tau21_2',
         'nJ_dpak8','nT_dpak8','nW_dpak8',
         'nJ_pNet','nT_pNet','nW_pNet',
         'Jet_HT','Jet_ST','MET_pt',
         't_pt','t_mass',
         #'t_dRWb', # t_dRWb does not exist, should check RDF script
         'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
-        'Bprime_DR','Bprime_ptbal','Bprime_chi2',
-        'minDR_leadAK8otherAK8'] 
+        'Bprime_DR','Bprime_ptbal','Bprime_chi2']
+        #'minDR_leadAK8otherAK8'] 
 
 # %%
 ### Getting data from ROOT files
@@ -115,16 +115,17 @@ print('Opening files...')
 eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 
 # Defining selection criteria for the events
-seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_pt_1 <= 0))"
-seltest = "Bprime_mass > 0 && NJets_forward > 0 && FatJet_pt_1 > 0"
+seltrain = "Bprime_mass > 0 && (NJets_forward == 0 || (NJets_forward > 0 && FatJet_phi[0] <= 0))"
+seltest = "Bprime_mass > 0 && NJets_forward > 0 && FatJet_phi[0] > 0"
 
 treeVars = vars
 
 # Potential variable for future loop controller
-filenames = ['ttbarT', 'ttbarTb', 'singleT', 'singleTb', 'WJets2500',
-            'WJets1200', 'WJets800', 'WJets600', 'WJets400', 'WJets200']
+filenames = ['ttbarT', 'ttbarTb', #'singleT', 'singleTb', 
+             'WJets2500','WJets1200', 'WJets800', 'WJets600', 'WJets400', 'WJets200']
 
-weights = [1, 1, 0.456, 0.0506, 0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
+weights = [1, 1, #0.456, 0.0506, 
+           0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466]
 
 ## Performing selections and reads
 
@@ -145,10 +146,10 @@ trainTTbarT = arraysTrain.pop(0)
 testTTbarT  = arraysTest.pop(0)
 trainTTbarTb = arraysTrain.pop(0)
 testTTbarTb  = arraysTest.pop(0)
-trainSingleT = arraysTrain.pop(0)
-testSingleT  = arraysTest.pop(0)
-trainSingleTb = arraysTrain.pop(0)
-testSingleTb  = arraysTest.pop(0)
+#trainSingleT = arraysTrain.pop(0)
+#testSingleT  = arraysTest.pop(0)
+#trainSingleTb = arraysTrain.pop(0)
+#testSingleTb  = arraysTest.pop(0)
 trainWJets2500 = arraysTrain.pop(0)
 testWJets2500  = arraysTest.pop(0)
 trainWJets1200 = arraysTrain.pop(0)
@@ -200,13 +201,13 @@ np.random.shuffle(trainTTbarT)
 np.random.shuffle(testTTbarT)
 
 # TODO - In future, may combine with TTbarT, but must compare plots
-trainSingleT = np.concatenate([trainSingleT, trainSingleTb])
-testSingleT = np.concatenate([testSingleT, testSingleTb])
-np.random.shuffle(trainSingleT)
-np.random.shuffle(testSingleT)
+#trainSingleT = np.concatenate([trainSingleT, trainSingleTb])
+#testSingleT = np.concatenate([testSingleT, testSingleTb])
+#np.random.shuffle(trainSingleT)
+#np.random.shuffle(testSingleT)
 
 ## Print initial information to the log file and the screen
-logfile.write(str(len(trainTTbarT)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " + str(len(trainSingleT)) + ", " +str(len(testTTbarT)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets)) + ", " + str(len(testSingleT)))
+logfile.write(str(len(trainTTbarT)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTbarT)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets))) # + ", " + str(len(testSingleT) + ", " + str(len(trainSingleT)) ))
 # %%
 ### Update the user
 print('------------ Before Cuts -------------')
@@ -214,13 +215,13 @@ print('Training Events:')
 print('Number of ttBarT: ' + str(len(trainTTbarT)))
 print('Number of Bprime: ' + str(len(trainBprime)))
 print('Number of WJets: ' + str(len(trainWJets)))
-print('Number of singleT: ' + str(len(trainSingleT)) + '\n')
+#print('Number of singleT: ' + str(len(trainSingleT)) + '\n')
 print('Testing Events:')
 print('Number of ttBarT: ' + str(len(testTTbarT)))
 print('Number of Bprime: ' + str(len(testBprime)))
 print('Number of Bprime2: ' + str(len(testBprime2)))
 print('Number of WJets: ' + str(len(testWJets)))
-print('Number of singleT: ' + str(len(testSingleT)) + '\n')
+#print('Number of singleT: ' + str(len(testSingleT)) + '\n')
 
 # %%
 ### Post-processing to prepare date for plotting and export
@@ -230,28 +231,28 @@ testBprime = testBprime[:maxtest]
 testBprime2 = testBprime2[:maxtest]
 testWJets = testWJets[:maxtest]
 testTTbarT = testTTbarT[:maxtest]
-testSingleT = testSingleT[:maxtest]
+#testSingleT = testSingleT[:maxtest]
 
 ## Calculate the maximum number of allowed training events in each group
-## We'll allow up to 10% imbalance between the samples. TODO - Should this be replaced with weighting?
-maxpersample = int(round(1.1*min(len(trainTTbarT), len(trainBprime), len(trainWJets), len(trainSingleT)),0))
+## We'll allow up to 30% imbalance between the samples. TODO - Should this be replaced with weighting?
+maxpersample = int(round(1.3*min(len(trainTTbarT), len(trainBprime), len(trainWJets)),0))#, len(trainSingleT)),0))
 
 ## Shorten the training arrays to the max allowed length
 ## These are not shuffled yet, so we will chop off fewer "good" testing events
 trainBprime = trainBprime[:maxpersample]
 trainWJets = trainWJets[:maxpersample]
 trainTTbarT = trainTTbarT[:maxpersample]
-trainSingleT = trainSingleT[:maxpersample]
+#trainSingleT = trainSingleT[:maxpersample]
 
 # Final shuffle to eliminate any unwanted patterns
 np.random.shuffle(trainTTbarT)
 np.random.shuffle(trainBprime)
 np.random.shuffle(trainWJets)
-np.random.shuffle(trainSingleT)
+#np.random.shuffle(trainSingleT)
 np.random.shuffle(testTTbarT)
 np.random.shuffle(testBprime)
 np.random.shuffle(testWJets)
-np.random.shuffle(testSingleT)
+#np.random.shuffle(testSingleT)
 
 # Print final size information to user
 print('------------ Final Sizes ------------')
@@ -259,15 +260,15 @@ print('Training Events:')
 print('Number of ttBarT: ' + str(len(trainTTbarT)))
 print('Number of Bprime: ' + str(len(trainBprime)))
 print('Number of WJets: ' + str(len(trainWJets)))
-print('Number of singleT: ' + str(len(trainSingleT)) + '\n')
+#print('Number of singleT: ' + str(len(trainSingleT)) + '\n')
 print('Testing Events:')
 print('Number of ttBarT: ' + str(len(testTTbarT)))
 print('Number of Bprime: ' + str(len(testBprime)))
 print('Number of Bprime2: ' + str(len(testBprime2)))
 print('Number of WJets: ' + str(len(testWJets)))
-print('Number of singleT: ' + str(len(testSingleT)) + '\n')
+#print('Number of singleT: ' + str(len(testSingleT)) + '\n')
 
-logfile.write(str(len(trainTTbarT)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " + str(len(trainSingleT)) + ", " +str(len(testTTbarT)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets)) + ", " + str(len(testSingleT)))
+logfile.write(str(len(trainTTbarT)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTbarT)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets)))# + ", " + str(len(testSingleT) + ", " + str(len(trainSingleT)) ))
 logfile.close()
 
 # %%
@@ -278,103 +279,105 @@ logfile.close()
 weightsTrainTTbarT = np.array([sub[0] for sub in trainTTbarT])
 weightsTrainBprime = np.array([sub[0] for sub in trainBprime])
 weightsTrainWJets = np.array([sub[0] for sub in trainWJets])
-weightsTrainSingleT = np.array([sub[0] for sub in trainSingleT])
+#weightsTrainSingleT = np.array([sub[0] for sub in trainSingleT])
 weightsTestTTbarT = np.array([sub[0] for sub in testTTbarT])
 weightsTestBprime = np.array([sub[0] for sub in testBprime])
 weightsTestBprime2 = np.array([sub[0] for sub in testBprime2])
 weightsTestWJets = np.array([sub[0] for sub in testWJets])
-weightsTestSingleT = np.array([sub[0] for sub in testSingleT])
+#weightsTestSingleT = np.array([sub[0] for sub in testSingleT])
 ## Cut off weights from front of array
 trainTTbarT = [sub[1:] for sub in trainTTbarT]
 trainBprime = [sub[1:] for sub in trainBprime]
 trainWJets = [sub[1:] for sub in trainWJets]
-trainSingleT = [sub[1:] for sub in trainSingleT]
+#trainSingleT = [sub[1:] for sub in trainSingleT]
 testTTbarT = [sub[1:] for sub in testTTbarT]
 testBprime = [sub[1:] for sub in testBprime]
 testBprime2 = [sub[1:] for sub in testBprime2]
 testWJets = [sub[1:] for sub in testWJets]
-testSingleT = [sub[1:] for sub in testSingleT]
+#testSingleT = [sub[1:] for sub in testSingleT]
 
 RStrainTTbarT = (resample_with_replacement(trainTTbarT, weightsTrainTTbarT)).tolist()
 RStrainBprime = (resample_with_replacement(trainBprime, weightsTrainBprime)).tolist()
 RStrainWJets = (resample_with_replacement(trainWJets, weightsTrainWJets)).tolist()
-RStrainSingleT = (resample_with_replacement(trainSingleT, weightsTrainSingleT)).tolist()
+#RStrainSingleT = (resample_with_replacement(trainSingleT, weightsTrainSingleT)).tolist()
 RStestTTbarT = (resample_with_replacement(testTTbarT, weightsTestTTbarT)).tolist()
 RStestBprime = (resample_with_replacement(testBprime, weightsTestBprime)).tolist()
 RStestBprime2 = (resample_with_replacement(testBprime2, weightsTestBprime2)).tolist()
 RStestWJets = (resample_with_replacement(testWJets, weightsTestWJets)).tolist()
-RStestSingleT = (resample_with_replacement(testSingleT, weightsTestSingleT)).tolist()
+#RStestSingleT = (resample_with_replacement(testSingleT, weightsTestSingleT)).tolist()
 
 ## New versions are used for merging and copies are used for unaltered plotting
 trainTTbarT = copy.copy(RStrainTTbarT)
 trainBprime = copy.copy(RStrainBprime)
 trainWJets = copy.copy(RStrainWJets)
-trainSingleT = copy.copy(RStrainSingleT)
+#trainSingleT = copy.copy(RStrainSingleT)
 testTTbarT = copy.copy(RStestTTbarT)
 testBprime = copy.copy(RStestBprime)
 testBprime2 = copy.copy(RStestBprime2)
 testWJets = copy.copy(RStestWJets)
-testSingleT = copy.copy(RStestSingleT)
+#testSingleT = copy.copy(RStestSingleT)
 
 ## Transpose these arrays to get arrays for plotting
 ## Each entry is one variable for all the events
 ## We will make sure all samples are the same size for plots
-numPerSample = min(len(trainTTbarT),len(trainBprime), len(trainWJets), len(trainSingleT))
+#numPerSample = min(len(trainTTbarT),len(trainBprime), len(trainWJets))#, len(trainSingleT))
+#print('Setting numPerSample = '+str(numPerSample))
 
-histsTTbarT = np.array(trainTTbarT[:numPerSample]).T
-histsBprime = np.array(trainBprime[:numPerSample]).T
+histsTTbarT = np.array(trainTTbarT).T#[:numPerSample]).T
+histsBprime = np.array(trainBprime).T#[:numPerSample]).T
 #histsTprime2 = np.array(trainTprime2[:numPerSample]).T
-histsWJets = np.array(trainWJets[:numPerSample]).T
-histsSingleT = np.array(trainSingleT[:numPerSample]).T
+histsWJets = np.array(trainWJets).T#[:numPerSample]).T
+#histsSingleT = np.array(trainSingleT[:numPerSample]).T
 
 # %%
 ### Plotting input variables
-print('Plotting input variables...')
-for index, hist in enumerate(histsWJets):
-   sys.stdout.write('\rNow processing plot {}/'.format(index + 1) + str(len(histsWJets)) + ' - ' + vars[index] + '...       ')
-   sys.stdout.flush()
-   plt.figure()
-   plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
-   plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
-   #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
-   plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
-   plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{singleT}$', histtype='step', normed=True)
-   plt.title('CMS Simulation',loc='left',size=18)
-   plt.title('Work in progress',loc='right',size=14,style='italic')
-   plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-   plt.xlabel(vars[index],horizontalalignment='right',x=1.0,size=14)
-   plt.legend(loc='best',fontsize=14)
-   if not WithBprimeVars: plt.savefig(outdirName+'plots_'+str(vars[index])+outStr)
-   if WithBprimeVars: plt.savefig(outdirName+'plots_'+str(vars[index])+outStr)
-   plt.close()
+# print('Plotting input variables...')
+# for index, hist in enumerate(histsWJets):
+#    sys.stdout.write('\rNow processing plot {}/'.format(index + 1) + str(len(histsWJets)) + ' - ' + vars[index] + '...       ')
+#    sys.stdout.flush()
+#    plt.figure()
+#    plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
+#    plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{T\overline{T}\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
+#    #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
+#    plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
+#    plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{singleT}$', histtype='step', normed=True)
+#    plt.title('CMS Simulation',loc='left',size=18)
+#    plt.title('Work in progress',loc='right',size=14,style='italic')
+#    plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
+#    plt.xlabel(vars[index],horizontalalignment='right',x=1.0,size=14)
+#    plt.legend(loc='best',fontsize=14)
+#    if not WithBprimeVars: plt.savefig(outdirName+'plots_'+str(vars[index])+outStr)
+#    if WithBprimeVars: plt.savefig(outdirName+'plots_'+str(vars[index])+outStr)
+#    plt.close()
    
-   # Logarithmic option
-   plt.figure()
-   plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
-   plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
-   #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
-   plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
-   plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{singleT}$', histtype='step', normed=True)
-   plt.title('CMS Simulation',loc='left',size=18)
-   plt.title('Work in progress',loc='right',size=14,style='italic')
-   plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-   plt.yscale('log', nonposy='clip')
-   plt.xlabel(vars[index],horizontalalignment='right',x=1.0,size=14)
-   plt.legend(loc='best',fontsize=14)
-   if not WithBprimeVars: plt.savefig(outdirName+'logscale_plots_'+str(vars[index])+outStr)
-   if WithBprimeVars: plt.savefig(outdirName+'logscale_plots_'+str(vars[index])+outStr)
-   plt.close()
+#    # Logarithmic option
+#    plt.figure()
+#    plt.hist(hist, bins=50, color='g', label=r'$\mathrm{W+jets}$', histtype='step', normed=True)
+#    plt.hist(histsBprime[index], bins=50, color='y', label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', histtype='step', normed=True)
+#    #plt.hist(histsTprime2[index], bins=50, color='c', label=r'$\mathrm{T\overline{T}\,('+str(Tprime2)+'\,TeV)}$', histtype='step', normed=True)
+#    plt.hist(histsTTbarT[index], bins=50, color='r', label=r'$\mathrm{t\bar{t}}$', histtype='step', normed=True)
+#    plt.hist(histsSingleT[index], bins=50, color='k', label=r'$\mathrm{singleT}$', histtype='step', normed=True)
+#    plt.title('CMS Simulation',loc='left',size=18)
+#    plt.title('Work in progress',loc='right',size=14,style='italic')
+#    plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
+#    plt.yscale('log', nonposy='clip')
+#    plt.xlabel(vars[index],horizontalalignment='right',x=1.0,size=14)
+#    plt.legend(loc='best',fontsize=14)
+#    if not WithBprimeVars: plt.savefig(outdirName+'logscale_plots_'+str(vars[index])+outStr)
+#    if WithBprimeVars: plt.savefig(outdirName+'logscale_plots_'+str(vars[index])+outStr)
+#    plt.close()
 
 # %%
 ### Make arrays of training and testing data
 trainData = []
 trainLabel = []
 testWeights = []
-nEvents = len(RStrainTTbarT) + len(RStrainBprime) + len(RStrainWJets) + len(RStrainSingleT)
+nEvents = len(RStrainTTbarT) + len(RStrainBprime) + len(RStrainWJets) #+ len(RStrainSingleT)
+print('nEvents in the training set '+str(nEvents))
 
 # Pull random data based on a selected random integer
 while nEvents > 0:
-    rng = random.randint(0,3)
+    rng = random.randint(0,2)
     if(rng == 0 and len(RStrainWJets) > 0):
         trainData.append(RStrainWJets.pop())
         trainLabel.append(rng)
@@ -390,54 +393,55 @@ while nEvents > 0:
         trainLabel.append(rng)
         nEvents -= 1
 
-    elif(rng == 3 and len(RStrainSingleT) > 0):
-        trainData.append(RStrainSingleT.pop())
-        trainLabel.append(rng)
-        nEvents -= 1
+     #elif(rng == 3 and len(RStrainSingleT) > 0):
+     #   trainData.append(RStrainSingleT.pop())
+     #   trainLabel.append(rng)
+     #   nEvents -= 1
 
     
 
 # If using larger weight class, we use a different variable set
-if test2000: nEventsTest = len(RStestTTbarT) + len(RStestBprime) + len(RStestWJets) + len(RStestSingleT)
-else: nEventsTest = len(RStestTTbarT) + len(RStestBprime2) + len(RStestWJets) + len(RStestSingleT)
+if test2000: nEventsTest = len(RStestTTbarT) + len(RStestBprime2) + len(RStestWJets) #+ len(RStestSingleT)
+else: nEventsTest = len(RStestTTbarT) + len(RStestBprime) + len(RStestWJets)# + len(RStestSingleT)
+print('nEventsTest = '+str(nEventsTest))
 
 testData = []
 testLabel = []
 testWeight = [] 
 # Once again else clauses kick in when selected list is empty
 while(nEventsTest > 0):
-    rng = random.randint(0, 3)
-    if(rng == 0 and len(RStestWJets) > 0):
-        testData.append(RStestWJets.pop())
-        trainLabel.append(rng)
-        nEvents -= 1
+   rng = random.randint(0, 2)
+   if(rng == 0 and len(RStestWJets) > 0):
+      testData.append(RStestWJets.pop())
+      trainLabel.append(rng)
+      nEvents -= 1
 
-    elif(rng == 1 and len(RStestTTbarT) > 0):
-        testData.append(RStestTTbarT.pop())
-        trainLabel.append(rng)
-        nEvents -= 1
+   elif(rng == 1 and len(RStestTTbarT) > 0):
+      testData.append(RStestTTbarT.pop())
+      trainLabel.append(rng)
+      nEvents -= 1
 
-    elif(rng == 2):
-        if(test2000 and len(RStestBprime2) > 0): 
-            testData.append(RStestBprime2.pop())
-            trainLabel.append(rng)
-            nEvents -= 1
-        elif(not test2000 and len(RStestBprime) > 0):
-            testData.append(RStestBprime.pop())
-            trainLabel.append(rng)
-            nEvents -= 1
-        else: continue
+   elif(rng == 2):
+      if(test2000 and len(RStestBprime2) > 0): 
+         testData.append(RStestBprime2.pop())
+         trainLabel.append(rng)
+         nEvents -= 1
+      elif(not test2000 and len(RStestBprime) > 0):
+         testData.append(RStestBprime.pop())
+         trainLabel.append(rng)
+         nEvents -= 1
+      else: continue
 
-    elif(rng == 3 and len(RStestSingleT) > 0):
-        testData.append(RStestSingleT.pop()) 
-        trainLabel.append(rng)
-        nEvents -= 1
+   # elif(rng == 3 and len(RStestSingleT) > 0):
+   #    testData.append(RStestSingleT.pop()) 
+   #    trainLabel.append(rng)
+   #    nEvents -= 1
 
 # Save the output to a file
 print('Saving file to ' + outdirName + 'Arrays' + outStr)
 np.savez(outdirName + 'Arrays' + outStr, trainData=trainData, trainLabel = trainLabel, testData = testData, 
     testLabel = testLabel, testWJets = testWJets, testTTbarT = testTTbarT, testBprime = testBprime,
-    testBprime2 = testBprime2, testSingleT = testSingleT)
+    testBprime2 = testBprime2)#, testSingleT = testSingleT)
 
 print('Done')
 print('Time Taken: %s minutes' % (round(time.time() - start_time, 2)/60)) 
