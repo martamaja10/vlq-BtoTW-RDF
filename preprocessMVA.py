@@ -44,7 +44,7 @@ def resample_with_replacement(X_train, sample_weight):
    X_train_resampled = np.zeros((len(X_train), len(X_train[0])), dtype=np.float32)
    print('\t Resampling:')
    for i in range(len(X_train)):
-      if i%10000 == 0: print('\t\t ...',i,'...')
+      if i%10000 == 0: print('\t\t ...'+ str(i) +'...')
       # draw a number from 0 to len(X_train)-1
       draw = np.random.choice(np.arange(len(X_train)), p=sample_weight)
 
