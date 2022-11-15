@@ -194,13 +194,11 @@ testWJets = np.concatenate([testWJets200, testWJets400, testWJets600, testWJets8
 np.random.shuffle(trainWJets)
 np.random.shuffle(testWJets)
 
-# TODO - Ask if these should be shuffled before the concatenate
 trainTTbarT = np.concatenate([trainTTbarT, trainTTbarTb])
 testTTbarT = np.concatenate([testTTbarT, testTTbarTb])
 np.random.shuffle(trainTTbarT)
 np.random.shuffle(testTTbarT)
 
-# TODO - In future, may combine with TTbarT, but must compare plots
 #trainSingleT = np.concatenate([trainSingleT, trainSingleTb])
 #testSingleT = np.concatenate([testSingleT, testSingleTb])
 #np.random.shuffle(trainSingleT)
@@ -226,7 +224,7 @@ print('Number of WJets: ' + str(len(testWJets)))
 # %%
 ### Post-processing to prepare date for plotting and export
 
-## Shorten the testing arrays to the chosen length TODO - Check if this is necessary
+## Shorten the testing arrays to the chosen length
 testBprime = testBprime[:maxtest]
 testBprime2 = testBprime2[:maxtest]
 testWJets = testWJets[:maxtest]
@@ -234,7 +232,7 @@ testTTbarT = testTTbarT[:maxtest]
 #testSingleT = testSingleT[:maxtest]
 
 ## Calculate the maximum number of allowed training events in each group
-## We'll allow up to 30% imbalance between the samples. TODO - Should this be replaced with weighting?
+## We'll allow up to 30% imbalance between the samples. 
 maxpersample = int(round(1.3*min(len(trainTTbarT), len(trainBprime), len(trainWJets)),0))#, len(trainSingleT)),0))
 
 ## Shorten the training arrays to the max allowed length
