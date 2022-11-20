@@ -12,7 +12,7 @@ import tensorflow as tf
 import tempfile
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from tensorflow.keras.layers import Conv1D, Dense, MaxPooling1D, Flatten, Dropout
-from tensorflow.keras.models import Sequential, Model, save_model, load_model
+from keras.models import Sequential, Model, save_model, load_model
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.neural_network import MLPClassifier
@@ -94,8 +94,8 @@ logfile.write(str(vararray)+", ")
 
 # %%
 ### Signal Selection
-Bprime = 0.8
-Bprime2 = 2.0
+Bprime = 2.0
+Bprime2 = 0.8
 test2000 = False #use if Bprime = 2000
 
 # %%
@@ -277,7 +277,7 @@ ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, normalize = 'tru
 ### Training a basic decision tree with SKlearn
 print('\n--------------Random Forest Classifier--------------')
 tstart = time.time()
-dtModel = ensemble.RandomForestClassifier(random_state = 0)
+dtModel = ensemble.RandomForestClassifier(random_state = 0, n_estimators = 100)
 dtModel.fit(trainData, trainLabel)
 dtTime = time.time() - tstart
 print(dtTime)
@@ -312,8 +312,8 @@ cnn.add(Dense(100, activation="relu"))
 cnn.add(Dense(25, activation = 'softmax'))
 cnn.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
-cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.4, verbose = 0,
-   callbacks = callbackList, batch_size = 15000)
+cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.1, verbose = 0,
+   callbacks = callbackList)
 cnn.load_weights('./ModelChkpt/checkpoint')
 cnnTime = time.time() - tstart
 print(cnnTime)
@@ -372,8 +372,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2MLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2MLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetMLP'+outStr+'.png')
 
@@ -386,8 +386,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2DT.T[0], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2DT.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetDT'+outStr+'.png')
 
@@ -400,8 +400,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsCNN.T[0], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTCNN.T[0], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeCNN.T[0], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2CNN.T[0], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeCNN.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2CNN.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetCNN'+outStr+'.png')
 
@@ -416,8 +416,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2MLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2MLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTMLP'+outStr+'.png')
 
@@ -430,8 +430,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2DT.T[1], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2DT.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTDT'+outStr+'.png')
 
@@ -444,8 +444,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsCNN.T[1], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTCNN.T[1], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeCNN.T[1], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2CNN.T[1], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeCNN.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2CNN.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTCNN'+outStr+'.png')
 
@@ -460,8 +460,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeMLP'+outStr+'.png')
 
@@ -474,8 +474,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2DT.T[2], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2DT.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeDT'+outStr+'.png')
 
@@ -488,8 +488,8 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_WJetsCNN.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_TTbarTCNN.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeCNN.T[2], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2CNN.T[2], bins=20, range=(0,1), label=r'$\mathrm{B\overline{B}\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeCNN.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2CNN.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeCNN'+outStr+'.png')
 # %%
@@ -527,7 +527,7 @@ print('Recall: ' + str(recallCNN))
 print('F-measure: ' + str(fscoreCNN))
 print('Trained in ' + str(cnnTime) + ' s')
 # %%
-### Saving models to files
+## Saving models to files
 def make_keras_picklable():
     def __getstate__(self):
         model_str = ""
@@ -553,8 +553,7 @@ make_keras_picklable()
 
 pickle.dump(mlp, open(outdir+'models/Dnn_mlp_3bin'+outStr+'.pkl', 'wb'))
 pickle.dump(dtModel, open(outdir+'models/dt_3bin' + outStr +'.pkl', 'wb'))
-cnn.save(outdir+'models/cnn', 'wb')
-with open(outdir+'models/cnn.pkl', 'wb') as f:
-    pickle.dump(cnn, f)
+pickle.dump(cnn, open(outdir+'models/dt_3bin' + outStr +'.pkl', 'wb'))
 pickle.dump(scaler, open(outdir+'Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
 # %%
+cnn.save(outdir+'models/cnn', 'wb')
