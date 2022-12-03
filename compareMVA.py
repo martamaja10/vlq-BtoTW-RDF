@@ -528,32 +528,10 @@ print('F-measure: ' + str(fscoreCNN))
 print('Trained in ' + str(cnnTime) + ' s')
 # %%
 ## Saving models to files
-def make_keras_picklable():
-    def __getstate__(self):
-        model_str = ""
-        with tempfile.NamedTemporaryFile(suffix='.hdf5', delete=True) as fd:
-            save_model(self, fd.name, overwrite=True)
-            model_str = fd.read()
-        d = {'model_str': model_str}
-        return d
-
-    def __setstate__(self, state):
-        with tempfile.NamedTemporaryFile(suffix='.hdf5', delete=True) as fd:
-            fd.write(state['model_str'])
-            fd.flush()
-            model = load_model(fd.name)
-        self.__dict__ = model.__dict__
-
-    cls = Model
-    cls.__getstate__ = __getstate__
-    cls.__setstate__ = __setstate__
-
-# Run the function
-make_keras_picklable()
-
 pickle.dump(mlp, open(outdir+'models/Dnn_mlp_3bin'+outStr+'.pkl', 'wb'))
 pickle.dump(dtModel, open(outdir+'models/dt_3bin' + outStr +'.pkl', 'wb'))
-pickle.dump(cnn, open(outdir+'models/dt_3bin' + outStr +'.pkl', 'wb'))
+arch = cnn.to_json()
+with open(outdir+'models/architecture.json', 'w') as arch_file:
+    arch_file.write(arch)
+cnn.save_weights(outdir+'models/weights.h5')
 pickle.dump(scaler, open(outdir+'Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
-# %%
-cnn.save(outdir+'models/cnn', 'wb')
