@@ -168,8 +168,8 @@ fName = fname
 sys.stdout.write('\rNow processing signal file...                                                                ')
 sys.stdout.flush()
 weight = 1
-fileBp1  = TFile.Open(eosdir + "Bp800_hadd.root", "READ")
-fileBp2 = TFile.Open(eosdir + "Bp2000_hadd.root", "READ")
+fileBp1  = TFile.Open(eosdir + "BpM14000_hadd.root", "READ")
+fileBp2 = TFile.Open(eosdir + "BpM2000_hadd.root", "READ")
 # Swapping order depending on defined parameters
 if Bprime == 2.0:
     temp = fileBp1
