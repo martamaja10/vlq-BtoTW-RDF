@@ -9,7 +9,7 @@ import math
 import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.neural_network import MLPClassifier
 from sklearn import ensemble, svm
 from sklearn.metrics import f1_score, recall_score, precision_score, accuracy_score
@@ -279,7 +279,7 @@ plt.plot(testscore)
 plt.savefig(outdir+'MLPTrainPlots/valscore'+outStr+'.png')
 plt.show()
 
-plot_confusion_matrix(mlp, testData, testLabel, display_labels=['WJets', 'TTbarT', 'VLQ B'], normalize = 'true')
+ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, display_labels=['WJets', 'TTbarT', 'VLQ B'], normalize = 'true')
 plt.savefig(outdir+'MLPTrainPlots/CM'+outStr+'.png')
 plt.show()
 
@@ -292,7 +292,7 @@ dtModel.fit(trainData, trainLabel)
 dtTime = time.time() - tstart
 print(dtTime)
 
-plot_confusion_matrix(dtModel, testData, testLabel, normalize = 'true')
+ConfusionMatrixDisplay.from_estimator(dtModel, testData, testLabel, normalize = 'true')
 plt.savefig(outdir+'DTTrainPlots/CM'+outStr+'.png')
 plt.show()
 
@@ -306,7 +306,7 @@ svmModel.fit(trainData, trainLabel)
 svmTime = time.time() - tstart
 print(svmTime)
 
-plot_confusion_matrix(svmModel, testData, testLabel, normalize = 'true')
+ConfusionMatrixDisplay.from_estimator(svmModel, testData, testLabel, normalize = 'true')
 plt.savefig(outdir+'SVMTrainPlots/CM'+outStr+'.png')
 plt.show()
 
