@@ -9,7 +9,7 @@ import math
 import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.preprocessing import StandardScaler
-from plot_confusion_matrix import plot_confusion_matrix
+from sklearn.metrics import plot_confusion_matrix
 from sklearn.neural_network import MLPClassifier
 from sklearn import ensemble, svm
 from sklearn.metrics import f1_score, recall_score, precision_score, accuracy_score
