@@ -340,7 +340,7 @@ plt.plot(testscore)
 plt.savefig(outdir+'MLP_valscore'+outStr+'.png')
 plt.show()
 
-preds = mlp.predict(testData, testLabel)
+preds = mlp.predict(testData)
 plot_confusion(testLabel, preds, title = 'MLP')
 
 
@@ -353,6 +353,7 @@ dtModel.fit(trainData, trainLabel)
 dtTime = time.time() - tstart
 print(dtTime)
 
+preds = dtModel.predict(testData)
 plot_confusion(testLabel, preds, title = 'DT')
 
 # %% 
@@ -365,9 +366,8 @@ svmModel.fit(trainData, trainLabel)
 svmTime = time.time() - tstart
 print(svmTime)
 
+preds = svmModel.predict(testData)
 plot_confusion(testLabel, preds, title = 'SVM')
-plt.savefig(outdir+'SVMTrainPlots/CM'+outStr+'.png')
-plt.show()
 
 # %%
 ### Getting probabilities from the classifiers
