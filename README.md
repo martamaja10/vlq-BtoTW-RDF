@@ -7,6 +7,8 @@ This fork contains some machine learning extensions to the preexisting R-Datafra
 
 Most of the critical files are located in the root directory of the repository, namely the .cc and .cpp files. Each of these files plays a particular role in running the analysis.
 
+Additionally, the python files in this repository are important for analyzing and training neural networks on the data produced by the RDF scripts. These are also located in the root directory. 
+
 ## Critical Files
 
 A few key files in this repository are listed below along with a brief description of how they play into the analysis.
@@ -18,6 +20,14 @@ A few key files in this repository are listed below along with a brief descripti
 - `analyzer_RDF.cpp` - This file is where the data begins being altered. The key function in this file is analyzer_RDF. This function takes in the user input and creates a dataframe. Initially, the function performs some preprocessing, setting up necessary variables for analysis. Then, the function implements the LWTNN library. Next, the function applies some flags and filtering to narrow the dataset down to only include necessary and "good" events. Finally, the function performs an analysis on the now cut data and creates a final snapshot file as an output. Note this cpp file has a corresponding header file.
 
 So, in summary, the flow is `callRDF.C` -> `runRDF.C` -> `analyzer_RDF.cpp` with `callRDF.C` being the only file the user needs to interact with at runtime. 
+
+In addition to these files, there are three primary python files.
+
+- `preprocessMVA.py` - This file takes the output of the RDF scripts and performs some further selections and cuts to make the data useful for training machine learning models. The output of this file is a collection of graphs of input data shapes and a numpy array (stored as a .npz) which stores a 3D array of the data. The first dimension is a set of subarrays (trainData, trainLabel, testData, testLabel, testWJets, testTTbarT, testBprime, testBprime2). The second dimension is events and the third is features. `preprocessMVA.py` must be called with an argument specifying where the output should be saved (in the form python preprocessMVA.py [outputdir]).
+
+- `trainMVA.py` - This file takes the output of `preprocessMVA.py` and trains three models on it. At the time of writing (Dec 6, 2022), these models are a multilayer perceptron, random forest decision tree, and linear SVM. This file trains these models, tests them on the testing data, and creates some plots analyzing the performance of the three classifiers. At the end, these models are saved to pickle files along with a data scaler so they can be passed back into the RDF scripts to generate better plots. The input directory for this script should be pointed to the output directory of `preprocessMVA.py`.
+
+- `compareMVA.py` - This file is almost identical to trainMVA.py, but it implements Tensorflow and Keras to create a Convolutional Neural Network instead of a linear SVM. This may be useful in the future, but for best performance, be sure to use a machine compatible with Tensorflow-gpu.
 
 ## Getting started
 

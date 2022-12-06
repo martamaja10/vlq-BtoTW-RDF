@@ -96,7 +96,7 @@ logfile.write(str(vararray)+", ")
 ### Signal Selection
 Bprime = 2.0
 Bprime2 = 0.8
-test2000 = False #use if Bprime = 2000
+test2000 = True #use if Bprime = 2000
 
 # %%
 ### Configure output
@@ -261,7 +261,6 @@ plt.xlabel('iterations')
 plt.ylabel('training loss')
 plt.plot(losscurve)
 plt.savefig(outdir+'trainloss'+outStr+'.png')
-plt.close()
 
 ## Draw validation sample (10% of the training data) score
 testscore = mlp.validation_scores_
@@ -270,9 +269,8 @@ plt.xlabel('iterations')
 plt.ylabel('validation score')
 plt.plot(testscore)
 plt.savefig(outdir+'valscore'+outStr+'.png')
-plt.close()
 
-ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, normalize = 'true')
+ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, display_labels=['WJets', 'TTbarT', 'VLQ B'], normalize = 'true')
 # %%
 ### Training a basic decision tree with SKlearn
 print('\n--------------Random Forest Classifier--------------')
@@ -317,6 +315,7 @@ cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.1, verbose = 0,
 cnn.load_weights('./ModelChkpt/checkpoint')
 cnnTime = time.time() - tstart
 print(cnnTime)
+
 # %%
 ### Getting predictions from CNN
 testAr = np.array(testData)
@@ -363,7 +362,7 @@ probsCNN = [probs_WJetsCNN, probs_TTbarTCNN, probs_Bprime2CNN]
 # %%
 ### Plotting the comparison 
 ## WJets
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted W boson score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -377,7 +376,7 @@ plt.hist(probs_Bprime2MLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetMLP'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted W boson score - DT',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -391,7 +390,7 @@ plt.hist(probs_Bprime2DT.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetDT'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted W boson score - CNN',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -407,7 +406,7 @@ plt.savefig(outdir+'plots/score_WJetCNN'+outStr+'.png')
 
 
 ## TTbarT
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted top quark score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -421,7 +420,7 @@ plt.hist(probs_Bprime2MLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTMLP'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted top quark score - DT',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -435,7 +434,7 @@ plt.hist(probs_Bprime2DT.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTDT'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted top quark score - CNN',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -451,7 +450,7 @@ plt.savefig(outdir+'plots/score_TTbarTCNN'+outStr+'.png')
 
 
 ## Signal
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted B quark score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -465,7 +464,7 @@ plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeMLP'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted B quark score - DT',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -479,7 +478,7 @@ plt.hist(probs_Bprime2DT.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeDT'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted B quark score - CNN',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -530,8 +529,21 @@ print('Trained in ' + str(cnnTime) + ' s')
 ## Saving models to files
 pickle.dump(mlp, open(outdir+'models/Dnn_mlp_3bin'+outStr+'.pkl', 'wb'))
 pickle.dump(dtModel, open(outdir+'models/dt_3bin' + outStr +'.pkl', 'wb'))
+
 arch = cnn.to_json()
 with open(outdir+'models/architecture.json', 'w') as arch_file:
     arch_file.write(arch)
 cnn.save_weights(outdir+'models/weights.h5')
-pickle.dump(scaler, open(outdir+'Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
+jsonString = '{\n\t"inputs":['
+for feature in selectedFeatures:
+   jsonString += '\t\n{\n\t\t"name": ' + '"' + feature + '",\n'
+   jsonString += '\t\t"offset": 0,\n'
+   jsonString += '\t\t"scale": 1\n},'
+jsonString += '\t],\n\t"class_labels":["WJet", "TTbarT", "Bprime", "Bprime2"]\n}'
+jsonFile = open("inputs.json", "w")
+n = jsonFile.write(jsonString)
+jsonFile.close()
+
+pickle.dump(scaler, open(outdir+'models/Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
+
+# %%
