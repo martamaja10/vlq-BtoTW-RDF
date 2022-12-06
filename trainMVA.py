@@ -9,7 +9,6 @@ import math
 import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.neural_network import MLPClassifier
 from sklearn import ensemble, svm
 from sklearn.metrics import f1_score, recall_score, precision_score, accuracy_score
@@ -53,6 +52,7 @@ def plot_confusion(actual_class, pred_class, title = 'Confusion Matrix'):
    plt.title(title)
    plt.xlabel('Predicted label')
    plt.ylabel('Actual label')
+   plt.savefig(outdir+'CM_' + title + outStr+'.png')
    plt.show()
    return confusion
 
@@ -177,13 +177,74 @@ print('{} WJet events'.format(len(testWJets)))
 print('{} TTbarT events'.format(len(testTTbarT)))
 print('{} {} TeV B events'.format(len(testBprime), Bprime))
 print('{} {} TeV B events'.format(len(testBprime2), Bprime2))
+
+## Code for selecting out deepak8
+# cols = []
+# newVarList = []
+# for i, var in enumerate(varList):
+#    if not 'dpak8' in var:
+#       cols.append(i)
+#       newVarList.append(var)
+
+# varList = newVarList
+
+# print('Selecting out deepak8 features from training data...')
+# selectedTrain = []
+# for event in trainData:
+#    newEvent = []
+#    for col in cols:
+#       newEvent.append(event[col])
+#    selectedTrain.append(newEvent)
+
+# print('Selecting out deepak8 features from testing data...')
+# selectedTest = []
+# for event in testData:
+#    newEvent = []
+#    for col in cols:
+#       newEvent.append(event[col])
+#    selectedTest.append(newEvent)
+
+# selectedBprime2 = []
+# for event in testBprime2:
+#    newEvent = []
+#    for col in cols:
+#       newEvent.append(event[col])
+#    selectedBprime2.append(newEvent)
+
+# selectedBprime = []
+# for event in testBprime:
+#    newEvent = []
+#    for col in cols:
+#       newEvent.append(event[col])
+#    selectedBprime.append(newEvent)
+
+# selectedTTbarT = []
+# for event in testTTbarT:
+#    newEvent = []
+#    for col in cols:
+#       newEvent.append(event[col])
+#    selectedTTbarT.append(newEvent)
+
+# selectedWJets = []
+# for event in testWJets:
+#    newEvent = []
+#    for col in cols:
+#       newEvent.append(event[col])
+#    selectedWJets.append(newEvent)
+
+# trainData = selectedTrain
+# testData = selectedTest
+# testBprime2 = selectedBprime2
+# testBprime = selectedBprime
+# testTTbarT = selectedTTbarT
+# testWJets = selectedWJets
       
 # %%
 ### Evaluation of features
 trainSelector = SelectKBest(f_regression, k=15).fit(trainData, trainLabel)
 cols = trainSelector.get_support(indices = True).tolist()
 
-# Eliminating DeepAK8 Features
+# Eliminating DeepAK8 Features - Should be removed, but needed for Dec 6, 2022
 for i, col in enumerate(cols):
    if 'dpak8' in varList[col]:
       cols.pop(i)
@@ -268,7 +329,7 @@ plt.figure()
 plt.xlabel('iterations')
 plt.ylabel('training loss')
 plt.plot(losscurve)
-plt.savefig(outdir+'MLPTrainPlots/trainloss'+outStr+'.png')
+plt.savefig(outdir+'MLP_trainloss'+outStr+'.png')
 
 ## Draw validation sample (10% of the training data) score
 testscore = mlp.validation_scores_
@@ -276,12 +337,12 @@ plt.figure()
 plt.xlabel('iterations')
 plt.ylabel('validation score')
 plt.plot(testscore)
-plt.savefig(outdir+'MLPTrainPlots/valscore'+outStr+'.png')
+plt.savefig(outdir+'MLP_valscore'+outStr+'.png')
 plt.show()
 
-ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, display_labels=['WJets', 'TTbarT', 'VLQ B'], normalize = 'true')
-plt.savefig(outdir+'MLPTrainPlots/CM'+outStr+'.png')
-plt.show()
+preds = mlp.predict(testData, testLabel)
+plot_confusion(testLabel, preds, title = 'MLP')
+
 
 # %%
 ### Training a basic decision tree with SKlearn
@@ -292,9 +353,7 @@ dtModel.fit(trainData, trainLabel)
 dtTime = time.time() - tstart
 print(dtTime)
 
-ConfusionMatrixDisplay.from_estimator(dtModel, testData, testLabel, normalize = 'true')
-plt.savefig(outdir+'DTTrainPlots/CM'+outStr+'.png')
-plt.show()
+plot_confusion(testLabel, preds, title = 'DT')
 
 # %% 
 ### Training an SVM classifier
@@ -306,7 +365,7 @@ svmModel.fit(trainData, trainLabel)
 svmTime = time.time() - tstart
 print(svmTime)
 
-ConfusionMatrixDisplay.from_estimator(svmModel, testData, testLabel, normalize = 'true')
+plot_confusion(testLabel, preds, title = 'SVM')
 plt.savefig(outdir+'SVMTrainPlots/CM'+outStr+'.png')
 plt.show()
 
