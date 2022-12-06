@@ -283,52 +283,52 @@ ConfusionMatrixDisplay.from_estimator(dtModel, testData, testLabel, normalize = 
 
 # %%
 ### Train CNN with Tensorflow
-# print('\n--------------Training Convolutional Neural Network--------------')
-# tstart = time.time()
+print('\n--------------Training Convolutional Neural Network--------------')
+tstart = time.time()
 
-# trainAr = np.array(trainData)
-# labelAr = np.array(trainLabel)
-# # Reshaping train data for input to CNN
-# sample_size = trainAr.shape[0]
-# time_steps = trainAr.shape[1]
-# input_dimension = 1
-# callbackList = [EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 25, verbose = 1),
-#                ModelCheckpoint('./ModelChkpt/checkpoint', save_weights_only=True, monitor='val_accuracy', mode = 'max', save_best_only = True)]
-# trainCNN = trainAr.reshape(sample_size, time_steps, input_dimension)
-# tf.random.set_seed(42) # ensures models are somewhat consistent
+trainAr = np.array(trainData)
+labelAr = np.array(trainLabel)
+# Reshaping train data for input to CNN
+sample_size = trainAr.shape[0]
+time_steps = trainAr.shape[1]
+input_dimension = 1
+callbackList = [EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 25, verbose = 1),
+               ModelCheckpoint('./ModelChkpt/checkpoint', save_weights_only=True, monitor='val_accuracy', mode = 'max', save_best_only = True)]
+trainCNN = trainAr.reshape(sample_size, time_steps, input_dimension)
+tf.random.set_seed(42) # ensures models are somewhat consistent
 
-# # Building the model
-# cnn = Sequential(name="model_conv1D")
-# cnn.add(Conv1D(filters=128, kernel_size = 8, activation = 'relu', input_shape = (trainCNN.shape[1], trainCNN.shape[2])))
-# cnn.add(Dropout(0.5))
-# cnn.add(Conv1D(filters=256, kernel_size = 5, activation = 'relu'))
-# cnn.add(Dropout(0.2))
-# cnn.add(Dense(16, activation="relu"))
-# cnn.add(MaxPooling1D())
-# cnn.add(Flatten())
-# cnn.add(Dense(100, activation="relu"))
-# cnn.add(Dense(25, activation = 'softmax'))
-# cnn.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+# Building the model
+cnn = Sequential(name="model_conv1D")
+cnn.add(Conv1D(filters=128, kernel_size = 8, activation = 'relu', input_shape = (trainCNN.shape[1], trainCNN.shape[2])))
+cnn.add(Dropout(0.5))
+cnn.add(Conv1D(filters=256, kernel_size = 5, activation = 'relu'))
+cnn.add(Dropout(0.2))
+cnn.add(Dense(16, activation="relu"))
+cnn.add(MaxPooling1D())
+cnn.add(Flatten())
+cnn.add(Dense(100, activation="relu"))
+cnn.add(Dense(25, activation = 'softmax'))
+cnn.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
-# cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.1, verbose = 0,
-#    callbacks = callbackList)
-# cnn.load_weights('./ModelChkpt/checkpoint')
-# cnnTime = time.time() - tstart
-# print(cnnTime)
+cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.1, verbose = 0,
+   callbacks = callbackList)
+cnn.load_weights('./ModelChkpt/checkpoint')
+cnnTime = time.time() - tstart
+print(cnnTime)
 
-# # %%
-# ### Getting predictions from CNN
-# testAr = np.array(testData)
-# labelTAr = np.array(testLabel)
+# %%
+### Getting predictions from CNN
+testAr = np.array(testData)
+labelTAr = np.array(testLabel)
 
-# sample_test = testAr.shape[0]
-# time_test = trainAr.shape[1]
+sample_test = testAr.shape[0]
+time_test = trainAr.shape[1]
 
-# testCNN = testAr.reshape(sample_test, time_test, input_dimension)
+testCNN = testAr.reshape(sample_test, time_test, input_dimension)
 
-# pred_cnn = cnn.predict(testCNN).argmax(axis = -1)
+pred_cnn = cnn.predict(testCNN).argmax(axis = -1)
 
-# confusion = plot_confusion(labelTAr, pred_cnn, title = 'CNN Confusion Matrix')
+confusion = plot_confusion(labelTAr, pred_cnn, title = 'CNN Confusion Matrix')
 # %%
 ### Getting probabilities from the classifiers
 print('\n--------------Evaluation of Models--------------')
