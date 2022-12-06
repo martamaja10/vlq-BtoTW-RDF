@@ -96,7 +96,7 @@ logfile.write(str(vararray)+", ")
 ### Signal Selection
 Bprime = 2.0
 Bprime2 = 0.8
-test2000 = False #use if Bprime = 2000
+test2000 = True #use if Bprime = 2000
 
 # %%
 ### Configure output
@@ -261,7 +261,6 @@ plt.xlabel('iterations')
 plt.ylabel('training loss')
 plt.plot(losscurve)
 plt.savefig(outdir+'trainloss'+outStr+'.png')
-plt.close()
 
 ## Draw validation sample (10% of the training data) score
 testscore = mlp.validation_scores_
@@ -270,9 +269,8 @@ plt.xlabel('iterations')
 plt.ylabel('validation score')
 plt.plot(testscore)
 plt.savefig(outdir+'valscore'+outStr+'.png')
-plt.close()
 
-ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, normalize = 'true')
+ConfusionMatrixDisplay.from_estimator(mlp, testData, testLabel, display_labels=['WJets', 'TTbarT', 'VLQ B'], normalize = 'true')
 # %%
 ### Training a basic decision tree with SKlearn
 print('\n--------------Random Forest Classifier--------------')
@@ -285,51 +283,52 @@ ConfusionMatrixDisplay.from_estimator(dtModel, testData, testLabel, normalize = 
 
 # %%
 ### Train CNN with Tensorflow
-print('\n--------------Training Convolutional Neural Network--------------')
-tstart = time.time()
+# print('\n--------------Training Convolutional Neural Network--------------')
+# tstart = time.time()
 
-trainAr = np.array(trainData)
-labelAr = np.array(trainLabel)
-# Reshaping train data for input to CNN
-sample_size = trainAr.shape[0]
-time_steps = trainAr.shape[1]
-input_dimension = 1
-callbackList = [EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 25, verbose = 1),
-               ModelCheckpoint('./ModelChkpt/checkpoint', save_weights_only=True, monitor='val_accuracy', mode = 'max', save_best_only = True)]
-trainCNN = trainAr.reshape(sample_size, time_steps, input_dimension)
-tf.random.set_seed(42) # ensures models are somewhat consistent
+# trainAr = np.array(trainData)
+# labelAr = np.array(trainLabel)
+# # Reshaping train data for input to CNN
+# sample_size = trainAr.shape[0]
+# time_steps = trainAr.shape[1]
+# input_dimension = 1
+# callbackList = [EarlyStopping(monitor = 'val_loss', mode = 'min', patience = 25, verbose = 1),
+#                ModelCheckpoint('./ModelChkpt/checkpoint', save_weights_only=True, monitor='val_accuracy', mode = 'max', save_best_only = True)]
+# trainCNN = trainAr.reshape(sample_size, time_steps, input_dimension)
+# tf.random.set_seed(42) # ensures models are somewhat consistent
 
-# Building the model
-cnn = Sequential(name="model_conv1D")
-cnn.add(Conv1D(filters=128, kernel_size = 8, activation = 'relu', input_shape = (trainCNN.shape[1], trainCNN.shape[2])))
-cnn.add(Dropout(0.5))
-cnn.add(Conv1D(filters=256, kernel_size = 5, activation = 'relu'))
-cnn.add(Dropout(0.2))
-cnn.add(Dense(16, activation="relu"))
-cnn.add(MaxPooling1D())
-cnn.add(Flatten())
-cnn.add(Dense(100, activation="relu"))
-cnn.add(Dense(25, activation = 'softmax'))
-cnn.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+# # Building the model
+# cnn = Sequential(name="model_conv1D")
+# cnn.add(Conv1D(filters=128, kernel_size = 8, activation = 'relu', input_shape = (trainCNN.shape[1], trainCNN.shape[2])))
+# cnn.add(Dropout(0.5))
+# cnn.add(Conv1D(filters=256, kernel_size = 5, activation = 'relu'))
+# cnn.add(Dropout(0.2))
+# cnn.add(Dense(16, activation="relu"))
+# cnn.add(MaxPooling1D())
+# cnn.add(Flatten())
+# cnn.add(Dense(100, activation="relu"))
+# cnn.add(Dense(25, activation = 'softmax'))
+# cnn.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
-cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.1, verbose = 0,
-   callbacks = callbackList)
-cnn.load_weights('./ModelChkpt/checkpoint')
-cnnTime = time.time() - tstart
-print(cnnTime)
-# %%
-### Getting predictions from CNN
-testAr = np.array(testData)
-labelTAr = np.array(testLabel)
+# cnn.fit(trainCNN, labelAr, epochs = 500, validation_split = 0.1, verbose = 0,
+#    callbacks = callbackList)
+# cnn.load_weights('./ModelChkpt/checkpoint')
+# cnnTime = time.time() - tstart
+# print(cnnTime)
 
-sample_test = testAr.shape[0]
-time_test = trainAr.shape[1]
+# # %%
+# ### Getting predictions from CNN
+# testAr = np.array(testData)
+# labelTAr = np.array(testLabel)
 
-testCNN = testAr.reshape(sample_test, time_test, input_dimension)
+# sample_test = testAr.shape[0]
+# time_test = trainAr.shape[1]
 
-pred_cnn = cnn.predict(testCNN).argmax(axis = -1)
+# testCNN = testAr.reshape(sample_test, time_test, input_dimension)
 
-confusion = plot_confusion(labelTAr, pred_cnn, title = 'CNN Confusion Matrix')
+# pred_cnn = cnn.predict(testCNN).argmax(axis = -1)
+
+# confusion = plot_confusion(labelTAr, pred_cnn, title = 'CNN Confusion Matrix')
 # %%
 ### Getting probabilities from the classifiers
 print('\n--------------Evaluation of Models--------------')
@@ -363,7 +362,7 @@ probsCNN = [probs_WJetsCNN, probs_TTbarTCNN, probs_Bprime2CNN]
 # %%
 ### Plotting the comparison 
 ## WJets
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted W boson score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -377,7 +376,7 @@ plt.hist(probs_Bprime2MLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetMLP'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted W boson score - DT',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -391,7 +390,7 @@ plt.hist(probs_Bprime2DT.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetDT'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted W boson score - CNN',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -407,7 +406,7 @@ plt.savefig(outdir+'plots/score_WJetCNN'+outStr+'.png')
 
 
 ## TTbarT
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted top quark score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -421,7 +420,7 @@ plt.hist(probs_Bprime2MLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTMLP'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted top quark score - DT',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -435,7 +434,7 @@ plt.hist(probs_Bprime2DT.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTDT'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted top quark score - CNN',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -451,7 +450,7 @@ plt.savefig(outdir+'plots/score_TTbarTCNN'+outStr+'.png')
 
 
 ## Signal
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted B quark score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -465,7 +464,7 @@ plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeMLP'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted B quark score - DT',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -479,7 +478,7 @@ plt.hist(probs_Bprime2DT.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeDT'+outStr+'.png')
 
-plt.close()
+# plt.close()
 plt.figure()
 plt.xlabel('Predicted B quark score - CNN',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -530,8 +529,21 @@ print('Trained in ' + str(cnnTime) + ' s')
 ## Saving models to files
 pickle.dump(mlp, open(outdir+'models/Dnn_mlp_3bin'+outStr+'.pkl', 'wb'))
 pickle.dump(dtModel, open(outdir+'models/dt_3bin' + outStr +'.pkl', 'wb'))
+
 arch = cnn.to_json()
 with open(outdir+'models/architecture.json', 'w') as arch_file:
     arch_file.write(arch)
 cnn.save_weights(outdir+'models/weights.h5')
-pickle.dump(scaler, open(outdir+'Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
+jsonString = '{\n\t"inputs":['
+for feature in selectedFeatures:
+   jsonString += '\t\n{\n\t\t"name": ' + '"' + feature + '",\n'
+   jsonString += '\t\t"offset": 0,\n'
+   jsonString += '\t\t"scale": 1\n},'
+jsonString += '\t],\n\t"class_labels":["WJet", "TTbarT", "Bprime", "Bprime2"]\n}'
+jsonFile = open("inputs.json", "w")
+n = jsonFile.write(jsonString)
+jsonFile.close()
+
+pickle.dump(scaler, open(outdir+'models/Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
+
+# %%

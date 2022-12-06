@@ -87,7 +87,7 @@ test2000 = True
 
 # Defining plotting parameters
 WithBprimeVars = False
-outStr = '_2018TT_'+str(arch)+'_' + str(millify(maxtest)) +'test'
+outStr = '_2018BB_'+str(arch)+'_' + str(millify(maxtest)) +'test'
 
 # %%
 ### Defining variables to be used with model (defined in RDataframe script)
@@ -165,6 +165,7 @@ testWJets200  = arraysTest.pop(0)
 
 # Selection with signals
 fName = fname
+print()
 sys.stdout.write('\rNow processing signal file...                                                                ')
 sys.stdout.flush()
 weight = 1
