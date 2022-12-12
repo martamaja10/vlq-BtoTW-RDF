@@ -330,34 +330,9 @@ histsWJets = np.array(trainWJets).T#[:numPerSample]).T
 
 
 # Remove invalid rows
-nInvalidRow = 0
-for i,row in enumerate(histsWJets):
-   if np.inf in row or -np.inf in row or np.nan in row:
-      histsWJets.pop(i)
-      nInvalidRow += 1
-if nInvalidRow > 0: print('Encountered and removed {} invalid WJet row(s).'.format(nInvalidRow))
-
-nInvalidRow = 0
-for i, row in enumerate(histsTTbarT):
-   if np.inf in row or -np.inf in row or np.nan in row:
-      histsTTbarT.pop(i)
-      nInvalidRow += 1
-if nInvalidRow > 0: print('Encountered and removed {} invalid TTBarT row(s).'.format(nInvalidRow))
-
-nInvalidRow = 0
-for i, row in enumerate(histsBprime):
-   if np.inf in row or -np.inf in row or np.nan in row:
-      histsBprime.pop(i)
-      nInvalidRow += 1
-if nInvalidRow > 0: print('Encountered and removed {} invalid Bprime row(s).'.format(nInvalidRow))
-
-for i, row in enumerate(testWJets):
-   if np.inf in row or -np.inf in row or np.nan in row:
-      testWJets.pop(i)
-
-for i, row in enumerate(testTTbarT):
-   if np.inf in row or -np.inf in row or np.nan in row:
-      testTTbarT.pop(i)
+histsTTbarT = histsTTbarT[~np.isnan(histsTTbarT).any(axis=1)]
+histsWJets = histsWJets[~np.isnan(histsWJets).any(axis=1)]
+histsBprime= histsBprime[~np.isnan(histsBprime).any(axis=1)]
 # %%
 ### Plotting input variables
 print('Plotting input variables...')
