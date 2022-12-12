@@ -330,9 +330,9 @@ histsWJets = np.array(trainWJets).T#[:numPerSample]).T
 
 
 # Remove invalid rows
-histsTTbarT = histsTTbarT[~np.isnan(histsTTbarT).any(axis=1)]
-histsWJets = histsWJets[~np.isnan(histsWJets).any(axis=1)]
-histsBprime= histsBprime[~np.isnan(histsBprime).any(axis=1)]
+histsTTbarT = histsTTbarT[~np.isnan(histsTTbarT).any(axis=1) & ~np.isinf(histsTTbarT).any(axis=1)]
+histsWJets = histsWJets[~np.isnan(histsWJets).any(axis=1) & ~np.isinf(histsWJets).any(axis=1)]
+histsBprime= histsBprime[~np.isnan(histsBprime).any(axis=1) & ~np.isinf(histsBprime).any(axis=1)]
 # %%
 ### Plotting input variables
 print('Plotting input variables...')
