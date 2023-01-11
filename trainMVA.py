@@ -69,10 +69,6 @@ arch = '3x10'
 maxtest = 300000
 
 outdir = 'Output'
-if not os.path.exists(outdir): 
-   os.system('mkdir '+ outdir)
-outdir = './' + outdir + '/'
-
 inputdir = './Input'
 inputdir += '/'
 
@@ -80,14 +76,23 @@ vararray = 'test'
 testnum = 1
 year = '2018'
 feature_selection = True
-dpak8 = True
+dpak8 = False
 cnn = False
-if len(sys.argv) > 1:
-    outdir = sys.argv[1]
-    vararray = int(sys.argv[2])
-    testnum = int(sys.argv[3])
-    year = str(sys.argv[4])
+# if len(sys.argv) > 1:
+#     outdir = sys.argv[1]
+#     vararray = int(sys.argv[2])
+#     testnum = int(sys.argv[3])
+#     year = str(sys.argv[4])
 if year == 'all': maxtest = 30000
+
+# Building the structure of the output directory
+if not os.path.exists(outdir): 
+   os.system('mkdir '+ outdir)
+if not os.path.exists(outdir + '/plots'): 
+   os.system('mkdir "' + outdir + '/plots"')
+if not os.path.exists(outdir + '/models'): 
+   os.system('mkdir "' + outdir + '/models"')
+outdir = './' + outdir + '/'
 
 # %%
 ### Configure logs
@@ -276,9 +281,11 @@ dtModel = ensemble.RandomForestClassifier(random_state = 42, n_estimators = 100)
 dtModel.fit(trainData, trainLabel)
 importance = dtModel.feature_importances_
 for i, value in enumerate(importance):
-   print('Feature: %0d, Score: %.5f' % (i, value))
-plt.bar([x for x in range (len(importance))], importance)
-plt.show()
+   print('Feature: ' + varList[i] + 'Score: %.5f' % (value))
+
+# Plots the feature importance
+# plt.bar([x for x in range (len(importance))], importance, tick_label = varList)
+# plt.show()
 
 
 # %%
