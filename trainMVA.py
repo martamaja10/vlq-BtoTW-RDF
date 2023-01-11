@@ -4,6 +4,7 @@
 # external modules
 import os
 import time
+import sys
 import numpy as np
 import math
 import matplotlib.pyplot as plt
@@ -47,39 +48,52 @@ def plot_confusion(actual_class, pred_class, title = 'Confusion Matrix'):
    fig, ax = plt.subplots()
    ax.matshow(confusion)
 
+   labels = ['WJet', 'TTbarT', 'Bprime']
    for (i, j), z in np.ndenumerate(confusion):
       ax.text(j, i, '{:0.2f}'.format(z), ha='center', va='center')
+   
    plt.title(title)
+   plt.xticks(range(3), labels[:3])
    plt.xlabel('Predicted label')
+   plt.yticks(range(3), labels[:3])
    plt.ylabel('Actual label')
    plt.savefig(outdir+'CM_' + title + outStr+'.png')
    plt.show()
    return confusion
+
 
 # %%
 ### User parameters
 start_time = time.time()
 arch = '3x10'
 maxtest = 300000
-outdir = './Output'
+
+outdir = 'Output'
+if not os.path.exists(outdir): 
+   os.system('mkdir '+ outdir)
+outdir = './' + outdir + '/'
+
 inputdir = './Input'
+inputdir += '/'
+
 vararray = 'test'
 testnum = 1
 year = '2018'
-# if len(sys.argv) > 1:
-#    outdir = sys.argv[1]
-#    vararray = int(sys.argv[2])
-#    testnum = int(sys.argv[3])
-#    year = str(sys.argv[4])
+feature_selection = True
+dpak8 = True
+cnn = False
+if len(sys.argv) > 1:
+    outdir = sys.argv[1]
+    vararray = int(sys.argv[2])
+    testnum = int(sys.argv[3])
+    year = str(sys.argv[4])
 if year == 'all': maxtest = 30000
 
 # %%
 ### Configure logs
-outdir = outdir + '/'
-inputdir += '/'
-
 # Check if log file already exists
 if testnum == 1:
+
    logfile = open(outdir + "NN_logs" + year + ".txt", "a+")
    logfile.write('\ntest, vararray, Testing Score (Accuracy), tt-as-BB, BB-as-BB, Precision, Recall, F-Score \n')
 else:
@@ -100,28 +114,27 @@ test2000 = True #use if Bprime = 2000
 ### Configure output
 outStr = '_'+year+'BB_'+str(arch)+'_' + str(millify(maxtest)) +'test_vars'+str(vararray)+'_Test'+str(testnum)
 print('Outstr:',outStr,'Outdir:',outdir)
-if not os.path.exists(outdir): os.system('mkdir '+outdir)
 
 # %%
 ### Defining variables to be used with model (defined in RDataframe script)
 varList = ['pNet_J_1',#'pNet_J_2',
-        'pNet_T_1',#'pNet_T_2',
-        'pNet_W_1',#'pNet_W_2',
-        'dpak8_J_1',#'dpak8_J_2',
-        'dpak8_T_1',#'dpak8_T_2',
-        'dpak8_W_1',#'dpak8_W_2',
-        'FatJet_pt_1',#'FatJet_pt_2',
-        'FatJet_sdMass_1',#'FatJet_sdMass_2',
-        'tau21_1',#'tau21_2',
-        'nJ_dpak8','nT_dpak8','nW_dpak8',
-        'nJ_pNet','nT_pNet','nW_pNet',
-        'Jet_HT','Jet_ST','MET_pt',
-        't_pt','t_mass',
-        #'t_dRWb', # t_dRWb does not exist, should check RDF script
-        'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
-        'Bprime_DR','Bprime_ptbal','Bprime_chi2',
-        #'minDR_leadAK8otherAK8'
-        ] 
+      'pNet_T_1',#'pNet_T_2',
+      'pNet_W_1',#'pNet_W_2',
+      'dpak8_J_1',#'dpak8_J_2',
+      'dpak8_T_1',#'dpak8_T_2',
+      'dpak8_W_1',#'dpak8_W_2',
+      'FatJet_pt_1',#'FatJet_pt_2',
+      'FatJet_sdMass_1',#'FatJet_sdMass_2',
+      'tau21_1',#'tau21_2',
+      'nJ_dpak8','nT_dpak8','nW_dpak8',
+      'nJ_pNet','nT_pNet','nW_pNet',
+      'Jet_HT','Jet_ST','MET_pt',
+      't_pt','t_mass',
+      #'t_dRWb', # t_dRWb does not exist, should check RDF script
+      'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
+      'Bprime_DR','Bprime_ptbal','Bprime_chi2',
+      #'minDR_leadAK8otherAK8'
+      ] 
 
 
 # %%
@@ -178,138 +191,95 @@ print('{} TTbarT events'.format(len(testTTbarT)))
 print('{} {} TeV B events'.format(len(testBprime), Bprime))
 print('{} {} TeV B events'.format(len(testBprime2), Bprime2))
 
+
+
 ## Code for selecting out deepak8
-# cols = []
-# newVarList = []
-# for i, var in enumerate(varList):
-#    if not 'dpak8' in var:
-#       cols.append(i)
-#       newVarList.append(var)
+if not dpak8:
+   cols = []
+   newVarList = []
+   for i, var in enumerate(varList):
+      if not 'dpak8' in var:
+         cols.append(i)
+         newVarList.append(var)
 
-# varList = newVarList
+   varList = newVarList
 
-# print('Selecting out deepak8 features from training data...')
-# selectedTrain = []
-# for event in trainData:
-#    newEvent = []
-#    for col in cols:
-#       newEvent.append(event[col])
-#    selectedTrain.append(newEvent)
+   print('Selecting out deepak8 features from training data...')
+   selectedTrain = []
+   for event in trainData:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedTrain.append(newEvent)
 
-# print('Selecting out deepak8 features from testing data...')
-# selectedTest = []
-# for event in testData:
-#    newEvent = []
-#    for col in cols:
-#       newEvent.append(event[col])
-#    selectedTest.append(newEvent)
+   print('Selecting out deepak8 features from testing data...')
+   selectedTest = []
+   for event in testData:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedTest.append(newEvent)
 
-# selectedBprime2 = []
-# for event in testBprime2:
-#    newEvent = []
-#    for col in cols:
-#       newEvent.append(event[col])
-#    selectedBprime2.append(newEvent)
+   selectedBprime2 = []
+   for event in testBprime2:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedBprime2.append(newEvent)
 
-# selectedBprime = []
-# for event in testBprime:
-#    newEvent = []
-#    for col in cols:
-#       newEvent.append(event[col])
-#    selectedBprime.append(newEvent)
+   selectedBprime = []
+   for event in testBprime:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedBprime.append(newEvent)
 
-# selectedTTbarT = []
-# for event in testTTbarT:
-#    newEvent = []
-#    for col in cols:
-#       newEvent.append(event[col])
-#    selectedTTbarT.append(newEvent)
+   selectedTTbarT = []
+   for event in testTTbarT:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedTTbarT.append(newEvent)
 
-# selectedWJets = []
-# for event in testWJets:
-#    newEvent = []
-#    for col in cols:
-#       newEvent.append(event[col])
-#    selectedWJets.append(newEvent)
+   selectedWJets = []
+   for event in testWJets:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedWJets.append(newEvent)
 
-# trainData = selectedTrain
-# testData = selectedTest
-# testBprime2 = selectedBprime2
-# testBprime = selectedBprime
-# testTTbarT = selectedTTbarT
-# testWJets = selectedWJets
-      
-# %%
-### Evaluation of features
-trainSelector = SelectKBest(f_regression, k=15).fit(trainData, trainLabel)
-cols = trainSelector.get_support(indices = True).tolist()
-
-# Eliminating DeepAK8 Features - Should be removed, but needed for Dec 6, 2022
-for i, col in enumerate(cols):
-   if 'dpak8' in varList[col]:
-      cols.pop(i)
-
-selectedFeatures = []
-for col in cols:
-   selectedFeatures.append(varList[col])
-print('\nSelected the following features for training:')
-print(selectedFeatures)
-
-print('Selecting out unhelpful features from training data...')
-selectedTrain = []
-for event in trainData:
-   newEvent = []
-   for col in cols:
-      newEvent.append(event[col])
-   selectedTrain.append(newEvent)
-
-print('Selecting out unhelpful features from testing data...')
-selectedTest = []
-for event in testData:
-   newEvent = []
-   for col in cols:
-      newEvent.append(event[col])
-   selectedTest.append(newEvent)
-
-selectedBprime2 = []
-for event in testBprime2:
-   newEvent = []
-   for col in cols:
-      newEvent.append(event[col])
-   selectedBprime2.append(newEvent)
-
-selectedBprime = []
-for event in testBprime:
-   newEvent = []
-   for col in cols:
-      newEvent.append(event[col])
-   selectedBprime.append(newEvent)
-
-selectedTTbarT = []
-for event in testTTbarT:
-   newEvent = []
-   for col in cols:
-      newEvent.append(event[col])
-   selectedTTbarT.append(newEvent)
-
-selectedWJets = []
-for event in testWJets:
-   newEvent = []
-   for col in cols:
-      newEvent.append(event[col])
-   selectedWJets.append(newEvent)
+   trainData = selectedTrain
+   testData = selectedTest
+   testBprime2 = selectedBprime2
+   testBprime = selectedBprime
+   testTTbarT = selectedTTbarT
+   testWJets = selectedWJets
 
 # %% 
 ### Perform scaling
 print('\nBuilding the scaler...')
-scaler = StandardScaler().fit(selectedTrain)
+scaler = StandardScaler().fit(trainData)
 print('Transforming...')
-trainData = scaler.transform(selectedTrain)
-testData = scaler.transform(selectedTest)
-testBprime2 = scaler.transform(selectedBprime2)
-testBprime = scaler.transform(selectedBprime)
-testTTbarT = scaler.transform(selectedTTbarT)
-testWJets = scaler.transform(selectedWJets)
+trainData = scaler.transform(trainData)
+testData = scaler.transform(testData)
+testBprime2 = scaler.transform(testBprime2)
+testBprime = scaler.transform(testBprime)
+testTTbarT = scaler.transform(testTTbarT)
+testWJets = scaler.transform(testWJets)
+
+
+# %%
+### Training a basic decision tree with SKlearn
+print('\n--------------Random Forest Feature Selection--------------')
+tstart = time.time()
+dtModel = ensemble.RandomForestClassifier(random_state = 42, n_estimators = 100)
+dtModel.fit(trainData, trainLabel)
+importance = dtModel.feature_importances_
+for i, value in enumerate(importance):
+   print('Feature: %0d, Score: %.5f' % (i, value))
+plt.bar([x for x in range (len(importance))], importance)
+plt.show()
+
 
 # %%
 ### Training a basic MLP with SKlearn
@@ -317,7 +287,7 @@ testWJets = scaler.transform(selectedWJets)
 print('\n--------------Training Multilayer Perceptron--------------')
 tstart = time.time()
 mlp = MLPClassifier(max_iter = 500, solver = 'adam', activation = 'relu', alpha = 1e-5, 
-      hidden_layer_sizes = (16, 50), random_state = 42, shuffle = True, verbose = False,
+      hidden_layer_sizes = (25, 100), random_state = 42, shuffle = True, verbose = False,
       early_stopping = True, validation_fraction = 0.3)
 mlp.fit(trainData, trainLabel)
 mlpTime = time.time() - tstart
@@ -343,35 +313,9 @@ plt.show()
 preds = mlp.predict(testData)
 plot_confusion(testLabel, preds, title = 'MLP')
 
-
-# %%
-### Training a basic decision tree with SKlearn
-print('\n--------------Random Forest Classifier--------------')
-tstart = time.time()
-dtModel = ensemble.RandomForestClassifier(random_state = 42, n_estimators = 100)
-dtModel.fit(trainData, trainLabel)
-dtTime = time.time() - tstart
-print(dtTime)
-
-preds = dtModel.predict(testData)
-plot_confusion(testLabel, preds, title = 'DT')
-
-# %% 
-### Training an SVM classifier
-print('\n--------------Support Vector Machine--------------')
-tstart = time.time()
-svmModel = svm.LinearSVC(random_state = 42, dual = False)
-svmModel = CalibratedClassifierCV(svmModel)
-svmModel.fit(trainData, trainLabel)
-svmTime = time.time() - tstart
-print(svmTime)
-
-preds = svmModel.predict(testData)
-plot_confusion(testLabel, preds, title = 'SVM')
-
 # %%
 ### Getting probabilities from the classifiers
-print('\n--------------Evaluation of Models--------------')
+print('\n--------------Evaluation of Model--------------')
 
 # Get scores for non-training events on MLP
 probs_WJetsMLP = mlp.predict_proba(testWJets)
@@ -380,29 +324,12 @@ probs_BprimeMLP = mlp.predict_proba(testBprime)
 probs_Bprime2MLP = mlp.predict_proba(testBprime2)
 # probs = [probsWJets, probsTTbarT, probsBprime]
 probsMLP = [probs_WJetsMLP, probs_TTbarTMLP, probs_Bprime2MLP]
-   
-
-# Get scores for non-training events on DT
-probs_WJetsDT = dtModel.predict_proba(testWJets)
-probs_TTbarTDT = dtModel.predict_proba(testTTbarT)
-probs_BprimeDT = dtModel.predict_proba(testBprime)
-probs_Bprime2DT = dtModel.predict_proba(testBprime2)
-# probs = [probsWJets, probsTTbarT, probsBprime]
-probsDT = [probs_WJetsDT, probs_TTbarTDT, probs_Bprime2DT]
-
-
-# Get scores for non-training events on SVM
-probs_WJetsSVM = svmModel.predict_proba(testWJets)
-probs_TTbarTSVM = svmModel.predict_proba(testTTbarT)
-probs_BprimeSVM = svmModel.predict_proba(testBprime)
-probs_Bprime2SVM = svmModel.predict_proba(testBprime2)
-# probs = [probsWJets, probsTTbarT, probsBprime]
-probsSVM = [probs_WJetsSVM, probs_TTbarTSVM, probs_Bprime2SVM]
 
 # %%
 ### Plotting the comparison 
 ## WJets
 # plt.close()
+if not os.path.exists(outdir + 'plots'): os.system('mkdir '+outdir + 'plots')
 plt.figure()
 plt.xlabel('Predicted W boson score - MLP',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -415,35 +342,6 @@ plt.hist(probs_BprimeMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('
 plt.hist(probs_Bprime2MLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_WJetMLP'+outStr+'.png')
-
-# plt.close()
-plt.figure()
-plt.xlabel('Predicted W boson score - DT',horizontalalignment='right',x=1.0,size=14)
-plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-plt.title('CMS Simulation',loc='left',size=18)
-plt.title('Work in progress',loc='right',size=14,style='italic')
-plt.ylim([0.01,10.**4])
-plt.hist(probs_WJetsDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
-plt.hist(probs_TTbarTDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeDT.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2DT.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
-plt.legend(loc='best')
-plt.savefig(outdir+'plots/score_WJetDT'+outStr+'.png')
-
-# plt.close()
-plt.figure()
-plt.xlabel('Predicted W boson score - SVM',horizontalalignment='right',x=1.0,size=14)
-plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-plt.title('CMS Simulation',loc='left',size=18)
-plt.title('Work in progress',loc='right',size=14,style='italic')
-plt.ylim([0.01,10.**4])
-plt.hist(probs_WJetsSVM.T[0], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
-plt.hist(probs_TTbarTSVM.T[0], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeSVM.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2SVM.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
-plt.legend(loc='best')
-plt.savefig(outdir+'plots/score_WJetSVM'+outStr+'.png')
-
 
 ## TTbarT
 # plt.close()
@@ -460,35 +358,6 @@ plt.hist(probs_Bprime2MLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_TTbarTMLP'+outStr+'.png')
 
-# plt.close()
-plt.figure()
-plt.xlabel('Predicted top quark score - DT',horizontalalignment='right',x=1.0,size=14)
-plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-plt.title('CMS Simulation',loc='left',size=18)
-plt.title('Work in progress',loc='right',size=14,style='italic')
-plt.ylim([0.01,10.**4])
-plt.hist(probs_WJetsDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
-plt.hist(probs_TTbarTDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeDT.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2DT.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
-plt.legend(loc='best')
-plt.savefig(outdir+'plots/score_TTbarTDT'+outStr+'.png')
-
-# plt.close()
-plt.figure()
-plt.xlabel('Predicted top quark score - SVM',horizontalalignment='right',x=1.0,size=14)
-plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-plt.title('CMS Simulation',loc='left',size=18)
-plt.title('Work in progress',loc='right',size=14,style='italic')
-plt.ylim([0.01,10.**4])
-plt.hist(probs_WJetsSVM.T[1], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
-plt.hist(probs_TTbarTSVM.T[1], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeSVM.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2SVM.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
-plt.legend(loc='best')
-plt.savefig(outdir+'plots/score_TTbarTSVM'+outStr+'.png')
-
-
 ## Signal
 # plt.close()
 plt.figure()
@@ -504,33 +373,6 @@ plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,(
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeMLP'+outStr+'.png')
 
-# plt.close()
-plt.figure()
-plt.xlabel('Predicted B quark score - DT',horizontalalignment='right',x=1.0,size=14)
-plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-plt.title('CMS Simulation',loc='left',size=18)
-plt.title('Work in progress',loc='right',size=14,style='italic')
-plt.ylim([0.01,10.**4])
-plt.hist(probs_WJetsDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
-plt.hist(probs_TTbarTDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeDT.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2DT.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
-plt.legend(loc='best')
-plt.savefig(outdir+'plots/score_BprimeDT'+outStr+'.png')
-
-# plt.close()
-plt.figure()
-plt.xlabel('Predicted B quark score - SVM',horizontalalignment='right',x=1.0,size=14)
-plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
-plt.title('CMS Simulation',loc='left',size=18)
-plt.title('Work in progress',loc='right',size=14,style='italic')
-plt.ylim([0.01,10.**4])
-plt.hist(probs_WJetsSVM.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
-plt.hist(probs_TTbarTSVM.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_BprimeSVM.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
-plt.hist(probs_Bprime2SVM.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
-plt.legend(loc='best')
-plt.savefig(outdir+'plots/score_BprimeSVM'+outStr+'.png')
 # %%
 ### Getting metrics
 accMLP = accuracy_score(testLabel, mlp.predict(testData))
@@ -543,31 +385,16 @@ precDT = precision_score(testLabel, dtModel.predict(testData), average='weighted
 recallDT = recall_score(testLabel, dtModel.predict(testData), average='weighted')
 fscoreDT = f1_score(testLabel, dtModel.predict(testData), average='weighted')
 
-accSVM = accuracy_score(testLabel, svmModel.predict(testData))
-precSVM = precision_score(testLabel, svmModel.predict(testData), average='weighted')
-recallSVM = recall_score(testLabel, svmModel.predict(testData), average='weighted')
-fscoreSVM = f1_score(testLabel, svmModel.predict(testData), average='weighted')
-
 print('------MLP------')
+print('Accuracy: ' + str(accMLP))
 print('Precision: ' + str(precMLP))
 print('Recall: ' + str(recallMLP))
 print('F-measure: ' + str(fscoreMLP))
 print('Trained in ' + str(mlpTime) + ' s')
 
-print('------DT------')
-print('Precision: ' + str(precDT))
-print('Recall: ' + str(recallDT))
-print('F-measure: ' + str(fscoreDT))
-print('Trained in ' + str(dtTime) + ' s')
-
-print('------SVM------')
-print('Precision: ' + str(precSVM))
-print('Recall: ' + str(recallSVM))
-print('F-measure: ' + str(fscoreSVM))
-print('Trained in ' + str(svmTime) + ' s')
 # %%
 ## Saving models to files
+if not os.path.exists(outdir + 'models'): os.system('mkdir '+outdir + 'models')
 pickle.dump(mlp, open(outdir+'models/MLP'+outStr+'.pkl', 'wb'))
 pickle.dump(dtModel, open(outdir+'models/DT' + outStr +'.pkl', 'wb'))
-pickle.dump(svmModel, open(outdir+'models/SVM' + outStr +'.pkl', 'wb'))
 pickle.dump(scaler, open(outdir+'models/Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
