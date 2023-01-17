@@ -72,12 +72,10 @@ outdir = 'Output'
 inputdir = './Input'
 inputdir += '/'
 
-vararray = 'test'
+vararray = '_shortened'
 testnum = 1
 year = '2018'
-feature_selection = True
-dpak8 = False
-cnn = False
+feature_selection = False
 # if len(sys.argv) > 1:
 #     outdir = sys.argv[1]
 #     vararray = int(sys.argv[2])
@@ -98,9 +96,8 @@ outdir = './' + outdir + '/'
 ### Configure logs
 # Check if log file already exists
 if testnum == 1:
-
    logfile = open(outdir + "NN_logs" + year + ".txt", "a+")
-   logfile.write('\ntest, vararray, Testing Score (Accuracy), tt-as-BB, BB-as-BB, Precision, Recall, F-Score \n')
+   logfile.write('\ntest, vararray, Testing Score (Accuracy), tt-as-BB, BB-as-BB (LM), BB-as-BB (HM), Precision, Recall, F-Score \n')
 else:
    time.sleep(2)
    logfile = open(outdir+"BB_output_Jan21_"+year+".txt","a+")
@@ -111,9 +108,9 @@ logfile.write(str(vararray)+", ")
 
 # %%
 ### Signal Selection
-Bprime = 2.0
-Bprime2 = 0.8
 test2000 = True #use if Bprime = 2000
+Bprime = 2.0 if test2000 else 0.8
+Bprime2 = 0.8 if test2000 else 2.0
 
 # %%
 ### Configure output
@@ -125,13 +122,9 @@ print('Outstr:',outStr,'Outdir:',outdir)
 varList = ['pNet_J_1',#'pNet_J_2',
       'pNet_T_1',#'pNet_T_2',
       'pNet_W_1',#'pNet_W_2',
-      'dpak8_J_1',#'dpak8_J_2',
-      'dpak8_T_1',#'dpak8_T_2',
-      'dpak8_W_1',#'dpak8_W_2',
       'FatJet_pt_1',#'FatJet_pt_2',
       'FatJet_sdMass_1',#'FatJet_sdMass_2',
       'tau21_1',#'tau21_2',
-      'nJ_dpak8','nT_dpak8','nW_dpak8',
       'nJ_pNet','nT_pNet','nW_pNet',
       'Jet_HT','Jet_ST','MET_pt',
       't_pt','t_mass',
@@ -140,7 +133,6 @@ varList = ['pNet_J_1',#'pNet_J_2',
       'Bprime_DR','Bprime_ptbal','Bprime_chi2',
       #'minDR_leadAK8otherAK8'
       ] 
-
 
 # %%
 ### Importing data
@@ -181,13 +173,29 @@ for i, row in enumerate(testData):
       nInvalidRow += 1
 if nInvalidRow > 0: print('Encountered and removed {} invalid test row(s).'.format(nInvalidRow))
 
+cleanedList = []
 for i, row in enumerate(testWJets):
    if np.inf in row or -np.inf in row or np.nan in row:
-      testWJets.pop(i)
+      cleanedList.pop(i)
+testWJets = cleanedList
 
+cleanedList = []
 for i, row in enumerate(testTTbarT):
    if np.inf in row or -np.inf in row or np.nan in row:
-      testTTbarT.pop(i)
+      cleanedList.pop(i)
+testTTbarT = cleanedList
+
+cleanedList = []
+for i, row in enumerate(testBprime):
+   if np.inf in row or -np.inf in row or np.nan in row:
+      cleanedList.pop(i)
+testBprime = cleanedList
+
+cleanedList = []
+for i, row in enumerate(testBprime2):
+   if np.inf in row or -np.inf in row or np.nan in row:
+      cleanedList.pop(i)
+testBprime2 = cleanedList
 
 print('Training on ' + str(len(trainData)) + ' events.')
 print('Testing on {} events of the following makeup:'.format(len(testData)))
@@ -196,20 +204,37 @@ print('{} TTbarT events'.format(len(testTTbarT)))
 print('{} {} TeV B events'.format(len(testBprime), Bprime))
 print('{} {} TeV B events'.format(len(testBprime2), Bprime2))
 
+print("Using initial variable set of " + str(varList))
 
 
-## Code for selecting out deepak8
-if not dpak8:
-   cols = []
-   newVarList = []
-   for i, var in enumerate(varList):
-      if not 'dpak8' in var:
-         cols.append(i)
-         newVarList.append(var)
+# %%
+### Training a basic decision tree with SKlearn
+if feature_selection:
+   print('\n--------------Random Forest Feature Selection--------------')
+   tstart = time.time()
+   dtModel = ensemble.RandomForestClassifier(random_state = 42, n_estimators = 100)
+   dtModel.fit(trainData, trainLabel)
+   importance = dtModel.feature_importances_
 
-   varList = newVarList
+   # Selects the 5 best features
+   cols = [0, 0, 0, 0, 0]
 
-   print('Selecting out deepak8 features from training data...')
+   importances = np.zeros(5)
+   for i, value in enumerate(importance):
+      for j, imp in enumerate(importances):
+         if value > imp:
+            tempi = cols[j]
+            cols[j] = i
+            i = tempi
+            importances[j] = value
+            value = imp
+
+
+   # Plots the feature importance
+   # plt.bar([x for x in range (len(importance))], importance, tick_label = varList)
+   # plt.show()
+
+   print('Selecting best features...')
    selectedTrain = []
    for event in trainData:
       newEvent = []
@@ -217,7 +242,6 @@ if not dpak8:
          newEvent.append(event[col])
       selectedTrain.append(newEvent)
 
-   print('Selecting out deepak8 features from testing data...')
    selectedTest = []
    for event in testData:
       newEvent = []
@@ -225,12 +249,19 @@ if not dpak8:
          newEvent.append(event[col])
       selectedTest.append(newEvent)
 
-   selectedBprime2 = []
-   for event in testBprime2:
+   selectedTTbarT = []
+   for event in testTTbarT:
       newEvent = []
       for col in cols:
          newEvent.append(event[col])
-      selectedBprime2.append(newEvent)
+      selectedTTbarT.append(newEvent)
+   
+   selectedWJets = []
+   for event in testWJets:
+      newEvent = []
+      for col in cols:
+         newEvent.append(event[col])
+      selectedWJets.append(newEvent)
 
    selectedBprime = []
    for event in testBprime:
@@ -239,54 +270,36 @@ if not dpak8:
          newEvent.append(event[col])
       selectedBprime.append(newEvent)
 
-   selectedTTbarT = []
-   for event in testTTbarT:
+   selectedBprime2 = []
+   for event in testBprime2:
       newEvent = []
       for col in cols:
          newEvent.append(event[col])
-      selectedTTbarT.append(newEvent)
+      selectedBprime2.append(newEvent)
 
-   selectedWJets = []
-   for event in testWJets:
-      newEvent = []
-      for col in cols:
-         newEvent.append(event[col])
-      selectedWJets.append(newEvent)
+   newVarList = []
+   for i, var in enumerate(varList):
+      if i in cols:
+         newVarList.append(var)
+   varList = newVarList
 
-   trainData = selectedTrain
-   testData = selectedTest
-   testBprime2 = selectedBprime2
-   testBprime = selectedBprime
-   testTTbarT = selectedTTbarT
-   testWJets = selectedWJets
+   print('Selected features: ' + str(varList))   
+varfile = open(outdir + "MLPvars.txt", "a+")
+for var in varList:
+   varfile.write(var + ',')
+
 
 # %% 
 ### Perform scaling
 print('\nBuilding the scaler...')
-scaler = StandardScaler().fit(trainData)
+scaler = StandardScaler().fit(selectedTrain)
 print('Transforming...')
-trainData = scaler.transform(trainData)
-testData = scaler.transform(testData)
-testBprime2 = scaler.transform(testBprime2)
-testBprime = scaler.transform(testBprime)
-testTTbarT = scaler.transform(testTTbarT)
-testWJets = scaler.transform(testWJets)
-
-
-# %%
-### Training a basic decision tree with SKlearn
-print('\n--------------Random Forest Feature Selection--------------')
-tstart = time.time()
-dtModel = ensemble.RandomForestClassifier(random_state = 42, n_estimators = 100)
-dtModel.fit(trainData, trainLabel)
-importance = dtModel.feature_importances_
-for i, value in enumerate(importance):
-   print('Feature: ' + varList[i] + 'Score: %.5f' % (value))
-
-# Plots the feature importance
-# plt.bar([x for x in range (len(importance))], importance, tick_label = varList)
-# plt.show()
-
+trainData = scaler.transform(selectedTrain)
+testData = scaler.transform(selectedTest)
+testBprime2 = scaler.transform(selectedBprime2)
+testBprime = scaler.transform(selectedBprime)
+testTTbarT = scaler.transform(selectedTTbarT)
+testWJets = scaler.transform(selectedWJets)
 
 # %%
 ### Training a basic MLP with SKlearn
@@ -321,7 +334,7 @@ preds = mlp.predict(testData)
 plot_confusion(testLabel, preds, title = 'MLP')
 
 # %%
-### Getting probabilities from the classifiers
+### Getting probabilities from the classifier
 print('\n--------------Evaluation of Model--------------')
 
 # Get scores for non-training events on MLP
@@ -387,11 +400,6 @@ precMLP = precision_score(testLabel, mlp.predict(testData), average='weighted')
 recallMLP = recall_score(testLabel, mlp.predict(testData), average='weighted')
 fscoreMLP = f1_score(testLabel, mlp.predict(testData), average='weighted')
 
-accDT = accuracy_score(testLabel, dtModel.predict(testData))
-precDT = precision_score(testLabel, dtModel.predict(testData), average='weighted')
-recallDT = recall_score(testLabel, dtModel.predict(testData), average='weighted')
-fscoreDT = f1_score(testLabel, dtModel.predict(testData), average='weighted')
-
 print('------MLP------')
 print('Accuracy: ' + str(accMLP))
 print('Precision: ' + str(precMLP))
@@ -399,9 +407,16 @@ print('Recall: ' + str(recallMLP))
 print('F-measure: ' + str(fscoreMLP))
 print('Trained in ' + str(mlpTime) + ' s')
 
+logfile.write(str(accMLP)+", ")
+logfile.write(str(np.mean(probs_TTbarTMLP.T[0]))+", ")
+logfile.write(str(np.mean(probs_BprimeMLP.T[0]))+", ")
+logfile.write(str(np.mean(probs_Bprime2MLP.T[0]))+", ")
+logfile.write(str(precMLP)+", ")
+logfile.write(str(recallMLP)+", ")
+logfile.write(str(fscoreMLP))
+
 # %%
 ## Saving models to files
 if not os.path.exists(outdir + 'models'): os.system('mkdir '+outdir + 'models')
 pickle.dump(mlp, open(outdir+'models/MLP'+outStr+'.pkl', 'wb'))
-pickle.dump(dtModel, open(outdir+'models/DT' + outStr +'.pkl', 'wb'))
 pickle.dump(scaler, open(outdir+'models/Dnn_scaler_3bin'+outStr+'.pkl', 'wb'))
