@@ -114,7 +114,7 @@ Bprime2 = 0.8 if test2000 else 2.0
 
 # %%
 ### Configure output
-outStr = '_'+year+'BB_'+str(arch)+'_' + str(millify(maxtest)) +'test_vars'+str(vararray)+'_Test'+str(testnum)
+outStr = '_'+year+'BB_'+str(arch)+'_' + str(millify(maxtest)) +'test_vars_'+str(vararray)+'_Test'+str(testnum)
 print('Outstr:',outStr,'Outdir:',outdir)
 
 # %%
@@ -157,41 +157,39 @@ if len(testLabel) == 0:
    trainLabel = trainLabel[:len(trainData)]
 
 # Remove invalid rows
-nInvalidRow = 0
-for i,row in enumerate(trainData):
+cleanedList = trainData
+for i, row in enumerate(trainData):
    if np.inf in row or -np.inf in row or np.nan in row:
-      trainData.pop(i)
+      cleanedList.pop(i)
       trainLabel.pop(i)
-      nInvalidRow += 1
-if nInvalidRow > 0: print('Encountered and removed {} invalid train row(s).'.format(nInvalidRow))
+trainData = cleanedList
 
-nInvalidRow = 0
+cleanedList = testData
 for i, row in enumerate(testData):
    if np.inf in row or -np.inf in row or np.nan in row:
-      testData.pop(i)
+      cleanedList.pop(i)
       testLabel.pop(i)
-      nInvalidRow += 1
-if nInvalidRow > 0: print('Encountered and removed {} invalid test row(s).'.format(nInvalidRow))
+testData = cleanedList
 
-cleanedList = []
+cleanedList = testWJets
 for i, row in enumerate(testWJets):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
 testWJets = cleanedList
 
-cleanedList = []
+cleanedList = testTTbarT
 for i, row in enumerate(testTTbarT):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
 testTTbarT = cleanedList
 
-cleanedList = []
+cleanedList = testBprime
 for i, row in enumerate(testBprime):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
 testBprime = cleanedList
 
-cleanedList = []
+cleanedList = testBprime2
 for i, row in enumerate(testBprime2):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
@@ -284,6 +282,15 @@ if feature_selection:
    varList = newVarList
 
    print('Selected features: ' + str(varList))   
+else:
+   selectedTrain = trainData
+   selectedTest = testData
+   selectedBprime = testBprime
+   selectedBprime2 = testBprime2
+   selectedTTbarT = testTTbarT
+   selectedWJets = testWJets
+if os.path.exists(outdir + "MLPvars.txt"):
+   os.remove(outdir + "MLPvars.txt")
 varfile = open(outdir + "MLPvars.txt", "a+")
 for var in varList:
    varfile.write(var + ',')
@@ -311,7 +318,7 @@ mlp = MLPClassifier(max_iter = 500, solver = 'adam', activation = 'relu', alpha 
       early_stopping = True, validation_fraction = 0.3)
 mlp.fit(trainData, trainLabel)
 mlpTime = time.time() - tstart
-print(mlpTime)
+print('Trained in ' + str(mlpTime) + ' seconds.')
 
 # MLP loss curve
 losscurve = mlp.loss_curve_
@@ -400,12 +407,11 @@ precMLP = precision_score(testLabel, mlp.predict(testData), average='weighted')
 recallMLP = recall_score(testLabel, mlp.predict(testData), average='weighted')
 fscoreMLP = f1_score(testLabel, mlp.predict(testData), average='weighted')
 
-print('------MLP------')
-print('Accuracy: ' + str(accMLP))
-print('Precision: ' + str(precMLP))
-print('Recall: ' + str(recallMLP))
-print('F-measure: ' + str(fscoreMLP))
-print('Trained in ' + str(mlpTime) + ' s')
+print('  Accuracy: ' + str(accMLP))
+print('  Precision: ' + str(precMLP))
+print('  Recall: ' + str(recallMLP))
+print('  F-measure: ' + str(fscoreMLP))
+print('  Trained in ' + str(mlpTime) + ' s')
 
 logfile.write(str(accMLP)+", ")
 logfile.write(str(np.mean(probs_TTbarTMLP.T[0]))+", ")

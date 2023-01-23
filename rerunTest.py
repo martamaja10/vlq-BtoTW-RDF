@@ -59,7 +59,7 @@ def resample_with_replacement(X_train, sample_weight):
 # The function then adds the weight to the front of the list and creates
 #       a 2D array
 def addWeight(brokenArray, weight):
-    reshapeArray = np.zeros((brokenArray.shape[0], len(vars) + 1))
+    reshapeArray = np.zeros((brokenArray.shape[0], len(varList) + 1))
     for i, event in enumerate(brokenArray):
         eventList = list(event)
         eventList.insert(0, weight) # (0 - index (first in this case), 1 - weight being assigned)
@@ -98,11 +98,11 @@ def plot_confusion(actual_class, pred_class, title = 'Confusion Matrix'):
 outdir = 'LargeTestOutput'
 inputdir = './Output/'
 arch = '3x10'
-testnum = 0 # currently hard-coded to 0 until it is needed
+testnum = 1 # currently hard-coded to 1 until it is needed
 maxtest = 300000
 year = '2018'
 vararray = 'shortened'
-outStr = '_'+year+'BB_'+str(arch)+'_' + str(millify(maxtest)) +'test_vars'+str(vararray)+'_Test'+str(testnum)
+outStr = '_'+year+'BB_'+str(arch)+'_' + str(millify(maxtest)) +'test_vars_'+str(vararray)+'_Test'+str(testnum)
 
 
 # %%
@@ -138,7 +138,7 @@ Bprime2 = 0.8 if use2000 else 2.0
 varFile = open(inputdir + 'MLPvars.txt')
 varList = list(csv.reader(varFile, delimiter=','))[0]
 varList = varList[:len(varList) - 1] # importing tacks on an unneeded tail
-
+treeVars = varList
 
 # %%
 ### Getting data from ROOT files
@@ -162,28 +162,19 @@ for i,fname in enumerate(filenames):
     weight = weights[i]
     fileOpener  = TFile.Open(eosdir + fname + "_hadd.root", "READ")
     treeMaker  = fileOpener.Get("Events")
-    arraysTrain.append(addWeight(tree2array(treeMaker, treeVars, seltrain), weight))
     arraysTest.append(addWeight(tree2array(treeMaker, treeVars, seltest), weight))
 
-trainTTbarT = arraysTrain.pop(0)
 testTTbarT  = arraysTest.pop(0)
-trainTTbarTb = arraysTrain.pop(0)
 testTTbarTb  = arraysTest.pop(0)
 #trainSingleT = arraysTrain.pop(0)
 #testSingleT  = arraysTest.pop(0)
 #trainSingleTb = arraysTrain.pop(0)
 #testSingleTb  = arraysTest.pop(0)
-trainWJets2500 = arraysTrain.pop(0)
 testWJets2500  = arraysTest.pop(0)
-trainWJets1200 = arraysTrain.pop(0)
 testWJets1200  = arraysTest.pop(0)
-trainWJets800 = arraysTrain.pop(0)
 testWJets800  = arraysTest.pop(0)
-trainWJets600 = arraysTrain.pop(0)
 testWJets600  = arraysTest.pop(0)
-trainWJets400 = arraysTrain.pop(0)
 testWJets400  = arraysTest.pop(0)
-trainWJets200 = arraysTrain.pop(0)
 testWJets200  = arraysTest.pop(0)
 
 treeVars = varList
@@ -206,23 +197,11 @@ sys.stdout.flush()
 
 print('Concatenating samples...')
 ## Add WJets together into a single sample and reshuffle
-trainWJets = np.concatenate([trainWJets200, trainWJets400, trainWJets600, trainWJets800, trainWJets1200, trainWJets2500])
 testWJets = np.concatenate([testWJets200, testWJets400, testWJets600, testWJets800, testWJets1200, testWJets2500])
-np.random.shuffle(trainWJets)
 np.random.shuffle(testWJets)
 
-trainTTbarT = np.concatenate([trainTTbarT, trainTTbarTb])
 testTTbarT = np.concatenate([testTTbarT, testTTbarTb])
-np.random.shuffle(trainTTbarT)
 np.random.shuffle(testTTbarT)
-
-#trainSingleT = np.concatenate([trainSingleT, trainSingleTb])
-#testSingleT = np.concatenate([testSingleT, testSingleTb])
-#np.random.shuffle(trainSingleT)
-#np.random.shuffle(testSingleT)
-
-## Print initial information to the log file and the screen
-logfile.write(str(len(trainTTbarT)) + ", " + str(len(trainBprime)) + ", " +str(len(trainWJets)) + ", " +str(len(testTTbarT)) + ", " +str(len(testBprime)) + ", " +str(len(testBprime2)) + ", " +str(len(testWJets))) # + ", " + str(len(testSingleT) + ", " + str(len(trainSingleT)) ))
 
 np.random.shuffle(testTTbarT)
 np.random.shuffle(testBprime)
@@ -231,35 +210,35 @@ np.random.shuffle(testBprime2)
 
 # %%
 ### Cleaning the imported arrays
-cleanedList = []
+cleanedList = testWJets
 for i, row in enumerate(testWJets):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
-testWJets = cleanedList
+testWJets = np.array(cleanedList)
 
-cleanedList = []
+cleanedList = testTTbarT
 for i, row in enumerate(testTTbarT):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
-testTTbarT = cleanedList
+testTTbarT = np.array(cleanedList)
 
-cleanedList = []
+cleanedList = testBprime
 for i, row in enumerate(testBprime):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
-testBprime = cleanedList
+testBprime = np.array(cleanedList)
 
-cleanedList = []
+cleanedList = testBprime2
 for i, row in enumerate(testBprime2):
    if np.inf in row or -np.inf in row or np.nan in row:
       cleanedList.pop(i)
-testBprime2 = cleanedList
+testBprime2 = np.array(cleanedList)
 
 
 # %%
 ### Loading model and scaler from pickles
 mlp = pickle.load(open(inputdir + 'models/MLP' +outStr+'.pkl'))
-scaler = pickle.load(open(outdir+'models/Dnn_scaler_3bin'+outStr+'.pkl'))
+scaler = pickle.load(open(inputdir+'models/Dnn_scaler_3bin'+outStr+'.pkl'))
 
 
 # %%
