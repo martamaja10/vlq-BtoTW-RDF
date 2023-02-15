@@ -65,7 +65,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //           Bprime truth extraction:                      
   // ---------------------------------------------------- 
   auto Bprime_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
-    ROOT::VecOps::RVec<int> BPrimeInfo (6,-999);
+    ROOT::VecOps::RVec<float> BPrimeInfo (6,-999);
 
     if(sample!="Bprime"){return BPrimeInfo;}
 
@@ -89,7 +89,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //           t truth extraction:    
   // ---------------------------------------------------- 
   auto t_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
-    ROOT::VecOps::RVec<int> t_daughter_gen_info(21,-999);
+    ROOT::VecOps::RVec<float> t_daughter_gen_info(21,-999);
 
     if(sample!="Bprime"){return t_daughter_gen_info;}
 
@@ -157,10 +157,10 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[17] = GenPart_mass[p];
             t_daughter_gen_info[18] = GenPart_pdgId[p];
             t_daughter_gen_info[19] = GenPart_status[p];
-            t_daughter_gen_info[20] = trueLeptonicT;
           }
         }
       }
+      t_daughter_gen_info[20] = trueLeptonicT;
     }
     return t_daughter_gen_info;
   };
@@ -169,11 +169,11 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //           W truth extraction: 
   // ---------------------------------------------------- 
   auto W_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
-    ROOT::VecOps::RVec<int> W_daughter_gen_info(14,-999);
+    ROOT::VecOps::RVec<float> W_daughter_gen_info(14,-999);
 
     if(sample!="Bprime"){return W_daughter_gen_info;}
 
-    int W_motherIdx = -1; // if not W->W', no need to store the mother idx info                             
+    int W_motherIdx = -1; // if not W->W', no need to store the mother idx info              
     int trueW_decayMode = 0; // 0-did not decay, 1-leptonic, 2-hadronic/tau                                 
 
     for(unsigned int i=0; i<nGenPart; i++){
@@ -188,7 +188,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       for(unsigned int j=i; j<nGenPart; j++){
         if((GenPart_genPartIdxMother[j])!=i){continue;} // pick out the daughter of W                                           
         if((GenPart_pdgId[j]) != id){continue;}
-        W_motherIdx = j; // store idx of W': W->W'                                                                              
+        W_motherIdx = j; // store idx of W': W->W'
         igen = j;
       }
 
@@ -212,13 +212,17 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           W_daughter_gen_info[10] = GenPart_mass[p];
           W_daughter_gen_info[11] = GenPart_pdgId[p];
           W_daughter_gen_info[12] = GenPart_status[p];
-          W_daughter_gen_info[13] = trueW_decayMode;
         }
-        else{trueW_decayMode = 2;}
+        else{trueW_decayMode = 0;}
       }
+      W_daughter_gen_info[13] = trueW_decayMode;
     }
     return W_daughter_gen_info;
   };
+
+  //auto isLeptonic_gen = [sample](int trueLeptonicT, int trueW_decayMode){
+  //if
+  //};
 
   // ----------------------------------------------------
   //   		ttbar background mass CALCULATOR:
@@ -547,46 +551,48 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("Bprime_gen_eta", "Bprime_gen_info[1]")
     .Define("Bprime_gen_phi", "Bprime_gen_info[2]")
     .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
-    .Define("Bprime_gen_pdgId", "Bprime_gen_info[4]")
-    .Define("Bprime_gen_status", "Bprime_gen_info[5]")
+    .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
+    .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
     .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenP\
 art_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("t_gen_pt", "t_daughter_gen_info[0]")
     .Define("t_gen_eta", "t_daughter_gen_info[1]")
     .Define("t_gen_phi", "t_daughter_gen_info[2]")
     .Define("t_gen_mass", "t_daughter_gen_info[3]")
-    .Define("t_gen_pdgId", "t_daughter_gen_info[4]")
-    .Define("t_gen_status", "t_daughter_gen_info[5]")
-    .Define("t_motherIdx", "t_daughter_gen_info[6]")
+    .Define("t_gen_pdgId", "(int) t_daughter_gen_info[4]")
+    .Define("t_gen_status", "(int) t_daughter_gen_info[5]")
+    .Define("t_motherIdx", "(int) t_daughter_gen_info[6]")
     .Define("daughterW_gen_pt", "t_daughter_gen_info[7]")
     .Define("daughterW_gen_eta", "t_daughter_gen_info[8]")
     .Define("daughterW_gen_phi", "t_daughter_gen_info[9]")
     .Define("daughterW_gen_mass", "t_daughter_gen_info[10]")
-    .Define("daughterW_gen_pdgId", "t_daughter_gen_info[11]")
-    .Define("daughterW_gen_status", "t_daughter_gen_info[12]")
-    .Define("daughterW_motherIdx", "t_daughter_gen_info[13]")
+    .Define("daughterW_gen_pdgId", "(int) t_daughter_gen_info[11]")
+    .Define("daughterW_gen_status", "(int) t_daughter_gen_info[12]")
+    .Define("daughterW_motherIdx", "(int) t_daughter_gen_info[13]")
     .Define("Tlepton_gen_pt", "t_daughter_gen_info[14]")
     .Define("Tlepton_gen_eta", "t_daughter_gen_info[15]")
     .Define("Tlepton_gen_phi", "t_daughter_gen_info[16]")
     .Define("Tlepton_gen_mass", "t_daughter_gen_info[17]")
-    .Define("Tlepton_gen_pdgId", "t_daughter_gen_info[18]")
-    .Define("Tlepton_gen_status", "t_daughter_gen_info[19]")
-    .Define("trueLeptonicT", "t_daughter_gen_info[20]")
+    .Define("Tlepton_gen_pdgId", "(int) t_daughter_gen_info[18]")
+    .Define("Tlepton_gen_status", "(int) t_daughter_gen_info[19]")
+    .Define("trueLeptonicT", "(int) t_daughter_gen_info[20]")
     .Define("W_daughter_gen_info", W_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("W_gen_pt", "W_daughter_gen_info[0]")
     .Define("W_gen_eta", "W_daughter_gen_info[1]")
     .Define("W_gen_phi", "W_daughter_gen_info[2]")
     .Define("W_gen_mass", "W_daughter_gen_info[3]")
-    .Define("W_gen_pdgId", "W_daughter_gen_info[4]")
-    .Define("W_gen_status", "W_daughter_gen_info[5]")
-    .Define("W_motherIdx", "W_daughter_gen_info[6]")
+    .Define("W_gen_pdgId", "(int) W_daughter_gen_info[4]")
+    .Define("W_gen_status", "(int) W_daughter_gen_info[5]")
+    .Define("W_motherIdx", "(int) W_daughter_gen_info[6]")
     .Define("Wlepton_gen_pt", "W_daughter_gen_info[7]")
     .Define("wlepton_gen_eta", "W_daughter_gen_info[8]")
     .Define("Wlepton_gen_phi", "W_daughter_gen_info[9]")
     .Define("Wlepton_gen_mass", "W_daughter_gen_info[10]")
-    .Define("Wlepton_gen_pdgId", "W_daughter_gen_info[11]")
-    .Define("Wlepton_gen_status", "W_daughter_gen_info[12]")
-    .Define("trueW_decayMode", "W_daughter_gen_info[13]");
+    .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
+    .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
+    .Define("trueW_decayMode", "(int) W_daughter_gen_info[13]")
+    .Define("singleLeptonic_gen", "trueLeptonicT+trueW_decayMode");
+    //.Define("num_singleLeptonic_gen", "(int) Sum(singleLeptonic_gen)");
   // -------------------------------------------------
   // 		Save Snapshot to file
   // -------------------------------------------------
