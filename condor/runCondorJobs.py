@@ -44,8 +44,8 @@ if makelists:
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM" > WJets2500NanoList.txt')
 
 else:
-    textlist = 'WJets2500NanoList.txt'
-    prefix = 'WJets2500'
+    textlist = sys.argv[2]#'singleTbNanoList.txt'
+    prefix = sys.argv[3]#'singleTb'
 
     rootfiles = []
     with open(os.path.abspath(textlist),'r') as rootlist:

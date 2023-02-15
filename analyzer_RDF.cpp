@@ -593,6 +593,7 @@ art_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("trueW_decayMode", "(int) W_daughter_gen_info[13]")
     .Define("singleLeptonic_gen", "trueLeptonicT+trueW_decayMode");
     //.Define("num_singleLeptonic_gen", "(int) Sum(singleLeptonic_gen)");
+
   // -------------------------------------------------
   // 		Save Snapshot to file
   // -------------------------------------------------
