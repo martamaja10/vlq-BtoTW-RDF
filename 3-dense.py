@@ -3,6 +3,7 @@
 
 # # Dense neural network with Keras
 # Author: Javier Duarte
+# Adapted by: Sam Carlson
 
 # ## Loading `pandas` DataFrames
 # Now we load two different `NumPy` arrays. One corresponding to the VV signal and one corresponding to the background.
@@ -19,32 +20,50 @@ import h5py
 seed = 7
 np.random.seed(seed)
 
-treename = 'HZZ4LeptonsAnalysisReduced'
+treename = 'Events'
 filename = {}
 upfile = {}
 params = {}
 df = {}
 
-filename['VV'] = 'data/ntuple_4mu_VV.root'
-filename['bkg'] = 'data/ntuple_4mu_bkg.root'
+filename['BpM2000'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM2000_hadd.root'
+filename['BpM1400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM1400_hadd.root'
+filename['BpM800'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM800_hadd.root'
+filename['WJets1200'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets1200_hadd.root'
+filename['WJets2500'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets2500_hadd.root'
+filename['WJets800'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets800_hadd.root'
+filename['WJets600'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets600_hadd.root'
+filename['WJets400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets400_hadd.root'
+filename['WJets200'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets200_hadd.root'
+filename['ttbarInc'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/ttbarInc_hadd.root'
 
-VARS = ['f_mass4l','f_massjj'] # choose which vars to use (2d)
+VARS = ['pNet_J_1',#'pNet_J_2',
+        'pNet_T_1',#'pNet_T_2',
+        'pNet_W_1',#'pNet_W_2',
+        'FatJet_pt_1',#'FatJet_pt_2',
+        'FatJet_sdMass_1',#'FatJet_sdMass_2',
+        'tau21_1',#'tau21_2',
+        'nJ_pNet','nT_pNet','nW_pNet',
+        'Jet_HT','Jet_ST','MET_pt',
+        't_pt','t_mass',
+        #'t_dRWb', # t_dRWb does not exist, should check RDF script
+        'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
+        'Bprime_DR','Bprime_ptbal','Bprime_chi2'] # choose which vars to use (2d)
 
-upfile['VV'] = uproot.open(filename['VV'])
-params['VV'] = upfile['VV'][treename].arrays(VARS)
-upfile['bkg'] = uproot.open(filename['bkg'])
-params['bkg'] = upfile['bkg'][treename].arrays(VARS)
+for key in filename:
 
-df['VV'] = pd.DataFrame(params['VV'],columns=VARS)
-df['bkg'] = pd.DataFrame(params['bkg'],columns=VARS)
+    upfile[key] = uproot.open(filename[key])
+    params[key] = upfile[key][treename].arrays(VARS)
 
-# cut out undefined variables VARS[0] and VARS[1] > -999
-df['VV']= df['VV'][(df['VV'][VARS[0]] > -999) & (df['VV'][VARS[1]] > -999)]
-df['bkg']= df['bkg'][(df['bkg'][VARS[0]] > -999) & (df['bkg'][VARS[1]] > -999)] 
+    df[key] = pd.DataFrame(params[key],columns=VARS)
+
+
+## cut out undefined variables VARS[0] and VARS[1] > -999
+#df[key]= df[key][(df[key][VARS[0]] > -999) & (df[key][VARS[1]] > -999)]
 
 # add isSignal variable
-df['VV']['isSignal'] = np.ones(len(df['VV'])) 
-df['bkg']['isSignal'] = np.zeros(len(df['bkg'])) 
+    df[key]['isSignal'] = np.ones(len(df[key])) 
+
 
 
 # ## Define the model
@@ -177,7 +196,7 @@ plt.show()
 
 
 df_all['dense'] = model.predict(X) # add prediction to array
-print df_all.iloc[:5]
+print(df_all.iloc[:5])
 
 
 # # Plot NN output vs input variables
