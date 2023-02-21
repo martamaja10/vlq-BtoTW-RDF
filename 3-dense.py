@@ -50,7 +50,7 @@ VARS = ['pNet_J_1',#'pNet_J_2',
         'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
         'Bprime_DR','Bprime_ptbal','Bprime_chi2'] # choose which vars to use (2d)
 
-for key in filename:
+for key in filename.keys():
 
     upfile[key] = uproot.open(filename[key])
     params[key] = upfile[key][treename].arrays(VARS)
@@ -62,8 +62,12 @@ for key in filename:
 #df[key]= df[key][(df[key][VARS[0]] > -999) & (df[key][VARS[1]] > -999)]
 
 # add isSignal variable
-    df[key]['isSignal'] = np.ones(len(df[key])) 
-
+if 'BpM' in key:    
+	df[key]['isSignal'] = np.full(len(df[key]),2) 
+elif 'tt' in key:
+	df[key]['isSignal'] = np.full(len(df[key]),1)
+else:
+	df[key]['isSignal'] = np.full(len(df[key]),0)
 
 
 # ## Define the model
