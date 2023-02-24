@@ -36,7 +36,7 @@ filename['WJets600'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJ
 filename['WJets400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets400_hadd.root'
 filename['WJets200'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets200_hadd.root'
 filename['ttbarInc'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/ttbarInc_hadd.root'
-
+#swap ttbarInc for ttbarTb_hadd.root and ttbarT_hadd.root
 VARS = ['pNet_J_1',#'pNet_J_2',
         'pNet_T_1',#'pNet_T_2',
         'pNet_W_1',#'pNet_W_2',
@@ -272,57 +272,4 @@ plt.colorbar(cont_plot,ax=ax, boundaries=[0,1],label='NN output')
 # **Question 5:** What happens if you add/remove dropout?
 # 
 # **Question 6:** What happens if you add/remove early stopping?
-
-# ## Add prediction to `ROOT` trees
-# Here we'll add the precition we've computed to `ROOT` trees.
-
-# In[9]:
-
-
-from root_numpy import root2array, array2root
-
-
-def get_features_from_file(filename='', treename='', branches=[]):
-    t = root2array(filename, treename=treename, branches=branches) # structured numpy array 
-    #print t.shape 
-    t = t.view(np.float32).reshape(t.shape + (-1,)) # normal numpy array (trick from https://stackoverflow.com/questions/5957380/convert-structured-array-to-regular-numpy-array)
-    #print t.shape
-    return t
-
-def write_prediction_to_file(features, model, filename='',treename='',branch=''):
-    y_predict_all = model.predict(features) # normal numpy array
-    #print y_predict_all.shape
-    y_predict_all = np.array(y_predict_all, dtype=[(branch, np.float32)]) # structured numpy array
-    #print y_predict_all.shape
-    array2root(y_predict_all, filename, treename=treename, mode='recreate')
-    
-X_all = get_features_from_file('data/ntuple_4mu_VV.root', 
-                               treename='HZZ4LeptonsAnalysisReduced', 
-                               branches=VARS)
-
-X_all = scaler.transform(X_all)
-
-write_prediction_to_file(X_all, 
-                         model, 
-                         filename='data/ntuple_4mu_VV_predict.root', 
-                         treename='HZZ4LeptonsAnalysisReduced', 
-                         branch='dense')
-
-X_all = get_features_from_file('data/ntuple_4mu_bkg.root', 
-                               treename='HZZ4LeptonsAnalysisReduced', 
-                               branches=VARS)
-
-X_all = scaler.transform(X_all)
-
-write_prediction_to_file(X_all, 
-                         model, 
-                         filename='data/ntuple_4mu_bkg_predict.root', 
-                         treename='HZZ4LeptonsAnalysisReduced', 
-                         branch='dense')
-
-
-# In[ ]:
-
-
-
 
