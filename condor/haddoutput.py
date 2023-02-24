@@ -10,7 +10,7 @@ inDir='/store/user/jmanagan/BtoTW_RDF_MLPs/'
 outDir='/store/user/jmanagan/BtoTW_RDF_MLPs_hadds/'
 scratchDir='/uscmst1b_scratch/lpc1/3DayLifetime/jmanagan/'
 
-if not os.path.exists(scratchDir): os.system('mkdir '+scratchDir)
+if not os.path.exists(scratchDir): os.system('mkdir -p '+scratchDir)
 os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir)
 
 dirList = [
