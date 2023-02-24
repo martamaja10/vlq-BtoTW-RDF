@@ -88,7 +88,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ----------------------------------------------------                        
   //           t truth extraction:    
   // ---------------------------------------------------- 
-  auto t_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
+  auto t_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, float t_mass){
 
     ROOT::VecOps::RVec<float> t_daughter_gen_info(27,-999);
     if(sample!="Bprime"){return t_daughter_gen_info;}
@@ -171,7 +171,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
         }
       }
       t_daughter_gen_info[26] = trueLeptonicT;
-      }
+    }
+    //std::cout << "reco: " << t_mass << std::endl;
+    //std::cout << "gen: " << t_daughter_gen_info[3] << "\n" << std::endl;
     return t_daughter_gen_info;
   };
 
@@ -249,17 +251,25 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     return label;
   };
 
-  // Note: this is proabably not necessary.
-  // Since we have b_pt stored as a branch
-  // can do this selection when plotting
-  auto bjetCheck = [sample](float b_pt){
-    if(sample!="Bprime"){return -9;} // not sure if this line is needed. check.
-    if(b_pt<200){return 0;} // label bjets with pt>200 as 1
-    return 1;
-  };
 
-  // Similarly, the generator particle of AK8 is probably not needed as well.
-  // The original tree contains the branch GenJetAK8_partonFlavour
+  auto genFatJet_matching = [](ROOT::VecOps::RVec<float> goodcleanFatJets, ROOT::VecOps::RVec<int>& FatJet_genJetAK8Idx, ROOT::VecOps::RVec<float>& FatJet_mass, ROOT::VecOps::RVec<float>& GenJetAK8_mass, ROOT::VecOps::RVec<int>& GenJetAK8_partonFlavour, ROOT::VecOps::RVec<float>& GenJetAK8_pt){
+
+    //std::cout << "Event: " << std::endl;
+
+    ROOT::VecOps::RVec<float> matching_info(3,-9.);
+    ROOT::VecOps::RVec<int> gen_idx = FatJet_genJetAK8Idx[goodcleanFatJets];
+    ROOT::VecOps::RVec<float> reco_mass = FatJet_mass[goodcleanFatJets];
+
+    for(unsigned int i=0; i<gen_idx.size(); i++){
+      matching_info[0] = reco_mass[i] - GenJetAK8_mass[gen_idx[i]];
+      matching_info[1] = GenJetAK8_partonFlavour[gen_idx[i]];
+      matching_info[2] = GenJetAK8_pt[gen_idx[i]];
+      //std::cout << "gen_mass: " << GenJetAK8_mass[idx] << std::endl;
+      //std::cout << "parton: " << GenJetAK8_partonFlavour[gen_idx[i]] << std::endl;
+    }
+    
+    return 0;
+  };
 
   // ----------------------------------------------------
   //   		ttbar background mass CALCULATOR:
@@ -590,8 +600,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
     .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
     .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
-    .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenP\
-art_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
+    .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "t_mass"})
     .Define("t_gen_pt", "t_daughter_gen_info[0]")
     .Define("t_gen_eta", "t_daughter_gen_info[1]")
     .Define("t_gen_phi", "t_daughter_gen_info[2]")
@@ -634,8 +643,10 @@ art_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
     .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
     .Define("trueW_decayMode", "(int) W_daughter_gen_info[13]")
-    .Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueW_decayMode"}) // summing these three gives the total number of events in Bprime sample
-    .Define("bjetCheck", bjetCheck, {"daughterb_gen_pt"});
+    .Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueW_decayMode"})
+    .Define("DelM_W", "W_lv[3] - W_gen_mass") // could it be moved to plotting script?
+    .Define("DelM_t", "t_mass - t_gen_mass")
+    .Define("genFatJet_matching", genFatJet_matching, {"goodcleanFatJets","FatJet_genJetAK8Idx", "FatJet_mass", "GenJetAK8_mass", "GenJetAK8_partonFlavour", "GenJetAK8_pt"});
 
   // -------------------------------------------------
   // 		Save Snapshot to file
