@@ -23,18 +23,28 @@ np.random.seed(seed)
 
 treename = 'Events'
 filename = {}
+weights = {}
 upfile = {}
 params = {}
 df = {}
 
 print('Performing initializations...')
-# These two lists make things easier later
-filenames = ['ttbarT', 'ttbarTb', #'singleT', 'singleTb', 
-             'WJets2500','WJets1200', 'WJets800', 'WJets600', 'WJets400', 'WJets200',
-             'BpM2000', 'BpM1400', 'BpM800']
 
-weights = [1, 1, #0.456, 0.0506, 
-           0.0011, 0.0148, 0.0544, 0.1128, 0.4749, 0.4466, 1, 1, 1]
+#These two dictionaries make things easier
+
+weights['ttbarT'] = 1
+weights['ttbarTb'] = 1
+#weights['singleT'] = 0.456
+#weights['singleTb'] = 0.0506
+weights['WJets2500'] = 0.0011
+weights['WJets1200'] = 0.0148
+weights['WJets800'] = 0.0544
+weights['WJets600'] = 0.1128
+weights['WJets400'] = 0.4749
+weights['WJets200'] = 0.4466
+weights['BpM2000'] = 1
+weights['BpM1400'] = 1
+weights['BpM800'] = 1
 
 filename['BpM2000'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM2000_hadd.root'
 filename['BpM1400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM1400_hadd.root'
@@ -69,7 +79,8 @@ for i,key in enumerate(filenames): ## Need .keys() here, or different list
     df[key] = pd.DataFrame(params[key],columns=VARS)
     df[key] = df[key].loc[(df[key]['Bprime_mass'] > 0) & (df[key]['NJets_forward'] > 1)] # Selection criteria
 
-    df[key]['Weight'] = weights[i]
+    df[key]['Weight'] = weights[key]
+    print(df['BpM800'].loc[0])
 
 
 ## cut out undefined variables VARS[0] and VARS[1] > -999
