@@ -71,16 +71,15 @@ VARS = ['pNet_J_1',#'pNet_J_2',
         'NJets_central', 'NJets_DeepFlavM','NFatJets','NJets_forward',
         'Bprime_DR','Bprime_ptbal','Bprime_chi2'] # choose which vars to use (2d)
 
-for i,key in enumerate(filenames): ## Need .keys() here, or different list
+for i,key in enumerate(filename.keys()): ## Need .keys() here, or different list
     print('Now processing file ' + key + '...')
     upfile[key] = uproot.open(filename[key])
     params[key] = upfile[key][treename].arrays(VARS)
-
     df[key] = pd.DataFrame(params[key],columns=VARS)
     df[key] = df[key].loc[(df[key]['Bprime_mass'] > 0) & (df[key]['NJets_forward'] > 1)] # Selection criteria
 
     df[key]['Weight'] = weights[key]
-    print(df['BpM800'].loc[0])
+
 
 
 ## cut out undefined variables VARS[0] and VARS[1] > -999
@@ -93,6 +92,8 @@ for i,key in enumerate(filenames): ## Need .keys() here, or different list
         df[key]['isSignal'] = np.ones(len(df[key]))
     else:
         df[key]['isSignal'] = np.zeros(len(df[key]))
+    print(df[key].shape)
+    print(df[key]['Weight'])
 
 print('Completed loading files, pickling input data...')
 df_all = pd.concat([df['BpM2000'], df['BpM1400'], df['BpM800'], df['ttbarT'],df['ttbarTb'], df['WJets200'], 
