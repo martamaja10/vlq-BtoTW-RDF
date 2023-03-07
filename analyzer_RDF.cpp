@@ -97,7 +97,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     if(sample!="Bprime"){return t_daughter_gen_info;}
 
     int t_motherIdx = -1, W_motherIdx = -1; // if not t->t' or W->W', no need to store the mother idx info
-    int trueLeptonicT = 0; // 0-false 1-true
+    int trueLeptonicT = -1; // -1: did not decay, 0: hadronic, 1:leptonic
  
     for(unsigned int i=0; i<nGenPart; i++){
       int id = GenPart_pdgId[i];
@@ -123,10 +123,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       t_daughter_gen_info[5] = GenPart_status[igen];
       t_daughter_gen_info[6] = t_motherIdx;
 
-      std::bitset<15> statusFlags(GenPart_statusFlags[igen]);
-      //t_daughter_gen_info[7] = stoi(statusFlags.to_string()[1]); // for debugging purposes
-      //std::cout << statusFlags.to_string()[1] << std::endl;
-      //std::cout<< t_daughter_gen_info[7] << std::endl;
+      //std::bitset<15> statusFlags(GenPart_statusFlags[igen]);
 
       for(unsigned int j=igen; j<nGenPart; j++){
         if(GenPart_genPartIdxMother[j]!=igen){continue;}
@@ -173,6 +170,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[24] = GenPart_pdgId[p];
             t_daughter_gen_info[25] = GenPart_status[p];
           }
+	  else if(abs(p_id)!=12 & abs(p_id)!=14 & abs(p_id)!=16){
+	    trueLeptonicT = 0;
+	  }
         }
       }
       t_daughter_gen_info[26] = trueLeptonicT;
@@ -188,7 +188,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     if(sample!="Bprime"){return W_daughter_gen_info;}
 
     int W_motherIdx = -1; // if not W->W', no need to store the mother idx info  
-    int trueLeptonicW = -1; // -1: did not decay, 0: hadronic, 1: leptonic, 2: dileptonic 
+    int trueLeptonicW = -1; // -1: did not decay, 0: hadronic, 1: leptonic 
 
     for(unsigned int i=0; i<nGenPart; i++){
       int id = GenPart_pdgId[i];
@@ -227,7 +227,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           W_daughter_gen_info[11] = GenPart_pdgId[p];
           W_daughter_gen_info[12] = GenPart_status[p];
         }
-        else{trueLeptonicW = 0;} // hadronic
+        else if(abs(p_id)!=12 & abs(p_id)!=14 & abs(p_id)!=16){trueLeptonicW = 0;} // hadronic
       }
       W_daughter_gen_info[13] = trueLeptonicW;
     }
@@ -235,21 +235,24 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   };
 
   // The following functions could probably all go to the plotting marco
-  auto leptonicCheck = [sample](bool leptonicParticle, int trueLeptonicT, int trueLeptonicW){
+  //auto leptonicCheck = [sample](bool leptonicParticle, int trueLeptonicT, int trueLeptonicW){
+  auto leptonicCheck = [sample](int trueLeptonicT, int trueLeptonicW){
     if(sample!="Bprime"){return -9;} // not sure if this line is needed. check.
     
-    int trueLeptonicMode = -1;
-    int label=-1;
+    int trueLeptonicMode = -9;
+    //int label=-1;
     
     if ((trueLeptonicT!=1) & (trueLeptonicW==1)){trueLeptonicMode = 0;} // leptonic W
     else if ((trueLeptonicT==1) & (trueLeptonicW!=1)){trueLeptonicMode = 1;} // leptonic T
-
+    else if ((trueLeptonicT==1) & (trueLeptonicW==1)){trueLeptonicMode = 2;} // dileptonic
+    else if ((trueLeptonicT==0) & (trueLeptonicW==0)){trueLeptonicMode = -1;} // hadronic
+    /*
     if(leptonicParticle==trueLeptonicMode){ // leptonicParticle=1 for leptonicT, 0 for leptonicW
       if(trueLeptonicMode==0){label=0;} // set trueW label
       else if(trueLeptonicMode==1){label=1;} // set trueT label
     } // if neither trueT nor trueW, label=-1
-
-    return label;
+    */
+    return trueLeptonicMode;
   };
 
     /*
@@ -650,7 +653,8 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
     .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
     .Define("trueLeptonicW", "(int) W_daughter_gen_info[13]")
-    .Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueLeptonicW"});
+    .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"});
+  //.Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueLeptonicW"});
     //.Define("genFatJet_matching", genFatJet_matching, {"goodcleanFatJets","FatJet_genJetAK8Idx", "FatJet_mass", "GenJetAK8_mass", "GenJetAK8_partonFlavour", "GenJetAK8_pt"});
 
   // -------------------------------------------------
