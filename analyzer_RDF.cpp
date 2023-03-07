@@ -478,17 +478,71 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------
   auto HT_calc = jet_df0.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])") \
     .Filter("Jet_HT > 250","Pass HT > 250")						\
-    .Filter("NFatJets > 0","Pass N good central AK8 > 0");				        
+    .Filter("NFatJets > 0","Pass N good central AK8 > 0")
+    .Define("Bprime_gen_info", Bprime_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
+    .Define("Bprime_gen_eta", "Bprime_gen_info[1]")
+    .Define("Bprime_gen_phi", "Bprime_gen_info[2]")
+    .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
+    .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
+    .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
+    .Define("Bprime_gen_exist", "(int) Bprime_gen_info[6]")
+    .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("t_gen_pt", "t_daughter_gen_info[0]")
+    .Define("t_gen_eta", "t_daughter_gen_info[1]")
+    .Define("t_gen_phi", "t_daughter_gen_info[2]")
+    .Define("t_gen_mass", "t_daughter_gen_info[3]")
+    .Define("t_gen_pdgId", "(int) t_daughter_gen_info[4]")
+    .Define("t_gen_status", "(int) t_daughter_gen_info[5]")
+    .Define("t_motherIdx", "(int) t_daughter_gen_info[6]")
+    .Define("t_islastcopy", "(int) t_daughter_gen_info[7]")
+    .Define("daughterb_gen_pt", "t_daughter_gen_info[8]")
+    .Define("daughterb_gen_eta", "t_daughter_gen_info[9]")
+    .Define("daughterb_gen_phi", "t_daughter_gen_info[10]")
+    .Define("daughterb_gen_pdgId", "(int) t_daughter_gen_info[11]")
+    .Define("daughterb_gen_status", "(int) t_daughter_gen_info[12]")
+    .Define("daughterW_gen_pt", "t_daughter_gen_info[13]")
+    .Define("daughterW_gen_eta", "t_daughter_gen_info[14]")
+    .Define("daughterW_gen_phi", "t_daughter_gen_info[15]")
+    .Define("daughterW_gen_mass", "t_daughter_gen_info[16]")
+    .Define("daughterW_gen_pdgId", "(int) t_daughter_gen_info[17]")
+    .Define("daughterW_gen_status", "(int) t_daughter_gen_info[18]")
+    .Define("daughterW_motherIdx", "(int) t_daughter_gen_info[19]")
+    .Define("Tlepton_gen_pt", "t_daughter_gen_info[20]")
+    .Define("Tlepton_gen_eta", "t_daughter_gen_info[21]")
+    .Define("Tlepton_gen_phi", "t_daughter_gen_info[22]")
+    .Define("Tlepton_gen_mass", "t_daughter_gen_info[23]")
+    .Define("Tlepton_gen_pdgId", "(int) t_daughter_gen_info[24]")
+    .Define("Tlepton_gen_status", "(int) t_daughter_gen_info[25]")
+    .Define("trueLeptonicT", "(int) t_daughter_gen_info[26]")
+    .Define("W_daughter_gen_info", W_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("W_gen_pt", "W_daughter_gen_info[0]")
+    .Define("W_gen_eta", "W_daughter_gen_info[1]")
+    .Define("W_gen_phi", "W_daughter_gen_info[2]")
+    .Define("W_gen_mass", "W_daughter_gen_info[3]")
+    .Define("W_gen_pdgId", "(int) W_daughter_gen_info[4]")
+    .Define("W_gen_status", "(int) W_daughter_gen_info[5]")
+    .Define("W_motherIdx", "(int) W_daughter_gen_info[6]")
+    .Define("Wlepton_gen_pt", "W_daughter_gen_info[7]")
+    .Define("wlepton_gen_eta", "W_daughter_gen_info[8]")
+    .Define("Wlepton_gen_phi", "W_daughter_gen_info[9]")
+    .Define("Wlepton_gen_mass", "W_daughter_gen_info[10]")
+    .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
+    .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
+    .Define("trueLeptonicW", "(int) W_daughter_gen_info[13]")
+    .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"});
+  //.Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueLeptonicW"})                           
+  //.Define("genFatJet_matching", genFatJet_matching, {"goodcleanFatJets","FatJet_genJetAK8Idx", "FatJet_mass", "GenJetAK8_mass", "GenJetAK8_partonFlavour", "GenJetAK8_pt"});
   //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
   
   // ---------------------------------------------------------
   //    Uncomment to save seperate Preselection .root file
   // ---------------------------------------------------------
-  // TString outputFilePS = "RDF_"+sample+"_presel_"+chan+"_"+testnum+".root";
-  // const char* stdOutputFilePS = outputFilePS;
-  // std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
-  // HT_calc.Snapshot("Events", stdOutputFilePS);
-  // std::cout << "Output File: " << outputFilePS << std::endl << "-------------------------------------------------" << std::endl;
+  TString outputFilePS = "RDF_"+sample+"_presel_"+testNum+".root";
+  const char* stdOutputFilePS = outputFilePS;
+  std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
+  HT_calc.Snapshot("Events", stdOutputFilePS);
+  std::cout << "Output File: " << outputFilePS << std::endl << "-------------------------------------------------" << std::endl;
   // }
   //----------------------------------------------------------
   //       Uncomment from here to the bottom if starting from a preselection file!!
@@ -600,62 +654,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("mlp_HT250_Bprime","dnn_scores[2]")				\
     .Define("mlp_HT500_WJets","dnn_scores[3]")				\
     .Define("mlp_HT500_TTbar","dnn_scores[4]")				\
-    .Define("mlp_HT500_Bprime","dnn_scores[5]")
-    .Define("Bprime_gen_info", Bprime_gen_info, {"nGenPart", "GenPart_pdgId\
-", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
-    .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
-    .Define("Bprime_gen_eta", "Bprime_gen_info[1]")
-    .Define("Bprime_gen_phi", "Bprime_gen_info[2]")
-    .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
-    .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
-    .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
-    .Define("Bprime_gen_exist", "(int) Bprime_gen_info[6]")
-    .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
-    .Define("t_gen_pt", "t_daughter_gen_info[0]")
-    .Define("t_gen_eta", "t_daughter_gen_info[1]")
-    .Define("t_gen_phi", "t_daughter_gen_info[2]")
-    .Define("t_gen_mass", "t_daughter_gen_info[3]")
-    .Define("t_gen_pdgId", "(int) t_daughter_gen_info[4]")
-    .Define("t_gen_status", "(int) t_daughter_gen_info[5]")
-    .Define("t_motherIdx", "(int) t_daughter_gen_info[6]")
-    .Define("t_islastcopy", "(int) t_daughter_gen_info[7]")
-    .Define("daughterb_gen_pt", "t_daughter_gen_info[8]")
-    .Define("daughterb_gen_eta", "t_daughter_gen_info[9]")
-    .Define("daughterb_gen_phi", "t_daughter_gen_info[10]")
-    .Define("daughterb_gen_pdgId", "(int) t_daughter_gen_info[11]")
-    .Define("daughterb_gen_status", "(int) t_daughter_gen_info[12]")
-    .Define("daughterW_gen_pt", "t_daughter_gen_info[13]")
-    .Define("daughterW_gen_eta", "t_daughter_gen_info[14]")
-    .Define("daughterW_gen_phi", "t_daughter_gen_info[15]")
-    .Define("daughterW_gen_mass", "t_daughter_gen_info[16]")
-    .Define("daughterW_gen_pdgId", "(int) t_daughter_gen_info[17]")
-    .Define("daughterW_gen_status", "(int) t_daughter_gen_info[18]")
-    .Define("daughterW_motherIdx", "(int) t_daughter_gen_info[19]")
-    .Define("Tlepton_gen_pt", "t_daughter_gen_info[20]")
-    .Define("Tlepton_gen_eta", "t_daughter_gen_info[21]")
-    .Define("Tlepton_gen_phi", "t_daughter_gen_info[22]")
-    .Define("Tlepton_gen_mass", "t_daughter_gen_info[23]")
-    .Define("Tlepton_gen_pdgId", "(int) t_daughter_gen_info[24]")
-    .Define("Tlepton_gen_status", "(int) t_daughter_gen_info[25]")
-    .Define("trueLeptonicT", "(int) t_daughter_gen_info[26]")
-    .Define("W_daughter_gen_info", W_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
-    .Define("W_gen_pt", "W_daughter_gen_info[0]")
-    .Define("W_gen_eta", "W_daughter_gen_info[1]")
-    .Define("W_gen_phi", "W_daughter_gen_info[2]")
-    .Define("W_gen_mass", "W_daughter_gen_info[3]")
-    .Define("W_gen_pdgId", "(int) W_daughter_gen_info[4]")
-    .Define("W_gen_status", "(int) W_daughter_gen_info[5]")
-    .Define("W_motherIdx", "(int) W_daughter_gen_info[6]")
-    .Define("Wlepton_gen_pt", "W_daughter_gen_info[7]")
-    .Define("wlepton_gen_eta", "W_daughter_gen_info[8]")
-    .Define("Wlepton_gen_phi", "W_daughter_gen_info[9]")
-    .Define("Wlepton_gen_mass", "W_daughter_gen_info[10]")
-    .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
-    .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
-    .Define("trueLeptonicW", "(int) W_daughter_gen_info[13]")
-    .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"});
-  //.Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueLeptonicW"});
-    //.Define("genFatJet_matching", genFatJet_matching, {"goodcleanFatJets","FatJet_genJetAK8Idx", "FatJet_mass", "GenJetAK8_mass", "GenJetAK8_partonFlavour", "GenJetAK8_pt"});
+    .Define("mlp_HT500_Bprime","dnn_scores[5]");
 
   // -------------------------------------------------
   // 		Save Snapshot to file
