@@ -48,7 +48,7 @@ def get_features_from_file(filename='', treename='', branches=[]):
     t = root2array(filename, treename=treename, branches=branches) # structured numpy array 
     #print t.shape 
     t = t.view(np.float32).reshape(t.shape + (-1,)) # normal numpy array (trick from https://stackoverflow.com/questions/5957380/convert-structured-array-to-regular-numpy-array)
-    t = t[~np.isinf(t).any(axis=1)]
+    t = t[~np.isinf(t).any(axis=1)] # Filters out infinite values
     #print t.shape
     return t
 
