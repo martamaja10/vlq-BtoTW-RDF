@@ -474,7 +474,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
 
-  /*
+ 
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
   //  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
@@ -628,10 +628,11 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("DR_lep_Jets","DR_calc(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
 					   	 lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
     .Define("W_lv","W_reco(MET_pt,MET_phi,lepton_lv)")			\
-    .Define("W_pt", "W_lv[0]")
-    .Define("W_eta", "W_lv[1]")
-    .Define("W_phi", "W_lv[2]")
-    .Define("W_mass", "W_lv[3]")
+    .Define("W_pt", "W_lv.Pt()")
+    .Define("W_eta", "W_lv.Eta()")
+    .Define("W_phi", "W_lv.Phi()")
+    .Define("W_mass", "W_lv.M()")
+    .Define("W_MT", "sqrt(2*lepton_pt*MET_pt*(1-cos(lepton_phi - MET_phi)))")
     .Define("minMlj_output",minM_lep_jet_calc,{"gcJet_pt","gcJet_eta", "gcJet_phi","gcJet_mass", \
 	  "lepton_lv"})							\
     .Define("DR_W_lep","dR_Wt_Calc(W_lv,lepton_lv)")			\
@@ -677,9 +678,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
-  */
+  
   time.Stop();
   time.Print();
-  //std::cout << "Cut statistics:" << std::endl;
-  //postPresel.Report()->Print();
+  std::cout << "Cut statistics:" << std::endl;
+  postPresel.Report()->Print();
 }
