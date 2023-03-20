@@ -468,12 +468,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
+  /*
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-
+  */
  
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
@@ -483,13 +484,12 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //                    Lepton Filters
   // ---------------------------------------------------------
 
-  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
+  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 30 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_pfIsoId >= 4") \
     .Define("nTPassMu","(int) Sum(TPassMu)")				\
-    .Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
-							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
+    .Define("TPassEl","Electron_pt > 38 && Electron_mvaFall17V2noIso_WP90 == true && abs(Electron_eta) < 2.5")\
     .Define("nTPassEl","(int) Sum(TPassEl)")				\
-    .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_Mu50 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
-    .Define("isEl","(nElectron > 0 && nTPassEl == 1 && (HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1) && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
+    .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_IsoMu27 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
+    .Define("isEl","(nElectron > 0 && nTPassEl == 1 && HLT_Ele35_WPTight_Gsf == 1 && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
     .Filter("isMu || isEl","Event is either muon or electron");
   
   auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,TPassMu,TPassEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
