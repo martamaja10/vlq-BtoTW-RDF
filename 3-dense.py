@@ -47,7 +47,7 @@ weights['BpM1400'] = 1
 weights['BpM800'] = 1
 
 filename['BpM2000'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM2000_hadd.root'
-filename['BpM1400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM1400_hadd.root'
+filename['BpM1400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM14000_hadd.root'
 filename['BpM800'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM800_hadd.root'
 filename['WJets1200'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets1200_hadd.root'
 filename['WJets2500'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets2500_hadd.root'
@@ -55,8 +55,8 @@ filename['WJets800'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJ
 filename['WJets600'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets600_hadd.root'
 filename['WJets400'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets400_hadd.root'
 filename['WJets200'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/WJets200_hadd.root'
-filename['ttbarT'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/ttbarInc_hadd.root'
-filename['ttbarTb'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/ttbarInc_hadd.root'
+filename['ttbarT'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/ttbarT_hadd.root'
+filename['ttbarTb'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/ttbarTb_hadd.root'
 
 VARS = ['pNet_J_1',#'pNet_J_2',
         'pNet_T_1',#'pNet_T_2',
@@ -85,15 +85,13 @@ for i,key in enumerate(filename.keys()): ## Need .keys() here, or different list
 ## cut out undefined variables VARS[0] and VARS[1] > -999
 #df[key]= df[key][(df[key][VARS[0]] > -999) & (df[key][VARS[1]] > -999)]
 
-    # add isSignal variable
+    cms/home/khowey/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/NewAnalysisModels/MLP.h5') add isSignal variable
     if 'Bp' in key: ## Only label Bprime as signal
         df[key]['isSignal'] = np.full(len(df[key]), 2) 
     elif 'tt' in key:
         df[key]['isSignal'] = np.ones(len(df[key]))
     else:
         df[key]['isSignal'] = np.zeros(len(df[key]))
-    print(df[key].shape)
-    print(df[key]['Weight'])
 
 print('Completed loading files, pickling input data...')
 df_all = pd.concat([df['BpM2000'], df['BpM1400'], df['BpM800'], df['ttbarT'],df['ttbarTb'], df['WJets200'], 
