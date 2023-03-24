@@ -1,4 +1,4 @@
-// ------------------------------------------------------------ma--------------------------- //
+// --------------------------------------------------------------------------------------- //
 // Implimentation of RDataFrame in C++.					                   //
 // Comments on creating a singly produced VLQ search			                   //
 // To Run on Command Line:   root -l callRDF.C\(\"Muon(OR)Electron\",\"testNumber\"\,\"root://cmsxrootd.fnal.gov//store/...file.root\")      //
@@ -161,7 +161,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           int p_id = GenPart_pdgId[p];
          
           if(GenPart_genPartIdxMother[p]!=jgen){continue;}
-          if(abs(p_id)==11 | abs(p_id)==13 | abs(p_id)==15){
+          if(abs(p_id)==11 || abs(p_id)==13 || abs(p_id)==15){
             trueLeptonicT = 1;
             t_daughter_gen_info[20] = GenPart_pt[p]; // should I take the last copy?
             t_daughter_gen_info[21] = GenPart_eta[p];
@@ -170,7 +170,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[24] = GenPart_pdgId[p];
             t_daughter_gen_info[25] = GenPart_status[p];
           }
-	  else if(abs(p_id)!=12 & abs(p_id)!=14 & abs(p_id)!=16){
+	  else if(abs(p_id)!=12 && abs(p_id)!=14 && abs(p_id)!=16){
 	    trueLeptonicT = 0;
 	  }
         }
@@ -218,7 +218,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
         int p_id = GenPart_pdgId[p];
         int p_mother = GenPart_genPartIdxMother[p];
         if(p_mother!=igen){continue;}
-        if(abs(p_id)==11 | abs(p_id)==13 | abs(p_id)==15){
+        if(abs(p_id)==11 || abs(p_id)==13 || abs(p_id)==15){
           trueLeptonicW = 1; // leptonic
           W_daughter_gen_info[7] = GenPart_pt[p];
           W_daughter_gen_info[8] = GenPart_eta[p];
@@ -227,7 +227,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           W_daughter_gen_info[11] = GenPart_pdgId[p];
           W_daughter_gen_info[12] = GenPart_status[p];
         }
-        else if(abs(p_id)!=12 & abs(p_id)!=14 & abs(p_id)!=16){trueLeptonicW = 0;} // hadronic
+        else if(abs(p_id)!=12 && abs(p_id)!=14 && abs(p_id)!=16){trueLeptonicW = 0;} // hadronic
       }
       W_daughter_gen_info[13] = trueLeptonicW;
     }
@@ -240,26 +240,38 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     
     int trueLeptonicMode = -9;
     
-    if ((trueLeptonicT!=1) & (trueLeptonicW==1)){trueLeptonicMode = 0;} // leptonic W
-    else if ((trueLeptonicT==1) & (trueLeptonicW!=1)){trueLeptonicMode = 1;} // leptonic T
-    else if ((trueLeptonicT==1) & (trueLeptonicW==1)){trueLeptonicMode = 2;} // dileptonic
-    else if ((trueLeptonicT==0) & (trueLeptonicW==0)){trueLeptonicMode = -1;} // hadronic
+    if ((trueLeptonicT!=1) && (trueLeptonicW==1)){trueLeptonicMode = 0;} // leptonic W
+    else if ((trueLeptonicT==1) && (trueLeptonicW!=1)){trueLeptonicMode = 1;} // leptonic T
+    else if ((trueLeptonicT==1) && (trueLeptonicW==1)){trueLeptonicMode = 2;} // dileptonic
+    else if ((trueLeptonicT==0) && (trueLeptonicW==0)){trueLeptonicMode = -1;} // hadronic
 
     return trueLeptonicMode;
   };
 
   auto FatJet_matching = [](unsigned int nGenJetAK8, ROOT::VecOps::RVec<float>& GenJetAK8_eta, ROOT::VecOps::RVec<float>& GenJetAK8_phi,unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
 
-    ROOT::VecOps::RVec<float> matched_GenPart(nGenJetAK8,-9);
-    //std::cout << "Event" << std::endl;
+    ROOT::VecOps::RVec<int> matched_GenPart(nGenJetAK8,-9);
+    std::cout << "Event" << std::endl;
 
     for(unsigned int i=0; i<nGenJetAK8; i++){
-
+      
       double fatjet_eta = GenJetAK8_eta[i];
       double fatjet_phi = GenJetAK8_phi[i];
       
       for(unsigned int p=0; p<nGenPart; p++){
+	std::bitset<15> statusFlags(GenPart_statusFlags[p]);                                                                     
+        if(statusFlags.to_string()[1]=='0'){continue;} // take the last copy
+
+	double part_eta = GenPart_eta[p];
+        double part_phi = GenPart_phi[p];
+        double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);                                                           
+        if(dR>0.8){continue;}
+	std::cout << GenPart_pdgId[p] << std::endl;
+      }
+      
+      for(unsigned int p=0; p<nGenPart; p++){
 	int id = GenPart_pdgId[p];
+	int motherIdx = GenPart_genPartIdxMother[p];
 	if(abs(id) != 5 && abs(id) != 6 && abs(id) != 24 && abs(id) != 23){continue;}
 	
 	std::bitset<15> statusFlags(GenPart_statusFlags[p]);
@@ -270,24 +282,42 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
 	double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
 	if(dR>0.8){continue;}
-	
-	if(abs(id) == 5){ GenJetAK8_phi[i] = id; continue; }
 
+	for(unsigned int p2=p+1; p2<nGenPart; p2++){
+	  if(GenPart_genPartIdxMother[p2] == motherIdx){
+	    double part_eta2 = GenPart_eta[p2];
+            double part_phi2 = GenPart_phi[p2];
+	    std::cout << id << " and " << GenPart_pdgId[p2] << " are daughters of " << GenPart_pdgId[motherIdx] << std::endl;
+	    dR = DeltaR(part_eta2, part_eta, part_phi2, part_phi);
+	    if(dR<0.8){
+	      std::cout << id << " merged with: " << GenPart_pdgId[p2] << std::endl;
+	      matched_GenPart[i] = GenPart_pdgId[motherIdx];
+	      continue;
+	    }
+	  }
+	}
+	
+	if(matched_GenPart[i]!=-9){continue;}
+	//if(abs(id) == 5){ GenJetAK8_phi[i] = id; continue; }
+
+	bool bothInJet = false;
 	for(unsigned int d=p; d<nGenPart; d++){
+	  if(GenPart_pdgId[d]>10 && GenPart_pdgId[d]<17){continue;}
+	  bothInJet = true;
 	  if(GenPart_genPartIdxMother[d] == p){
 	    part_eta = GenPart_eta[d];
 	    part_phi = GenPart_phi[d];
 	    dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
 
-	    if(dR>0.8){continue;}
+	    if(dR>0.8){bothInJet = false; continue;}
 	  }
 	}
-	if(matched_GenPart[i]!=-9){continue;}
-	matched_GenPart[i] = id;
+	if(matched_GenPart[i]==-9 && bothInJet){matched_GenPart[i] = GenPart_pdgId[p]; continue;}
+	if(matched_GenPart[i]==-9 && abs(id) == 5){GenJetAK8_phi[i] = id;}
       }
-      //std::cout << "matched id: " << matched_GenPart[i] << std::endl;
+      std::cout << "matched id: " << matched_GenPart[i] << std::endl;
+      std::cout << " " << std::endl;
     }
-    //std::cout << " " << std::endl;
     return matched_GenPart;
   };
 
