@@ -1,4 +1,4 @@
-
+*.root
 *.npz
 /settings.json
 test.py
