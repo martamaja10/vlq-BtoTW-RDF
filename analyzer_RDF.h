@@ -22,8 +22,8 @@
 #include "ROOT/RDataFrame.hxx"
 #include "ROOT/RVec.hxx"
 
-#include "lwtnn/lwtnn/interface/LightweightNeuralNetwork.hh"
-#include "lwtnn/lwtnn/interface/parse_json.hh"
+#include "../lwtnn/include/lwtnn/LightweightNeuralNetwork.hh" 
+#include "../lwtnn/include/lwtnn/parse_json.hh" 
 
 enum shift:char;
 
@@ -55,8 +55,6 @@ public :
    Bool_t          isLUp;
    Bool_t          isLDn;
 
-   lwt::LightweightNeuralNetwork* lwtnnTT;    
-
    // Fixed size dimensions of array or collections stored in the TTree if any.
  
    rdf(TString inputFileName, TString preselFileName, TString finalselFileName);
@@ -75,11 +73,6 @@ rdf::rdf(TString inputFileName, TString preselFileName, TString finalselFileName
 
   psOutName = preselFileName;
   fsOutName = finalselFileName;
-
-  string dnnFileTT = "vlq_mlp_June_08_20_TT.json";
-  ifstream input_cfgTT( dnnFileTT );
-  lwt::JSONConfig cfgTT = lwt::parse_json(input_cfgTT);
-  lwtnnTT = new lwt::LightweightNeuralNetwork(cfgTT.inputs, cfgTT.layers, cfgTT.outputs);
 
   isSig  = (inputFileName.Contains("Bprime"));
   isMadgraphBkg = (inputFileName.Contains("QCD") || inputFileName.Contains("madgraphMLM"));

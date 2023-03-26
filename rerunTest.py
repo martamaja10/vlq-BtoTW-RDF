@@ -59,9 +59,16 @@ def resample_with_replacement(X_train, sample_weight):
 # The function then adds the weight to the front of the list and creates
 #       a 2D array
 def addWeight(brokenArray, weight):
+<<<<<<< HEAD
     reshapeArray = np.zeros((brokenArray.shape[0], len(varList)))
     for i, event in enumerate(brokenArray):
         eventList = list(event)
+=======
+    reshapeArray = np.zeros((brokenArray.shape[0], len(varList) + 1))
+    for i, event in enumerate(brokenArray):
+        eventList = list(event)
+        eventList.insert(0, weight) # (0 - index (first in this case), 1 - weight being assigned)
+>>>>>>> 92718ba1ccb8f729de7be5419a8c2c8fb4ca3680
         reshapeArray[i] = np.array(eventList)
     return reshapeArray
 
@@ -270,6 +277,11 @@ plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
 plt.title('CMS Simulation',loc='left',size=18)
 plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
+<<<<<<< HEAD
+=======
+plt.hist(probs_WJetsMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
+plt.hist(probs_TTbarTMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
+>>>>>>> 92718ba1ccb8f729de7be5419a8c2c8fb4ca3680
 plt.hist(probs_BprimeMLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
 plt.hist(probs_Bprime2MLP.T[0], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
@@ -283,6 +295,11 @@ plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
 plt.title('CMS Simulation',loc='left',size=18)
 plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
+<<<<<<< HEAD
+=======
+plt.hist(probs_WJetsMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
+plt.hist(probs_TTbarTMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
+>>>>>>> 92718ba1ccb8f729de7be5419a8c2c8fb4ca3680
 plt.hist(probs_BprimeMLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
 plt.hist(probs_Bprime2MLP.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
@@ -296,7 +313,16 @@ plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
 plt.title('CMS Simulation',loc='left',size=18)
 plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
+<<<<<<< HEAD
 plt.hist(probs_BprimeMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
 plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig(outdir+'plots/score_BprimeMLP'+outStr+'.png')
+=======
+plt.hist(probs_WJetsMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
+plt.hist(probs_TTbarTMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
+plt.hist(probs_BprimeMLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime)+'\,TeV)}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_Bprime2MLP.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime\,('+str(Bprime2)+'\,TeV)}$', color='c', histtype='step', log=True, density=True)
+plt.legend(loc='best')
+plt.savefig(outdir+'plots/score_BprimeMLP'+outStr+'.png')
+>>>>>>> 92718ba1ccb8f729de7be5419a8c2c8fb4ca3680

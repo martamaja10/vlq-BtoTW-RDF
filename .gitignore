@@ -4,3 +4,7 @@
 test.py
 c
 *.npz
+*.png
+*.pkl
+*.txt
+*NN_logs2018.txt

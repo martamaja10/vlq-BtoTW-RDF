@@ -23,7 +23,6 @@ samples = {'Bp800':'BpM800_',
            'wjets2500':'WJets2500_',
            'singleT':'singleT_',
            'singleTb':'singleTb_',
-           'data_obs':'ttbarInc_' # data is a copy of ttbar for now, need histograms in the file for limits
 }
 tags = {'tjet':'taggedTjet == 1',
         'Wjet':'taggedWjet == 1',
@@ -143,7 +142,7 @@ for sample in samples.keys():
     print '\t Sample =',sample
     tfile = TFile.Open("root://cmseos.fnal.gov/"+indir+"/"+samples[sample]+"hadd.root")
     ttree = tfile.Get("Events")
-    tfile2 = TFile.Open("root://cmseos.fnal.gov/store/user/samuelca/" + samples[sample] + "predict.root")
+    tfile2 = TFile.Open("root://cmseos.fnal.gov/store/user/khowey/" + samples[sample] + "predict.root")
     ttree2 = tfile2.Get("Events")
     ttree.AddFriend("ttree2")
 

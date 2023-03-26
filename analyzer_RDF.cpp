@@ -26,8 +26,8 @@
 #include <TRandom3.h>
 #include <sstream>
 #include <chrono> // for high_resolution_clock
-//#include "lwtnn/lwtnn/interface/parse_json.hh"
-//#include "lwtnn/lwtnn/interface/LightweightNeuralNetwork.hh"
+#include "../lwtnn/include/lwtnn/parse_json.hh"
+#include "../lwtnn/include/lwtnn/LightweightNeuralNetwork.hh"
 
 using namespace ROOT::VecOps;
 void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
@@ -43,7 +43,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // Samples will be signal, ttbar (a background), and possibly others...
   TString sample = "singletop";
   if(isTT == true){sample = "ttbar";} 
-  else if(isSig == true}{sample = "Bprime";}
+  else if(isSig == true){sample = "Bprime";}
   else if(isMadgraphBkg == true){sample = "wjets";}
   std::cout<< "Sample: " << sample << std::endl;
   
@@ -51,10 +51,12 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // 			DNN Stuff
   // -------------------------------------------------------
   // Need new json files for B -> tW!
-  // std::string dnnFileBB = "vlq_mlp_Sept09_BB_3arch.json";
-  // std::ifstream input_cfgBB( dnnFileBB );
-  // lwt::JSONConfig cfgBB = lwt::parse_json(input_cfgBB);
-  // lwt::LightweightNeuralNetwork* lwtnnBB = new lwt::LightweightNeuralNetwork(cfgBB.inputs, cfgBB.layers, cfgBB.outputs);
+  std::ifstream input_mlpN("mlp_new.json");
+  std::ifstream input_mlpO("mlp_old.json");
+  lwt::JSONConfig mlpN = lwt::parse_json(input_mlpN);
+  lwt::JSONConfig mlpO = lwt::parse_json(input_mlpO);
+  lwt::LightweightNeuralNetwork* lwtnn_mlpN = new lwt::LightweightNeuralNetwork(mlpN.inputs, mlpN.layers, mlpN.outputs);
+  lwt::LightweightNeuralNetwork* lwtnn_mlpO = new lwt::LightweightNeuralNetwork(mlpO.inputs, mlpO.layers, mlpO.outputs);
   
   // --------------------------------------------------------------------------------------------------------------------
   // 							LAMBDA FXNS
@@ -149,63 +151,58 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //   LWTNN IMPLIMENTATION AND MYMAP CALCULATION
   // -----------------------------------------------	
   
-  // auto predictMLP = [lwtnnBB](float MET_pt, float Jet_HT, int NJets, int NFatJets, float Jet_ST, float FatJet_pt_1, float FatJet_pt_2, float FatJet_sdMass_1, float FatJet_sdMass_2, float dpak8_J_1, float dpak8_J_2, float dpak8_T_1, float dpak8_T_2, float dpak8_W_1, float dpak8_W_2, int dpak8_tag_1, int dpak8_tag_2, int nJ_DeepAK8, int nT_DeepAK8, int nW_DeepAK8, float tau21_1, float tau21_2, float minDR_leadAK8otherAK8)
-  // {
-  //   ROOT::VecOps::RVec<float> dnn_SigWjetTtbar (6,0);
-  //   std::map<std::string,double> varMapBB;
-  //   std::map<std::string,double> myMapBB;
+  auto predictMLP = [lwtnn_mlpN,lwtnn_mlpO](float pNet_J_1, float pNet_T_1, float dpak8_T_1, float FatJet_pt_1, float FatJet_sdMass_1, float tau21_1, int nT_dpak8, int nT_pNet, float Jet_HT, float Jet_ST, float MET_pt, int NJets_DeepFlavM, int NJets_forward)
+  {
+    ROOT::VecOps::RVec<float> mlp_scores (6,-1);
+    std::map<std::string,double> varMapB;
+    std::map<std::string,double> myMapB;
   
-  //   myMapBB = {
-  //     {"WjetsBB",-999},
-  //     {"ttbarBB",-999},
-  //     {"Bprime",-999},
-  //   };
-  
-  //   varMapBB = {
-  //     {"MET_pt", MET_pt},
-  //     {"Jet_ST", Jet_ST},
-  //     {"Jet_HT", Jet_HT},
-  //     {"NJets", NJets},
-  //     {"NFatJets", NFatJets},
-  //     {"minDR_leadAK8otherAK8", minDR_leadAK8otherAK8},
-  //     {"nT_DeepAK8", nT_DeepAK8},
-  //     {"FatJet_pt_1", FatJet_pt_1},
-  //     {"FatJet_pt_2", FatJet_pt_2},
-  //     {"FatJet_sdMass_1", FatJet_sdMass_1},
-  //     {"FatJet_sdMass_2", FatJet_sdMass_2},
-  //     {"dpak8_tag_1", dpak8_tag_1},
-  //     {"dpak8_tag_2", dpak8_tag_2},
-  //     {"dpak8_J_1", dpak8_J_1},
-  //     {"dpak8_J_2", dpak8_J_2},
-  //   };
-  
-  //   myMapBB = lwtnnBB->compute(varMapBB);
-  //   dnn_SigWjetTtbar[0] = myMapBB["Bprime"];
-  //   dnn_SigWjetTtbar[1] = myMapBB["WjetsBB"];
-  //   dnn_SigWjetTtbar[2] = myMapBB["ttbarBB"];
-  
-  //   return dnn_SigWjetTtbar;
-  // };
+    varMapB = {
+      {"pNet_J_1",	 pNet_J_1},	 
+      {"pNet_T_1",	 pNet_T_1},	 
+      {"dpak8_T_1",	 dpak8_T_1},	 
+      {"FatJet_pt_1",	 FatJet_pt_1},
+      {"FatJet_sdMass_1",FatJet_sdMass_1},
+      {"tau21_1",	 tau21_1},
+      {"nT_dpak8",	 nT_dpak8},
+      {"nT_pNet",	 nT_pNet},
+      {"Jet_HT",	 Jet_HT},
+      {"Jet_ST",	 Jet_ST},
+      {"MET_pt",	 MET_pt},
+      {"NJets_DeepFlavM",NJets_DeepFlavM},
+      {"NJets_forward",  NJets_forward},
+    };
+
+    myMapB = {{"WJets",-999},{"TTbar",-999},{"Bprime",-999}};    
+    myMapB = lwtnn_mlpN->compute(varMapB);
+    mlp_scores[0] = myMapB["WJets"];
+    mlp_scores[1] = myMapB["TTbar"];
+    mlp_scores[2] = myMapB["Bprime"];
+
+    myMapB = {{"WJets",-999},{"TTbar",-999},{"Bprime",-999}};    
+    myMapB = lwtnn_mlpO->compute(varMapB);
+    mlp_scores[3] = myMapB["WJets"];
+    mlp_scores[4] = myMapB["TTbar"];
+    mlp_scores[5] = myMapB["Bprime"];
+
+    return mlp_scores;
+  };
   
   // -------------------------------------------------------
   //               Flags and First Filter 
   // -------------------------------------------------------
   // Twiki with reccommended ultralegacy values
   auto rdf = ROOT::RDataFrame("Events",filename); // Initial data
-  std::cout << "Number of Events: " << rdf.Count().GetValue() << std::endl;
+  //  std::cout << "Number of Events: " << rdf.Count().GetValue() << std::endl;
   
-  auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1")
-    .Filter("MET_pt > 50");
-  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
+  auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
+    .Filter("MET_pt > 50","Pass MET > 50");
+  //  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
 
   // ---------------------------------------------------------
   //                    Lepton Filters
   // ---------------------------------------------------------
 
-  // auto Lep_df0 = METfilters.Define("nLeptons", stdNChan)		\
-  //   .Filter("nLeptons > 0");  // REQUIRED to come before any .Define operators for channels
-  //  std::cout << "Number of Events with Leptons: " << Lep_df0.Count().GetValue() << std::endl;
-  
   auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
     .Define("nTPassMu","(int) Sum(TPassMu)")				\
     .Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
@@ -213,7 +210,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("nTPassEl","(int) Sum(TPassEl)")				\
     .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_Mu50 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
     .Define("isEl","(nElectron > 0 && nTPassEl == 1 && (HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1) && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
-    .Filter("isMu || isEl");
+    .Filter("isMu || isEl","Event is either muon or electron");
   
   auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,TPassMu,TPassEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
     .Define("lepton_pt","assignleps[0]")				\
@@ -222,73 +219,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("lepton_mass","assignleps[3]")				\
     .Define("lepton_miniIso","assignleps[4]");
   
-  
-  // --------------------------------------------------------
-  //      Initialize Stuff - careful where you put these
-  // --------------------------------------------------------
-  //  auto xLep = Lep_df1;
-
-  //Compare triggers to gridpacks and cut out unneccessary or bad ones
-  // if(chan == "Muon")
-  //   {
-  //     auto HLTTriggers = Lep_df0.Filter("HLT_Mu50 == 1");
-      
-  //     // auto Lep_df1 = HLTTriggers.Define("LPassMu","Muon_pt > 10 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 1 && Muon_looseId == true")	\
-  //     // 	.Define("nLPassMu","(int) Sum(LPassMu)")			\
-  //     // 	.Filter("nLPassMu == 1");
-  //     // std::cout << "Number of Events with 1 loose muon: " << Lep_df1.Count().GetValue() << std::endl;
-      
-  //     auto Lep_df2 = HLTTriggers.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
-  // 	.Define("nTPassMu","(int) Sum(TPassMu)")			\
-  // 	.Filter("nTPassMu == 1");
-  //     std::cout << "Number of Events with 1 Tight Muon: " << Lep_df2.Count().GetValue() << std::endl;
-      
-  //     auto Lep_dfEl = Lep_df2.Define("passEl","Electron_pt > 50 && Electron_miniPFRelIso_all < 0.1 && \
-  // 							 Electron_mvaFall17V2noIso_WP90 == true && abs(Electron_eta) < 2.5")\
-  // 	.Define("nPassEl","(int) Sum(passEl)")				\
-  // 	.Filter("nElectron == 0 || (nElectron > 0 && nPassEl == 0)","Electron veto: none passing tight");
-  //     std::cout << "Number of Events passing the tight electron veto: " << Lep_dfEl.Count().GetValue() << std::endl;
-      
-  //     xLep = Lep_dfEl.Define("lepton_pt","Muon_pt[TPassMu == true]")	\
-  // 	.Define("lepton_eta","Muon_eta[TPassMu == true]")		\
-  // 	.Define("lepton_phi","Muon_phi[TPassMu == true]")		\
-  // 	.Define("lepton_mass","Muon_mass[TPassMu == true]")		\
-  // 	.Define("lepton_miniIso","Muon_miniPFRelIso_all[TPassMu == true]");
-  //   }
-  // else if(chan == "Electron")
-  //   {
-  //     auto HLTTriggers = Lep_df0.Filter("HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1"); // THINK ABOUT THIS! TOO TIGHT...?
-
-  //     // auto Lep_df1 = HLTTriggers.Define("LPassEl","Electron_pt > 10 && Electron_miniPFRelIso_all < 0.4 && \
-  //     // 							     Electron_mvaFall17V2noIso_WPL == true && abs(Electron_eta) < 2.5")\
-  //     // 	.Define("nLPassEl","(int) Sum(LPassEl)")			\
-  //     // 	.Filter("nLPassEl == 1");
-  //     // std::cout << "Number of Events with 1 Loose Electron: " << Lep_df1.Count().GetValue() << std::endl;
-      
-  //     auto Lep_df2 = HLTTriggers.Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
-  // 							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
-  // 	.Define("nTPassEl","(int) Sum(TPassEl)")			\
-  // 	.Filter("nTPassEl == 1");
-  //     std::cout << "Number of Events with 1 Tight Electron: " << Lep_df2.Count().GetValue() << std::endl;
-      
-  //     auto Lep_dfMu = Lep_df2.Define("passMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_miniIsoId >= 3 && Muon_tightId == true") \
-  // 	.Define("nPassMu","(int) Sum(passMu)")				\
-  // 	.Filter("nMuon == 0 || (nMuon > 0 && nPassMu == 0)","Muon veto: none past tight");
-  //     std::cout << "Number of Events passing the tight muon veto: " << Lep_dfMu.Count().GetValue() << std::endl;
-      
-  //     xLep = Lep_dfMu.Define("lepton_pt","Electron_pt[TPassEl == true]") \
-  // 	.Define("lepton_eta","Electron_eta[TPassEl == true]")		\
-  // 	.Define("lepton_phi","Electron_phi[TPassEl == true]")		\
-  // 	.Define("lepton_mass","Electron_mass[TPassEl == true]")		\
-  // 	.Define("lepton_miniIso","Electron_miniPFRelIso_all[TPassEl == true]");
-  //   }
-  
+    
   // --------------------------------------------------------
   // 		      JET SELECTION w/ cleaning
   // --------------------------------------------------------
   
-  auto jet_ft0 = Lep_df1.Filter("nJet > 0 && nFatJet > 0");
-  std::cout << "Number of Events with at least one AK4 and AK8 Jet: " << jet_ft0.Count().GetValue() << std::endl;
+  auto jet_ft0 = Lep_df1.Filter("nJet > 0 && nFatJet > 0","Event has jets");
+  //  std::cout << "Number of Events with at least one AK4 and AK8 Jet: " << jet_ft0.Count().GetValue() << std::endl;
   
   auto jet_df0 = jet_ft0.Define("goodJets","Jet_pt > 30 && abs(Jet_eta) < 2.4 && Jet_jetId > 1") \
     .Define("dR_LIM_AK4","(float) 0.4")					\
@@ -326,9 +263,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // 	  HT Calculation and Final Preselection Cut
   // ---------------------------------------------------------
   auto HT_calc = jet_df0.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])") \
-    .Filter("Jet_HT > 510")						\
-    .Filter("NFatJets > 0");				        
-  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
+    .Filter("Jet_HT > 250","Pass HT > 250")						\
+    .Filter("NFatJets > 0","Pass N good central AK8 > 0");				        
+  //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
   
   // ---------------------------------------------------------
   //    Uncomment to save seperate Preselection .root file
@@ -438,7 +375,14 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("isValidBDecay","Bprime_output[7]")				\
     .Define("taggedWbjetJet","Bprime_output[8]")			\
     .Define("taggedTjet","Bprime_output[9]")				\
-    .Define("taggedWjet","Bprime_output[10]");
+    .Define("taggedWjet","Bprime_output[10]")				\
+    .Define("dnn_scores",predictMLP,{"pNet_J_1","pNet_T_1","dpak8_T_1","FatJet_pt_1","FatJet_sdMass_1","tau21_1","nT_dpak8","nT_pNet","Jet_HT","Jet_ST","MET_pt","NJets_DeepFlavM","NJets_forward"}) \
+    .Define("mlp_HT250_WJets","dnn_scores[0]")				\
+    .Define("mlp_HT250_TTbar","dnn_scores[1]")				\
+    .Define("mlp_HT250_Bprime","dnn_scores[2]")				\
+    .Define("mlp_HT500_WJets","dnn_scores[3]")				\
+    .Define("mlp_HT500_TTbar","dnn_scores[4]")				\
+    .Define("mlp_HT500_Bprime","dnn_scores[5]");
       
   // -------------------------------------------------
   // 		Save Snapshot to file
@@ -451,4 +395,6 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
   time.Stop();
   time.Print();
+  std::cout << "Cut statistics:" << std::endl;
+  postPresel.Report()->Print();
 }
