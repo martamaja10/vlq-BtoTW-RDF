@@ -8,3 +8,4 @@ c
 *.pkl
 *.txt
 *NN_logs2018.txt
+*.swp
