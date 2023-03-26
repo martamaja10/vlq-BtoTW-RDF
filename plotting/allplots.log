@@ -1,0 +1,4621 @@
+lepPt
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... lepPt
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPt_tjet_logy.root has been created
+--- 10.703 min for hists, 0.96 s for plots ---
+lepEta
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... lepEta
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepEta_tjet_logy.root has been created
+--- 10.103 min for hists, 0.99 s for plots ---
+lepPhi
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... lepPhi
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepPhi_tjet_logy.root has been created
+--- 7.20283333333 min for hists, 1.14 s for plots ---
+lepIso
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... lepIso
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/lepIso_tjet_logy.root has been created
+--- 7.29216666667 min for hists, 1.0 s for plots ---
+JetEta
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... JetEta
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetEta_tjet_logy.root has been created
+--- 11.8366666667 min for hists, 0.96 s for plots ---
+JetPt
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... JetPt
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/JetPt_tjet_logy.root has been created
+--- 14.4325 min for hists, 0.96 s for plots ---
+NJetsCentral
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... NJetsCentral
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsCentral_tjet_logy.root has been created
+--- 9.0705 min for hists, 0.95 s for plots ---
+NJetsForward
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... NJetsForward
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NJetsForward_tjet_logy.root has been created
+--- 5.53633333333 min for hists, 0.92 s for plots ---
+NBJets
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... NBJets
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NBJets_tjet_logy.root has been created
+--- 6.80683333333 min for hists, 0.94 s for plots ---
+MET
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... MET
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/MET_tjet_logy.root has been created
+--- 8.66933333333 min for hists, 1.01 s for plots ---
+HT
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... HT
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/HT_tjet_logy.root has been created
+--- 11.6453333333 min for hists, 2.3 s for plots ---
+ST
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... ST
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/ST_tjet_logy.root has been created
+--- 11.893 min for hists, 0.95 s for plots ---
+FatJetEta
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... FatJetEta
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetEta_tjet_logy.root has been created
+--- 14.5126666667 min for hists, 0.95 s for plots ---
+FatJetPt
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... FatJetPt
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/FatJetPt_tjet_logy.root has been created
+--- 14.5431666667 min for hists, 0.94 s for plots ---
+Tau21
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... Tau21
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Tau21_tjet_logy.root has been created
+--- 16.1488333333 min for hists, 1.0 s for plots ---
+SoftDrop
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... SoftDrop
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/SoftDrop_tjet_logy.root has been created
+--- 16.5671666667 min for hists, 0.98 s for plots ---
+probj
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... probj
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probj_tjet_logy.root has been created
+--- 18.1825 min for hists, 0.99 s for plots ---
+probt
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... probt
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probt_tjet_logy.root has been created
+--- 13.8075 min for hists, 0.94 s for plots ---
+probw
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... probw
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/probw_tjet_logy.root has been created
+--- 18.0861666667 min for hists, 1.04 s for plots ---
+deeptag
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... deeptag
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/deeptag_tjet_logy.root has been created
+--- 15.1673333333 min for hists, 0.92 s for plots ---
+NFatJets
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... NFatJets
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/NFatJets_tjet_logy.root has been created
+--- 14.1588333333 min for hists, 0.92 s for plots ---
+nT
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp800
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = singleTb
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets2500
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = data_obs
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets600
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp2000
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets200
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = singleT
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets400
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp1400
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets1200
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = ttbar
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nT_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nT_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+Plotting... nT
+	 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 207, in <module>
+    if hsig2000.Integral()/bkgHT.Integral() > 0.1: sigScaleFact = 1
+ZeroDivisionError: float division by zero
+nW
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp800
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = singleTb
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets2500
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = data_obs
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets600
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp2000
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets200
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = singleT
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets400
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp1400
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets1200
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = ttbar
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "nW_DeepAK8"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {nW_DeepAK8 ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+Plotting... nW
+	 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 207, in <module>
+    if hsig2000.Integral()/bkgHT.Integral() > 0.1: sigScaleFact = 1
+ZeroDivisionError: float division by zero
+minDR_twoAK8s
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... minDR_twoAK8s
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_twoAK8s_tjet_logy.root has been created
+--- 13.0196666667 min for hists, 1.01 s for plots ---
+tmass
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... tmass
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/tmass_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/tmass_Wjet_logy.root has been created
+	 tag = Wbjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 207, in <module>
+    if hsig2000.Integral()/bkgHT.Integral() > 0.1: sigScaleFact = 1
+ZeroDivisionError: float division by zero
+tpt
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... tpt
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/tpt_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/tpt_Wjet_logy.root has been created
+	 tag = Wbjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 207, in <module>
+    if hsig2000.Integral()/bkgHT.Integral() > 0.1: sigScaleFact = 1
+ZeroDivisionError: float division by zero
+Wdrlep
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... Wdrlep
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/Wdrlep_tjet_logy.root has been created
+--- 14.693 min for hists, 0.96 s for plots ---
+tdrWb
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... tdrWb
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/tdrWb_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/tdrWb_Wjet_logy.root has been created
+	 tag = Wbjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 207, in <module>
+    if hsig2000.Integral()/bkgHT.Integral() > 0.1: sigScaleFact = 1
+ZeroDivisionError: float division by zero
+isLepW
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... isLepW
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/isLepW_tjet_logy.root has been created
+--- 12.6581666667 min for hists, 1.03 s for plots ---
+minMlj
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*6.65621/(7306187.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp800
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99800.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = singleTb
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*80.95/(95627000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets2500
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*0.0389136/(2097648.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = data_obs
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1/(1*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets600
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*14.5805/(7718765.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp2000
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets200
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*435.237/(58225632.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = singleT
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*136.02/(178336000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets400
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*59.1811/(7444030.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = Bp1400
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.0/(99600.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = wjets1200
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*1.60809/(6481518.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+	 Sample = ttbar
+		 tag = Wjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWjet == 1)}
+		 tag = Wbjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedWbjetJet == 1)}
+		 tag = all
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay == 1)}
+		 tag = other
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && isValidBDecay < 1)}
+		 tag = tjet
+Error in <TTreeFormula::Compile>:  Bad numerical expression : "minMleppJet"
+Info in <TSelectorDraw::AbortProcess>: Variable compilation failed: {minMleppJet ,(Generator_weight*138000.0*364.31088/(476408000.0*abs(Generator_weight)))*(NJets_forward > 0 && Bprime_mass > 0 && taggedTjet == 1)}
+Plotting... minMlj
+	 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 207, in <module>
+    if hsig2000.Integral()/bkgHT.Integral() > 0.1: sigScaleFact = 1
+ZeroDivisionError: float division by zero
+PtRel
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... PtRel
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRel_tjet_logy.root has been created
+--- 18.1836666667 min for hists, 1.02 s for plots ---
+PtRelAK8
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... PtRelAK8
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/PtRelAK8_tjet_logy.root has been created
+--- 15.0065 min for hists, 1.02 s for plots ---
+minDR
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... minDR
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDR_tjet_logy.root has been created
+--- 11.6588333333 min for hists, 0.99 s for plots ---
+minDRAK8
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... minDRAK8
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/minDRAK8_tjet_logy.root has been created
+--- 12.5265 min for hists, 0.99 s for plots ---
+BpMass
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpMass
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpMass_tjet_logy.root has been created
+--- 5.65533333333 min for hists, 1.07 s for plots ---
+BpPt
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpPt
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPt_tjet_logy.root has been created
+--- 9.98883333333 min for hists, 0.94 s for plots ---
+BpEta
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpEta
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpEta_tjet_logy.root has been created
+--- 10.5755 min for hists, 1.05 s for plots ---
+BpPhi
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpPhi
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPhi_tjet_logy.root has been created
+--- 11.6498333333 min for hists, 1.09 s for plots ---
+BpDeltaR
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpDeltaR
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpDeltaR_tjet_logy.root has been created
+--- 10.7815 min for hists, 0.98 s for plots ---
+BpPtBal
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpPtBal
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpPtBal_tjet_logy.root has been created
+--- 7.49116666667 min for hists, 1.22 s for plots ---
+BpChi2
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp800
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleTb
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets2500
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = data_obs
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets600
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp2000
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = singleT
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = Bp1400
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = wjets1200
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+	 Sample = ttbar
+		 tag = Wjet
+		 tag = Wbjet
+		 tag = all
+		 tag = other
+		 tag = tjet
+Plotting... BpChi2
+	 tag = Wjet
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_Wjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_Wjet_logy.root has been created
+	 tag = Wbjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_Wbjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_Wbjet_logy.root has been created
+	 tag = all
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_all_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_all_logy.root has been created
+	 tag = other
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_other_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_other_logy.root has been created
+	 tag = tjet
+TCanvas::Constructor:0: RuntimeWarning: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: png file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_tjet_logy.png has been created
+Info in <TCanvas::SaveAs>: ROOT file /uscms_data/d3/jmanagan/BtoTW/LCGenv/RDFanalyzer/plotting/plots_forwardjet/BpChi2_tjet_logy.root has been created
+--- 6.1525 min for hists, 0.99 s for plots ---
+MLP_HT500_Bprime
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 149, in <module>
+    histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
+KeyError: 'MLP_HT500_Bprime'
+MLP_HT500_TTbar
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 149, in <module>
+    histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
+KeyError: 'MLP_HT500_TTbar'
+MLP_HT500_WJets
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 149, in <module>
+    histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
+KeyError: 'MLP_HT500_WJets'
+MLP_HT250_Bprime
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 149, in <module>
+    histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
+KeyError: 'MLP_HT250_Bprime'
+MLP_HT250_TTbar
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 149, in <module>
+    histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
+KeyError: 'MLP_HT250_TTbar'
+MLP_HT250_WJets
+Scale factor =  1
+Building histograms...
+	 Sample = wjets800
+		 tag = Wjet
+Traceback (most recent call last):
+  File "histoDrawTrees.py", line 149, in <module>
+    histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
+KeyError: 'MLP_HT250_WJets'
