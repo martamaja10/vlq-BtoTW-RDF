@@ -1,17 +1,17 @@
 import os,sys,shutil,datetime,time
 from ROOT import *
 
-execfile("/uscms_data/d3/jmanagan/EOSSafeUtils.py")
+execfile("/uscms_data/d3/khowey/EOSSafeUtils.py")
 
 start_time = time.time()
 
 makelists = False
 if len(sys.argv) > 1: makelists = bool(eval(sys.argv[1]))
 
-relbase = '/uscms_data/d3/jmanagan/BtoTW/CMSSW_11_0_0/'
-outDir='/store/user/jmanagan/BtoTW_RDF'
-condorDir='/uscms_data/d3/jmanagan/BtoTW/rdfjobs/'
-tarfile = '/uscms_data/d3/jmanagan/BtoTW/rdfjobs.tar'
+relbase = '/uscms_data/d3/khowey/BtoTW/CMSSW_11_0_0/'
+outDir='/store/user/khowey/BtoTW_RDF'
+condorDir='/uscms_data/d3/khowey/BtoTW/rdfjobs/'
+tarfile = '/uscms_data/d3/khowey/BtoTW/rdfjobs.tar'
 
 runDir=os.getcwd()
 
