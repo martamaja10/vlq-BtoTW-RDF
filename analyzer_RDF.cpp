@@ -248,76 +248,53 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     return trueLeptonicMode;
   };
 
-  auto FatJet_matching = [](unsigned int nGenJetAK8, ROOT::VecOps::RVec<float>& GenJetAK8_eta, ROOT::VecOps::RVec<float>& GenJetAK8_phi,unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+  auto FatJet_matching = [](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& FatJet_eta, ROOT::VecOps::RVec<float>& FatJet_phi, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<float>& SubJet_pt, unsigned int& nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+  
+    ROOT::VecOps::RVec<float> gcFatJet_eta = FatJet_eta[goodcleanFatJets];
+    ROOT::VecOps::RVec<float> gcFatJet_phi = FatJet_phi[goodcleanFatJets];
+    ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
+ 
+    int nFatJets = gcFatJet_eta.size();
+    ROOT::VecOps::RVec<int> matched_GenPart(nFatJets,-9);
+   
+    for(unsigned int i=0; i<nFatJets; i++){
 
-    ROOT::VecOps::RVec<int> matched_GenPart(nGenJetAK8,-9);
-    std::cout << "Event" << std::endl;
+      double fatjet_eta = gcFatJet_eta[i];
+      double fatjet_phi = gcFatJet_phi[i];
 
-    for(unsigned int i=0; i<nGenJetAK8; i++){
-      
-      double fatjet_eta = GenJetAK8_eta[i];
-      double fatjet_phi = GenJetAK8_phi[i];
-      
-      for(unsigned int p=0; p<nGenPart; p++){
-	std::bitset<15> statusFlags(GenPart_statusFlags[p]);                                                                     
-        if(statusFlags.to_string()[1]=='0'){continue;} // take the last copy
-
-	double part_eta = GenPart_eta[p];
-        double part_phi = GenPart_phi[p];
-        double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);                                                           
-        if(dR>0.8){continue;}
-	std::cout << GenPart_pdgId[p] << std::endl;
-      }
-      
+      ROOT::VecOps::RVec<int> daughtersIdx;
       for(unsigned int p=0; p<nGenPart; p++){
 	int id = GenPart_pdgId[p];
-	int motherIdx = GenPart_genPartIdxMother[p];
-	if(abs(id) != 5 && abs(id) != 6 && abs(id) != 24 && abs(id) != 23){continue;}
-	
+	if(abs(id)>5){continue;}
+
 	std::bitset<15> statusFlags(GenPart_statusFlags[p]);
-	if(statusFlags.to_string()[1]=='0'){continue;} // take the last copy
+	if(statusFlags.to_string()[2]=='0'){continue;} // take the first copy
 
 	double part_eta = GenPart_eta[p];
-	double part_phi = GenPart_phi[p];	
-
+	double part_phi = GenPart_phi[p];
 	double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
 	if(dR>0.8){continue;}
-
-	for(unsigned int p2=p+1; p2<nGenPart; p2++){
-	  if(GenPart_genPartIdxMother[p2] == motherIdx){
-	    double part_eta2 = GenPart_eta[p2];
-            double part_phi2 = GenPart_phi[p2];
-	    std::cout << id << " and " << GenPart_pdgId[p2] << " are daughters of " << GenPart_pdgId[motherIdx] << std::endl;
-	    dR = DeltaR(part_eta2, part_eta, part_phi2, part_phi);
-	    if(dR<0.8){
-	      std::cout << id << " merged with: " << GenPart_pdgId[p2] << std::endl;
-	      matched_GenPart[i] = GenPart_pdgId[motherIdx];
-	      continue;
-	    }
-	  }
-	}
-	
-	if(matched_GenPart[i]!=-9){continue;}
-	//if(abs(id) == 5){ GenJetAK8_phi[i] = id; continue; }
-
-	bool bothInJet = false;
-	for(unsigned int d=p; d<nGenPart; d++){
-	  if(GenPart_pdgId[d]>10 && GenPart_pdgId[d]<17){continue;}
-	  bothInJet = true;
-	  if(GenPart_genPartIdxMother[d] == p){
-	    part_eta = GenPart_eta[d];
-	    part_phi = GenPart_phi[d];
-	    dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
-
-	    if(dR>0.8){bothInJet = false; continue;}
-	  }
-	}
-	if(matched_GenPart[i]==-9 && bothInJet){matched_GenPart[i] = GenPart_pdgId[p]; continue;}
-	if(matched_GenPart[i]==-9 && abs(id) == 5){GenJetAK8_phi[i] = id;}
+	std::cout << id << std::endl;
+	daughtersIdx.push_back(p);	
       }
-      std::cout << "matched id: " << matched_GenPart[i] << std::endl;
-      std::cout << " " << std::endl;
+      
+      int nDaughters = daughtersIdx.size();
+      if(nDaughters==0){continue;}
+      
+      int motherIdx = GenPart_genPartIdxMother[daughtersIdx[0]];
+      float motherPt = GenPart_pt[motherIdx];
+      if(nDaughters==3 && motherPt>400){matched_GenPart[i] = 6;}
+      else if(nDaughters==2 && motherPt>200 && (GenPart_pdgId[motherIdx])!=6){
+	matched_GenPart[i] = abs(GenPart_pdgId[motherIdx]);
+      }
+      else{
+	int firstsub = FatJet_subJetIdx1[i];
+	for(int isub = firstsub; isub < nSubJet; isub++){
+	  if(SubJet_hadronFlavour[isub] == 5){matched_GenPart[i] = 5;}
+	}
+      }
     }
+       
     return matched_GenPart;
   };
 
@@ -505,22 +482,20 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
     .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
     .Define("trueLeptonicW", "(int) W_daughter_gen_info[13]")
-    .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"})
-  //.Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueLeptonicW"})                        
-    .Define("genFatJet_matching", FatJet_matching, {"nGenJetAK8", "GenJetAK8_eta", "GenJetAK8_phi", "nGenPart", "GenPart_pdgId", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_statusFlags"});
+    .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"});
   //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
   
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  
+  /*
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-  
-  /* 
+  */
+   
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
   //  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
@@ -712,7 +687,8 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("mlp_HT250_Bprime","dnn_scores[2]")				\
     .Define("mlp_HT500_WJets","dnn_scores[3]")				\
     .Define("mlp_HT500_TTbar","dnn_scores[4]")				\
-    .Define("mlp_HT500_Bprime","dnn_scores[5]");
+    .Define("mlp_HT500_Bprime","dnn_scores[5]")
+    .Define("genFatJet_matching", FatJet_matching, {"goodcleanFatJets", "FatJet_eta", "FatJet_phi", "FatJet_subJetIdx1", "nSubJet", "SubJet_hadronFlavour", "SubJet_pt", "nGenPart", "GenPart_pdgId", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_statusFlags"});
 
   // -------------------------------------------------
   // 		Save Snapshot to file
@@ -723,9 +699,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
-  */
+ 
   time.Stop();
   time.Print();
-  //std::cout << "Cut statistics:" << std::endl;
-  //postPresel.Report()->Print();
+  std::cout << "Cut statistics:" << std::endl;
+  postPresel.Report()->Print();
 }
