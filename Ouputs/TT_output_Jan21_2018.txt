@@ -1,0 +1,5 @@
+
+arch, Original ttbar Training Events, Original TT 1.0 Training Events, Original WJets Training events, Original ttbar testing events, Original TT 1.0 testing events, Original TT 1.8 testing events, Original WJets Testing Events, Final Training ttbar, Final Training TT 1.0, Final Training WJets, Final Testing ttbar, Final Testing TT 1.0, Final Testing Tprime1.8, Final Testing WJets
+3x10, 
+arch, Original ttbar Training Events, Original TT 1.0 Training Events, Original WJets Training events, Original ttbar testing events, Original TT 1.0 testing events, Original TT 1.8 testing events, Original WJets Testing Events, Final Training ttbar, Final Training TT 1.0, Final Training WJets, Final Testing ttbar, Final Testing TT 1.0, Final Testing Tprime1.8, Final Testing WJets
+3x10, 

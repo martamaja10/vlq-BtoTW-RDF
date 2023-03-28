@@ -11,19 +11,18 @@ iPlot = sys.argv[1]
 indir = "/store/user/jmanagan/BtoTW_RDF_MLPs_hadds"
 outdir = os.getcwd()+'/plots_forwardjet/'
 if not os.path.exists(outdir): os.system('mkdir -p '+outdir)
-samples = {'Bp800':'BpM800_hadd.root', 
-           'Bp1400':'BpM1400_hadd.root',
-           'Bp2000':'BpM2000_hadd.root',
-           'ttbar':'ttbarInc_hadd.root',
-           'wjets200':'WJets200_hadd.root',
-           'wjets400':'WJets400_hadd.root',
-           'wjets600':'WJets600_hadd.root',
-           'wjets800':'WJets800_hadd.root',
-           'wjets1200':'WJets1200_hadd.root',
-           'wjets2500':'WJets2500_hadd.root',
-           'singleT':'singleT_hadd.root',
-           'singleTb':'singleTb_hadd.root',
-           'data_obs':'ttbarInc_hadd.root' # data is a copy of ttbar for now, need histograms in the file for limits
+samples = {'Bp800':'BpM800_', 
+           'Bp1400':'BpM14000_',
+           'Bp2000':'BpM2000_',
+           'ttbar':'ttbarInc_',
+           'wjets200':'WJets200_',
+           'wjets400':'WJets400_',
+           'wjets600':'WJets600_',
+           'wjets800':'WJets800_',
+           'wjets1200':'WJets1200_',
+           'wjets2500':'WJets2500_',
+           'singleT':'singleT_',
+           'singleTb':'singleTb_',
 }
 tags = {'tjet':'taggedTjet == 1',
         'Wjet':'taggedWjet == 1',
@@ -141,8 +140,13 @@ start_time = time.time()
 print 'Building histograms...'
 for sample in samples.keys():
     print '\t Sample =',sample
-    tfile = TFile.Open("root://cmseos.fnal.gov/"+indir+"/"+samples[sample])
+    tfile = TFile.Open("root://cmseos.fnal.gov/"+indir+"/"+samples[sample]+"hadd.root")
     ttree = tfile.Get("Events")
+    tfile2 = TFile.Open("root://cmseos.fnal.gov/store/user/khowey/" + samples[sample] + "predict.root")
+    ttree2 = tfile2.Get("Events")
+    ttree.AddFriend("ttree2")
+
+    ttree.Draw("dense")
 
     for tag in tags.keys():
         print '\t\t tag =',tag

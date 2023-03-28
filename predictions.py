@@ -1,4 +1,4 @@
-#To be run after 3-dense.py, imports 'model' and 'scaler'
+#this file is to be run after 3-dense.py, imports 'model' and 'scaler'
 #Opens all the .root files in the /eos/ storage area and applies prediction to all events
 
 # In[1]:
@@ -44,34 +44,39 @@ VARS = ['pNet_J_1',#'pNet_J_2',
         'Bprime_DR','Bprime_ptbal','Bprime_chi2']
 
 def get_features_from_file(filename='', treename='', branches=[]):
-    t = root2array(filename, treename=treename, branches=branches) # structured numpy array 
+    t = root2array(filename, treename=treename, branches=branches) # structured numpy array
     t = t.view(np.float32).reshape(t.shape + (-1,)) # normal numpy array (trick from https://stackoverflow.com/questions/5957380/convert-structured-array-to-regular-numpy-array)
     infCheck = np.isinf(t)
     for idx, x in np.ndenumerate(infCheck):
-        if x == True: 
+        if x == True:
             print "index of infinity:", idx
-	    #print "event:", t[idx[0],:]
-	    print "changed to = 1"
-	    t[idx[0],idx[1]] = 1
+            #print "event:", t[idx[0],:]
+            print "changed to = 1"
+            t[idx[0],idx[1]] = 1
     return t
 
-def write_prediction_to_file(features, model, filename='',treename='',branch=''):
+def write_prediction_to_file(features, model, filename='',treename='',branch=['']):
     y_predict_all = model.predict(features) # normal numpy array
     #print y_predict_all.shape
-    y_predict_all = np.array(y_predict_all, dtype=[(branch, np.float64)]) # structured numpy array
+    y_predict_all = np.array(y_predict_all, dtype=[(branch[0], np.float64),(branch[1], np.float64),(branch[2],np.float64)]) # structured numpy array
+    #Bprime = np.array(y_predict_all[0], dtype=[(branch[0], np.float64)])
+    #ttbar = np.array(y_predict_all[1], dtype=[(branch[1], np.float64)])
+    #wjets = np.array(y_predict_all[2], dtype=[(branch[2], np.float64)])
+    #y_predict_all = np.array(Bprime ttbar wjets)
     #print y_predict_all.shape
     array2root(y_predict_all, filename, treename=treename, mode='recreate')
 
 #running the get_features, scaler.transform, and write functions over all .root files
 for key in filename.keys():
     print "Now writing", key
-    X_all = get_features_from_file(filename[key], 
-                                   treename='Events', 
+    X_all = get_features_from_file(filename[key],
+                                   treename='Events',
                                    branches=VARS)
     X_all = scaler.transform(X_all)
-    write_prediction_to_file(X_all, 
-                             model, 
-                             filename[key].replace('hadd','predict').replace('/jmanagan/BtoTW_RDF','/samuelca'), 
-                             treename='Events', 
-                             branch='dense')
+    write_prediction_to_file(X_all,
+                             model,
+                             filename[key].replace('hadd','predict').replace('/jmanagan/BtoTW_RDF','/samuelca'),
+                             treename='Events',
+                             branch=['mlp_wjets', 'mlp_ttbar', 'mlp_bprime'])
 print('Complete!')
+
