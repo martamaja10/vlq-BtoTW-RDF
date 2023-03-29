@@ -8,7 +8,7 @@ from ROOT import *
 iPlot = sys.argv[1] 
 
 # Samples to process and categories to plot
-indir = "/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1/Bprime_hadds/"
+indir = "/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_170/Bprime_hadds/"
 outdir = os.getcwd()+'/plots_forwardjet/'
 if not os.path.exists(outdir): os.system('mkdir -p '+outdir)
 samples = {'Bp800':'Bprime800_hadd.root', 
