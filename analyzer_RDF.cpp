@@ -248,10 +248,8 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     return trueLeptonicMode;
   };
 
-  auto FatJet_matching = [](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& FatJet_eta, ROOT::VecOps::RVec<float>& FatJet_phi, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<float>& SubJet_pt, unsigned int& nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
-  
-    ROOT::VecOps::RVec<float> gcFatJet_eta = FatJet_eta[goodcleanFatJets];
-    ROOT::VecOps::RVec<float> gcFatJet_phi = FatJet_phi[goodcleanFatJets];
+  auto FatJet_matching = [](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<float>& SubJet_pt, unsigned int& nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+   
     ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
  
     int nFatJets = gcFatJet_eta.size();
@@ -263,6 +261,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       double fatjet_phi = gcFatJet_phi[i];
 
       ROOT::VecOps::RVec<int> daughtersIdx;
+      ROOT::VecOps::RVec<int> mothersIdx;
       for(unsigned int p=0; p<nGenPart; p++){
 	int id = GenPart_pdgId[p];
 	if(abs(id)>5){continue;}
@@ -274,23 +273,45 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 	double part_phi = GenPart_phi[p];
 	double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
 	if(dR>0.8){continue;}
-	std::cout << id << std::endl;
-	daughtersIdx.push_back(p);	
+	daughtersIdx.push_back(p);
+	mothersIdx.push_back(GenPart_genPartIdxMother[p]);
       }
       
       int nDaughters = daughtersIdx.size();
       if(nDaughters==0){continue;}
       
-      int motherIdx = GenPart_genPartIdxMother[daughtersIdx[0]];
-      float motherPt = GenPart_pt[motherIdx];
-      if(nDaughters==3 && motherPt>400){matched_GenPart[i] = 6;}
-      else if(nDaughters==2 && motherPt>200 && (GenPart_pdgId[motherIdx])!=6){
-	matched_GenPart[i] = abs(GenPart_pdgId[motherIdx]);
+      if(nDaughters==3){
+	if(mothersIdx[0] == mothersIdx[1]){
+	  int motherIdx = mothersIdx[2];
+	  if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+	    if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
+	  }
+	}
+	else if(mothersIdx[2] == mothersIdx[0]){
+          int motherIdx= mothersIdx[1];
+          if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+            if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
+          }
+        }
+	else if(mothersIdx[1] == mothersIdx[2]){
+          int motherIdx= mothersIdx[0];
+          if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+            if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
+          }
+        }
       }
-      else{
+
+      if(nDaughters==2){
+	if(mothersIdx[0] == mothersIdx[1]){
+	  int motherIdx = mothersIdx[0];
+	  if(GenPart_pt[motherIdx]>200){matched_GenPart[i] = abs(GenPart_pdgId[motherIdx]);}
+	}
+      }
+      
+      if(matched_GenPart[i] == -9){
 	int firstsub = FatJet_subJetIdx1[i];
 	for(int isub = firstsub; isub < nSubJet; isub++){
-	  if(SubJet_hadronFlavour[isub] == 5){matched_GenPart[i] = 5;}
+	  if(SubJet_hadronFlavour[isub] == 5 || SubJet_hadronFlavour[isub] == 4 || SubJet_hadronFlavour[isub] == 0){matched_GenPart[i] = SubJet_hadronFlavour[isub];}
 	}
       }
     }
@@ -688,7 +709,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("mlp_HT500_WJets","dnn_scores[3]")				\
     .Define("mlp_HT500_TTbar","dnn_scores[4]")				\
     .Define("mlp_HT500_Bprime","dnn_scores[5]")
-    .Define("genFatJet_matching", FatJet_matching, {"goodcleanFatJets", "FatJet_eta", "FatJet_phi", "FatJet_subJetIdx1", "nSubJet", "SubJet_hadronFlavour", "SubJet_pt", "nGenPart", "GenPart_pdgId", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_statusFlags"});
+    .Define("genFatJet_matching", FatJet_matching, {"goodcleanFatJets", "gcFatJet_eta", "gcFatJet_phi", "FatJet_subJetIdx1", "nSubJet", "SubJet_hadronFlavour", "SubJet_pt", "nGenPart", "GenPart_pdgId", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_statusFlags"});
 
   // -------------------------------------------------
   // 		Save Snapshot to file
