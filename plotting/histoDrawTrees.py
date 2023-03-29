@@ -37,10 +37,14 @@ tags = {'tjet':'taggedTjet == 1',
         'Wbjet':'taggedWbjetJet == 1',
         'other':'isValidBDecay < 1', # later likely some other selection like a network score
         'all':'isValidBDecay == 1', # combine all tagged events
-        'trueT':'trueLeptonicMode == 1',
-        'trueW':'trueLeptonicMode == 0',
-        'correctJet':'(taggedTjet == 1 && trueLeptonicMode == 1) || (taggedWjet == 1 && trueLeptonicMode == 0)',
-        'flippedJet':'(taggedTjet == 1 && trueLeptonicMode == 0) || (taggedWjet == 1 && trueLeptonicMode == 1)',
+        'genLeptonicT':'trueLeptonicMode == 1',
+        'genLeptonicW':'trueLeptonicMode == 0',
+        'trueSingleLepT':'taggedTjet == 1 && trueLeptonicMode == 1',
+        'trueSingleLepW':'taggedWjet == 1 && trueLeptonicMode == 0',
+        'falseSingleLepW':'taggedWjet == 1 && trueLeptonicMode == 1',
+        'falseSingleLepT':'taggedTjet == 1 && trueLeptonicMode == 0',
+        'correctTag':'(taggedTjet == 1 && trueLeptonicMode == 1) && (taggedWjet == 1 && trueLeptonicMode == 0)',
+        'flippedTag':'(taggedTjet == 1 && trueLeptonicMode == 0) && (taggedWjet == 1 && trueLeptonicMode == 1)'
     }
 
 # Numbers to weight the samples relative to each other
@@ -136,7 +140,7 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
     'Wdrlep':('DR_W_lep',linspace(0,5,51).tolist(),';leptonic W, #DeltaR(W,lepton)'),
     'tdrWb':('DR_W_b',linspace(0,6.3,51).tolist(),';leptonic t, #DeltaR(W,b)'),
     'isLepW':('leptonicParticle',linspace(0,2,3).tolist(),';lepton from W'),
-    'WMt':('W_MT',linspace(0,1000,51).tolist(),';M_{T}(W) [GeV]'),
+    'WMt':('W_MT',linspace(0,1500,51).tolist(),';M_{T}(W) [GeV]'),
     'minMlj':('minMleppJet',linspace(0,1000,51).tolist(),';min[M(l,jet)] [GeV], 0 b tags'),
     'PtRel':('ptRel_lep_Jet',linspace(0,500,51).tolist(),';p_{T,rel}(l, closest jet) [GeV]'),
     'PtRelAK8':('ptRel_lep_FatJet',linspace(0,500,51).tolist(),';p_{T,rel}(l, closest AK8 jet) [GeV]'),
@@ -160,10 +164,46 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
     'mlp_HT250_WJets': ('mlp_HT250_WJets',linspace(0,1,51).tolist(),';MLP (HT 250) W+jets score'),
 
     "Bprime_gen_pt":('Bprime_gen_pt',linspace(0,1500,51).tolist(),';B quark p_{T gen} [GeV]'),
-    "Bprime_gen_eta":('Bprime_gen_eta',linspace(-8,8,51).tolist(),';B quark #eta _{gen}'),
+    "Bprime_gen_eta":('Bprime_gen_eta',linspace(-10,10,51).tolist(),';B quark #eta _{gen}'),
     "Bprime_gen_phi":('Bprime_gen_phi',linspace(-3.5,3.5,51).tolist(),';B quark #phi _{gen}'),
-    "Bprime_gen_mass":('Bprime_gen_mass',linspace(700,2000,51).tolist(),';M_{gen}(B) [GeV]'),
+    "Bprime_gen_mass":('Bprime_gen_mass',linspace(700,2300,51).tolist(),';M_{gen}(B) [GeV]'),
 
+    "t_gen_pt":('t_gen_pt',linspace(0,1800,51).tolist(),';p_{T gen}(t) [GeV]'),
+    "t_gen_eta":('t_gen_eta',linspace(-4,4,51).tolist(),';#eta (t)'),
+    "t_gen_phi":('t_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi (t)'),
+    "t_gen_mass":('t_gen_mass',linspace(150,200,51).tolist(),';M_{gen}(t) [GeV]'),
+    "t_gen_status":('t_gen_status',linspace(20,55,35).tolist(),'particle status(t)'),
+    "Del_t":('t_mass - t_gen_mass',linspace(-1200, 1200, 51).tolist(),';M_{reco}(t)-M_{gen}(t) [GeV]'),
+
+    "daughterb_gen_pt":('daughterb_gen_pt',linspace(0,1200,51).tolist(),';p_{T gen}(b_{t}) [GeV]'),
+    "daughterb_gen_eta":('daughterb_gen_eta',linspace(-5,5,51).tolist(),';#eta_{gen}(b_{t})'),
+    "daughterb_gen_phi":('daughterb_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi_{gen}(b_{t})'),
+    "daughterb_gen_status":('daughterb_gen_status',linspace(20,25,6).tolist(),';particle statuss(b_{t})'),
+
+    "daughterW_gen_pt":('daughterW_gen_pt',linspace(0,1500,51).tolist(),';p_{T gen}(W_{t}) [GeV]'),
+    "daughterW_gen_eta":('daughterW_gen_eta',linspace(-5,5,51).tolist(),';#eta_{gen}(W_{t})'),
+    "daughterW_gen_phi":('daughterW_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi_{gen}(W_{t})'),
+    "daughterW_gen_mass":('daughterW_gen_mass',linspace(30,110,51).tolist(),';M_{gen}(W_{t}) [GeV]'),
+    "daughterW_gen_status":('daughterW_gen_status',linspace(20,55,35).tolist(),';particle status(W_{t})'),
+
+    "Tlepton_gen_pt":('Tlepton_gen_pt',linspace(0,1000,51).tolist(),';p_{T gen}(l_{t}) [GeV]'),
+    "Tlepton_gen_eta":('Tlepton_gen_eta',linspace(-5,7,51).tolist(),';#eta_{gen}(l_{t})'),
+    "Tlepton_gen_phi":('Tlepton_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi_{gen}(l_{t})'),
+    "Tlepton_gen_pdgId":('Tlepton_gen_pdgId',linspace(-17,17,35).tolist(),';gen pdgId(l_{t})'),
+    "Tlepton_gen_status":('Tlepton_gen_status',linspace(0,25,26).tolist(),';particle status(l_{t})'),
+
+    "W_gen_pt":('W_gen_pt',linspace(0,1800,51).tolist(),';p_{T gen}(W) [GeV]'),
+    "W_gen_eta":('W_gen_eta',linspace(-4,5,51).tolist(),';#eta_{gen}(W)'),
+    "W_gen_phi":('W_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi_{gen}(W)'),
+    "W_gen_mass":('W_gen_mass',linspace(30,110,51).tolist(),';M_{gen}(W) [GeV]'),
+    "W_gen_status":('W_gen_status',linspace(20,55,35).tolist(),'gen particle status(W)'),
+    "Del_W":('W_mass - W_gen_mass',linspace(-100, 900, 51).tolist(),';M_{reco}(W)-M_{gen}(W) [GeV]'),
+
+    "Wlepton_gen_pt":('Wlepton_gen_pt',linspace(0,1600,51).tolist(),';p_{T gen}(l) [GeV]'),
+    "Wlepton_gen_eta":('wlepton_gen_eta',linspace(-4,4,51).tolist(),';#eta_{gen}(l)'),
+    "Wlepton_gen_phi":('Wlepton_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi_{gen}(l)'),
+    "Wlepton_gen_pdgId":('Wlepton_gen_pdgId',linspace(-17,17,35).tolist(),'gen pdgId(l)'),
+    "Wlepton_gen_status":('Wlepton_gen_status',linspace(0,25,26).tolist(),'gen particle status(l)'),
 }
 
 # open an output file for the histos
