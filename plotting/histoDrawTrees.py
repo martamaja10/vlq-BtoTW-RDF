@@ -96,8 +96,8 @@ sigScaleFact = 1 # zoom in/out on signal
 print 'Scale factor = ',sigScaleFact
 bkgProcList = [#'qcd200',
 'qcd300','qcd500','qcd700','qcd1000','qcd1500','qcd2000','wjets200','wjets400','wjets600','wjets800','wjets1200','wjets2500','ttbar','singleT','singleTb']
-bkgHistColors = {#'qcd200':kYellow-7,
-'qcd300':kYellow-7,'qcd500':kYellow-7,'qcd700':kYellow-7,'qcd1000':kYellow-7,'qcd1500':kYellow-7,'qcd2000':kYellow-7,
+bkgHistColors = {#'qcd200':kOrange-5,
+'qcd300':kOrange-5,'qcd500':kOrange-5,'qcd700':kOrange-5,'qcd1000':kOrange-5,'qcd1500':kOrange-5,'qcd2000':kOrange-5,
                  'ttbar':kAzure+8,
                  'wjets200':kMagenta-2,'wjets400':kMagenta-2,'wjets600':kMagenta-2,'wjets800':kMagenta-2,'wjets1200':kMagenta-2,'wjets2500':kMagenta-2,
                  'singleT':kGreen-3,'singleTb':kGreen-3,} #TT
