@@ -304,7 +304,17 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       if(nDaughters==2){
 	if(mothersIdx[0] == mothersIdx[1]){
 	  int motherIdx = mothersIdx[0];
-	  if(GenPart_pt[motherIdx]>200){matched_GenPart[i] = abs(GenPart_pdgId[motherIdx]);}
+	  if(GenPart_pt[motherIdx]>200){
+	    bool noOtherDaughters = true;
+	    for(unsigned int d=0; d<nGenPart; d++){
+	      if(GenPart_genPartIdxMother[d] == motherIdx){
+		if(d!= daughtersIdx[0] && d!= daughtersIdx[1]){
+		  noOtherDaughters = false;
+		}
+	      }
+	    }
+	    if(noOtherDaughters){matched_GenPart[i] = abs(GenPart_pdgId[motherIdx]);}
+	  }
 	}
       }
       
