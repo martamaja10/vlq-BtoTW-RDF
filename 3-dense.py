@@ -96,6 +96,6 @@ for i,key in enumerate(filename.keys()): ## Need .keys() here, or different list
     print(df[key]['Weight'])
 
 print('Completed loading files, pickling input data...')
-df_all = pd.concat([df['BpM2000'], df['BpM1400'], df['BpM800'], df['ttbarT'],df['ttbarTb'], df['WJets200'], 
-                    df['WJets400'], df['WJets600'], df['WJets800'], df['WJets1200'], df['WJets2500']])
-np.savez('NewAnalysisArrays', dfarray = df_all.values)
+df_LM = pd.concat([df['BpM2000'], df['BpM1400']])
+df_background = pd.concat([df['ttbarT'],df['ttbarTb'], df['WJets200'], df['WJets400'], df['WJets600'], df['WJets800'], df['WJets1200'], df['WJets2500']])
+np.savez('NewAnalysisArrays', largeMass = df_LM.values, lowMass = df['BpM800'].values, background = df_background.values)
