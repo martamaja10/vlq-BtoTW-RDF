@@ -39,10 +39,10 @@ tags = {'tjet':'taggedTjet == 1',
         'all':'isValidBDecay == 1', # combine all tagged events
         'genLeptonicT':'trueLeptonicMode == 1',
         'genLeptonicW':'trueLeptonicMode == 0',
-        'trueSingleLepT':'taggedTjet == 1 && trueLeptonicMode == 1',
-        'trueSingleLepW':'taggedWjet == 1 && trueLeptonicMode == 0',
-        'falseSingleLepW':'taggedWjet == 1 && trueLeptonicMode == 1',
-        'falseSingleLepT':'taggedTjet == 1 && trueLeptonicMode == 0',
+        'trueSingleLepT':'leptonicParticle == 1 && trueLeptonicMode == 1',
+        'trueSingleLepW':'leptonicParticle == 0 && trueLeptonicMode == 0',
+        'falseSingleLepW':'leptonicParticle == 0 && trueLeptonicMode == 1',
+        'falseSingleLepT':'leptonicParticle == 1 && trueLeptonicMode == 0',
         'correctTag':'(taggedTjet == 1 && trueLeptonicMode == 1) && (taggedWjet == 1 && trueLeptonicMode == 0)',
         'flippedTag':'(taggedTjet == 1 && trueLeptonicMode == 0) && (taggedWjet == 1 && trueLeptonicMode == 1)'
     }
@@ -173,7 +173,7 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
     "t_gen_phi":('t_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi (t)'),
     "t_gen_mass":('t_gen_mass',linspace(150,200,51).tolist(),';M_{gen}(t) [GeV]'),
     "t_gen_status":('t_gen_status',linspace(20,55,35).tolist(),'particle status(t)'),
-    "Del_t":('t_mass - t_gen_mass',linspace(-1200, 1200, 51).tolist(),';M_{reco}(t)-M_{gen}(t) [GeV]'),
+    "Del_t":('t_mass - t_gen_mass',linspace(-200, 800, 51).tolist(),';M_{reco}(t)-M_{gen}(t) [GeV]'),
 
     "daughterb_gen_pt":('daughterb_gen_pt',linspace(0,1200,51).tolist(),';p_{T gen}(b_{t}) [GeV]'),
     "daughterb_gen_eta":('daughterb_gen_eta',linspace(-5,5,51).tolist(),';#eta_{gen}(b_{t})'),
@@ -197,7 +197,7 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
     "W_gen_phi":('W_gen_phi',linspace(-3.5,3.5,51).tolist(),';#phi_{gen}(W)'),
     "W_gen_mass":('W_gen_mass',linspace(30,110,51).tolist(),';M_{gen}(W) [GeV]'),
     "W_gen_status":('W_gen_status',linspace(20,55,35).tolist(),'gen particle status(W)'),
-    "Del_W":('W_mass - W_gen_mass',linspace(-100, 900, 51).tolist(),';M_{reco}(W)-M_{gen}(W) [GeV]'),
+    "Del_W":('W_mass - W_gen_mass',linspace(-100, 300, 51).tolist(),';M_{reco}(W)-M_{gen}(W) [GeV]'),
 
     "Wlepton_gen_pt":('Wlepton_gen_pt',linspace(0,1600,51).tolist(),';p_{T gen}(l) [GeV]'),
     "Wlepton_gen_eta":('wlepton_gen_eta',linspace(-4,4,51).tolist(),';#eta_{gen}(l)'),
@@ -223,8 +223,6 @@ for sample in samples.keys():
         histo.Sumw2()
         
         weightstr = "(Generator_weight*{}*{}/({}*abs(Generator_weight)))".format(lumi,xsec[sample],nRun[sample])
-        #print('arg1: ', plotList[iPlot][0]+' >> '+sample+'_'+tag)
-        #print('arg2: ', weightstr+'*(NJets_forward > 0 && Bprime_mass > 0 && '+tags[tag]+')')
         ttree.Draw(plotList[iPlot][0]+' >> '+sample+'_'+tag,weightstr+'*(NJets_forward > 0 && Bprime_mass > 0 && Bprime_gen_mass!=-999 && '+tags[tag]+')','GOFF')
         histo.SetDirectory(0)
         hists[sample+'_'+tag] = histo
