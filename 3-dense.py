@@ -85,7 +85,6 @@ for i,key in enumerate(filename.keys()): ## Need .keys() here, or different list
 ## cut out undefined variables VARS[0] and VARS[1] > -999
 #df[key]= df[key][(df[key][VARS[0]] > -999) & (df[key][VARS[1]] > -999)]
 
-    cms/home/khowey/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/NewAnalysisModels/MLP.h5') add isSignal variable
     if 'Bp' in key: ## Only label Bprime as signal
         df[key]['isSignal'] = np.full(len(df[key]), 2) 
     elif 'tt' in key:
@@ -94,6 +93,6 @@ for i,key in enumerate(filename.keys()): ## Need .keys() here, or different list
         df[key]['isSignal'] = np.zeros(len(df[key]))
 
 print('Completed loading files, pickling input data...')
-df_all = pd.concat([df['BpM2000'], df['BpM1400'], df['BpM800'], df['ttbarT'],df['ttbarTb'], df['WJets200'], 
-                    df['WJets400'], df['WJets600'], df['WJets800'], df['WJets1200'], df['WJets2500']])
-np.savez('NewAnalysisArrays', dfarray = df_all.values)
+df_LM = pd.concat([df['BpM2000'], df['BpM1400']])
+df_background = pd.concat([df['ttbarT'],df['ttbarTb'], df['WJets200'], df['WJets400'], df['WJets600'], df['WJets800'], df['WJets1200'], df['WJets2500']])
+np.savez('NewAnalysisArrays', largeMass = df_LM.values, lowMass = df['BpM800'].values, background = df_background.values)
