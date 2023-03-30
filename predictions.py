@@ -57,18 +57,24 @@ def get_features_from_file(filename='', treename='', branches=[]):
 
 def write_prediction_to_file(features, model, filename='',treename='',branch=['']):
     y_predict_all = model.predict(features) # normal numpy array
-    #print y_predict_all.shape
-    y_predict_all = np.array(y_predict_all, dtype=[(branch[0], np.float64),(branch[1], np.float64),(branch[2],np.float64)]) # structured numpy array
-    #Bprime = np.array(y_predict_all[0], dtype=[(branch[0], np.float64)])
-    #ttbar = np.array(y_predict_all[1], dtype=[(branch[1], np.float64)])
-    #wjets = np.array(y_predict_all[2], dtype=[(branch[2], np.float64)])
-    #y_predict_all = np.array(Bprime ttbar wjets)
-    #print y_predict_all.shape
-    array2root(y_predict_all, filename, treename=treename, mode='recreate')
+         #print y_predict_all.shape
+    print y_predict_all.shape
+    print y_predict_all[0]
+    y_wjet = np.array(y_predict_all[:, 0], dtype=[(branch[0], np.float64)])
+    y_ttbar = np.array(y_predict_all[:, 1], dtype=[(branch[1], np.float64)])
+    y_bprime = np.array(y_predict_all[:,2], dtype=[(branch[2], np.float64)])
+    print y_wjet.shape
+    print y_wjet[0]
+    print y_ttbar[0]
+    print y_bprime[0]
+
+    array2root(y_wjet, filename.replace('predict', 'predict_wjet'), treename=treename, mode='recreate')
+    array2root(y_ttbar, filename.replace('predict', 'predict_ttbar'), treename=treename, mode='recreate')
+    array2root(y_bprime, filename.replace('predict', 'predict_bprime'), treename=treename, mode='recreate')
 
 #running the get_features, scaler.transform, and write functions over all .root files
 for key in filename.keys():
-    print "Now writing", key
+    print("Now writing", key)
     X_all = get_features_from_file(filename[key],
                                    treename='Events',
                                    branches=VARS)
