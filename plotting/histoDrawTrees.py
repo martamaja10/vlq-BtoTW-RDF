@@ -139,14 +139,21 @@ hists = {}
 start_time = time.time()
 print 'Building histograms...'
 for sample in samples.keys():
-    print '\t Sample =',sample
-    tfile = TFile.Open("root://cmseos.fnal.gov/"+indir+"/"+samples[sample]+"hadd.root")
-    ttree = tfile.Get("Events")
-    tfile2 = TFile.Open("root://cmseos.fnal.gov/store/user/khowey/" + samples[sample] + "predict.root")
+    if (sample == 'Bp1400'): # This is to correcct a bug (14000 should be 1400) which hopefully will be irrelevant s    omeday
+        tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_wjet.root")
+        tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_ttbar.root")
+        tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_bprime.root")
+    else:
+        tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_wjet.    root")
+        tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_ttbar    .root")
+        tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_bprim    e.root")
+    # Three trees for each different class get merged into one
     ttree2 = tfile2.Get("Events")
-    ttree.AddFriend("ttree2")
-
-    ttree.Draw("dense")
+    ttree3 = tfile3.Get("Events")
+    ttree4 = tfile4.Get("Events")
+    ttree.AddFriend(ttree2)
+    ttree.AddFriend(ttree3)
+    ttree.AddFriend(ttree4)
 
     for tag in tags.keys():
         print '\t\t tag =',tag
