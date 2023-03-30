@@ -65,7 +65,6 @@ eventData = background[:, :NDIM]
 weights = background[:, NDIM]
 labels = background[:, NDIM+1]
 X_Back_train_val, X_Back_test, Y_Back_train_val, Y_Back_test, weights_Back_train, weights_Back_test = train_test_split(eventData, labels, weights, test_size=0.9, random_state=7)
-<<<<<<< HEAD
 
 eventData = Bp800[:, :NDIM]
 weights = Bp800[:, NDIM]
@@ -81,23 +80,6 @@ X_HM_train_val, X_HM_test, Y_HM_train_val, Y_HM_test, weights_HM_train, weights_
 X_train_val = np.concatenate((X_Back_train_val[:9000], X_LM_train_val, X_HM_train_val[:1000])) # Take low mass BP and background for training
 Y_train_val = np.concatenate((Y_Back_train_val[:9000], Y_LM_train_val, Y_HM_train_val[:1000])) 
 weights_train = np.concatenate((weights_Back_train[:9000], weights_LM_train, weights_HM_train[:1000]))
-=======
-
-eventData = Bp800[:, :NDIM]
-weights = Bp800[:, NDIM]
-labels = Bp800[:, NDIM+1]
-X_LM_train_val, X_LM_test, Y_LM_train_val, Y_LM_test, weights_LM_train, weights_LM_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
-
-eventData = Bp2000[:, :NDIM]
-weights = Bp2000[:, NDIM]
-labels = Bp2000[:, NDIM + 1]
-X_HM_train_val, X_HM_test, Y_HM_train_val, Y_HM_test, weights_HM_train, weights_HM_test = train_test_split(eventData, labels, weights, test_size=0.9, random_state=7)
-
-
-X_train_val = np.concatenate((X_Back_train_val[:9000], X_LM_train_val[:3000], X_HM_train_val[:1000])) # Take low mass BP and background for training
-Y_train_val = np.concatenate((Y_Back_train_val[:9000], Y_LM_train_val[:3000], Y_HM_train_val[:1000])) 
-weights_train = np.concatenate((weights_Back_train[:9000], weights_LM_train[:3000], weights_HM_train[:1000]))
->>>>>>> c6f95859d80e4f2a82ec361ca9e84534c2a12798
 
 # Randomly shuffling training set
 indices = np.random.permutation(len(X_train_val))
