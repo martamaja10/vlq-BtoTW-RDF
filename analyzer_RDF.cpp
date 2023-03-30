@@ -110,10 +110,10 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
       for(unsigned int j=i; j<nGenPart; j++){
 	if((GenPart_pdgId[j])!=id){continue;}
-        if((GenPart_genPartIdxMother[j])!=igen){continue;} // pick out the daughter of t
-        igen = j;
+        if((GenPart_genPartIdxMother[j])!=igen){continue;}
+        igen = j; // take the last copy of t
       }
-      t_motherIdx = GenPart_genPartIdxMother[i]; // store idx of t: t->t'
+      t_motherIdx = i; // store the idx of the first copy of t
 
       t_daughter_gen_info[0] = GenPart_pt[igen];
       t_daughter_gen_info[1] = GenPart_eta[igen];
@@ -122,8 +122,6 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       t_daughter_gen_info[4] = GenPart_pdgId[igen];
       t_daughter_gen_info[5] = GenPart_status[igen];
       t_daughter_gen_info[6] = t_motherIdx;
-
-      //std::bitset<15> statusFlags(GenPart_statusFlags[igen]);
 
       for(unsigned int j=igen; j<nGenPart; j++){
         if(GenPart_genPartIdxMother[j]!=igen){continue;}
@@ -170,10 +168,8 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[24] = GenPart_pdgId[p];
             t_daughter_gen_info[25] = GenPart_status[p];
           }
-	  else if(abs(p_id)!=12 && abs(p_id)!=14 && abs(p_id)!=16){
-	    trueLeptonicT = 0;
-	  }
         }
+	if(trueLeptonicT == -9){trueLeptonicT = 0;}
       }
       t_daughter_gen_info[26] = trueLeptonicT;
     }
@@ -507,7 +503,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("W_gen_status", "(int) W_daughter_gen_info[5]")
     .Define("W_motherIdx", "(int) W_daughter_gen_info[6]")
     .Define("Wlepton_gen_pt", "W_daughter_gen_info[7]")
-    .Define("wlepton_gen_eta", "W_daughter_gen_info[8]")
+    .Define("Wlepton_gen_eta", "W_daughter_gen_info[8]")
     .Define("Wlepton_gen_phi", "W_daughter_gen_info[9]")
     .Define("Wlepton_gen_mass", "W_daughter_gen_info[10]")
     .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
