@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "callRDF.C": "cpp",
+        "runRDF.C": "cpp"
+    }
+}
