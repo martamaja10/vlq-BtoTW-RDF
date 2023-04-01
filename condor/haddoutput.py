@@ -6,17 +6,19 @@ start_time = time.time()
 
 #IO directories must be full paths
 
-inDir='/store/user/jmanagan/BtoTW_RDF_MLPs/'
-outDir='/store/user/jmanagan/BtoTW_RDF_MLPs_hadds/'
-scratchDir='/uscmst1b_scratch/lpc1/3DayLifetime/jmanagan/'
+#inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel'
+#outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel/Bprime_hadds/'
+inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1'
+outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1/Bprime_hadds/'
+scratchDir='/uscmst1b_scratch/lpc1/3DayLifetime/xshen'
 
 if not os.path.exists(scratchDir): os.system('mkdir -p '+scratchDir)
 os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir)
 
 dirList = [
-    #'BpM1400',
-    'BpM2000',
-    'BpM800',
+    #'Bprime1400',
+    #'Bprime2000',
+    #'Bprime800',
     #'WJets1200',
     #'WJets200',
     #'WJets2500',
@@ -25,6 +27,14 @@ dirList = [
     #'WJets800',
     #'singleT',
     #'singleTb',
+    #'ttbar',
+    #'QCD200',
+    #'QCD300',
+    #'QCD500',
+    #'QCD700',
+    #'QCD1000',
+    #'QCD1500',
+    #'QCD2000',
     #'ttbarInc',
 ]
 

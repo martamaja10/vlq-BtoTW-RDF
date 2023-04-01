@@ -64,23 +64,26 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ----------------------------------------------------           
   //           Bprime truth extraction:                      
   // ---------------------------------------------------- 
-  auto Bprime_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
-    ROOT::VecOps::RVec<float> BPrimeInfo (6,-999);
-
+  auto Bprime_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+    ROOT::VecOps::RVec<float> BPrimeInfo (7,-999);
     if(sample!="Bprime"){return BPrimeInfo;}
-    
-    for(unsigned int p=0; p<nGenPart; p++){
-      int id=GenPart_pdgId[p];
+
+    for(unsigned int i=0; i<nGenPart; i++){
+      int id = GenPart_pdgId[i];
+      std::bitset<15> statusFlags(GenPart_statusFlags[i]);
+
       if(abs(id) != 6000007){continue;}
-      int motherid = GenPart_pdgId[GenPart_genPartIdxMother[p]];
-      if(motherid != id){ // takes the second B'                         
-        BPrimeInfo[0] = GenPart_pt[p];
-        BPrimeInfo[1] = GenPart_eta[p];
-        BPrimeInfo[2] = GenPart_phi[p];
-        BPrimeInfo[3] = GenPart_mass[p];
-        BPrimeInfo[4] = GenPart_pdgId[p];
-        BPrimeInfo[5] = GenPart_status[p];
-      }
+      if(statusFlags.to_string()[1]=='0'){continue;} // takes the last B'
+
+      BPrimeInfo[0] = GenPart_pt[i];
+      BPrimeInfo[1] = GenPart_eta[i];
+      BPrimeInfo[2] = GenPart_phi[i];
+      BPrimeInfo[3] = GenPart_mass[i];
+      BPrimeInfo[4] = GenPart_pdgId[i];
+      BPrimeInfo[5] = GenPart_status[i];
+    }
+    for(unsigned int i=0; i<nGenPart; i++){
+      if(abs(GenPart_pdgId[i]) == 6000007){BPrimeInfo[6] = 1; break;}
     }
     return BPrimeInfo;
   };
@@ -88,28 +91,29 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ----------------------------------------------------                        
   //           t truth extraction:    
   // ---------------------------------------------------- 
-  auto t_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, float t_mass){
+  auto t_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
 
     ROOT::VecOps::RVec<float> t_daughter_gen_info(27,-999);
     if(sample!="Bprime"){return t_daughter_gen_info;}
 
     int t_motherIdx = -1, W_motherIdx = -1; // if not t->t' or W->W', no need to store the mother idx info
-    int trueLeptonicT = 0; // 0-false 1-true                                     
+    int trueLeptonicT = -1; // -1: did not decay, 0: hadronic, 1:leptonic
+ 
     for(unsigned int i=0; i<nGenPart; i++){
       int id = GenPart_pdgId[i];
       int motherid = GenPart_pdgId[GenPart_genPartIdxMother[i]];
 
       if(abs(motherid)!=6000007){continue;}
       if(abs(id)!=6){continue;} // B->tW, pick out t
-
+     
       int igen = i;
 
       for(unsigned int j=i; j<nGenPart; j++){
 	if((GenPart_pdgId[j])!=id){continue;}
-        if((GenPart_genPartIdxMother[j])!=igen){continue;} // pick out the daughter of t
-        t_motherIdx = j; // store idx of t': t->t'    
-        igen = j;
+        if((GenPart_genPartIdxMother[j])!=igen){continue;}
+        igen = j; // take the last copy of t
       }
+      t_motherIdx = i; // store the idx of the first copy of t
 
       t_daughter_gen_info[0] = GenPart_pt[igen];
       t_daughter_gen_info[1] = GenPart_eta[igen];
@@ -121,30 +125,27 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
       for(unsigned int j=igen; j<nGenPart; j++){
         if(GenPart_genPartIdxMother[j]!=igen){continue;}
-        if(abs(GenPart_pdgId[j])!=5){continue;} // look for b in t->Wb       
-        t_daughter_gen_info[7] = GenPart_pt[j];
-        t_daughter_gen_info[8] = GenPart_eta[j];
-        t_daughter_gen_info[9] = GenPart_phi[j];
-        t_daughter_gen_info[10] = GenPart_mass[j]; // Note: this gives 0!!!  
+        if(abs(GenPart_pdgId[j])!=5){continue;} // look for b in t->Wb. took the first copy
+
+        t_daughter_gen_info[8] = GenPart_pt[j];
+        t_daughter_gen_info[9] = GenPart_eta[j];
+        t_daughter_gen_info[10] = GenPart_phi[j]; // did not record gen mass, because =0 for all b
         t_daughter_gen_info[11] = GenPart_pdgId[j];
         t_daughter_gen_info[12] = GenPart_status[j];
       }
 
       for(unsigned int j=igen; j<nGenPart; j++){
-        int j_id = GenPart_pdgId[j]; // look for W in t->Wb              
-        int j_mother = GenPart_genPartIdxMother[j];
-        if(j_mother!=igen){continue;}
+	int j_id = GenPart_pdgId[j];
+        if(GenPart_genPartIdxMother[j]!=igen){continue;} // look for W in t->Wb
         if(abs(j_id)!=24){continue;}
 
         int jgen = j;
-        for(unsigned int k = igen; k<nGenPart; k++){
-          int k_id = GenPart_pdgId[k];
-          int k_mother = GenPart_genPartIdxMother[k];
-	  if(k_id!=j_id){continue;}
-          if(k_mother!=jgen){continue;}
-          W_motherIdx = k_id; // store idx of W': W->W'    
+        for(unsigned int k=j; k<nGenPart; k++){
+	  if(GenPart_pdgId[k]!=j_id){continue;}
+          if(GenPart_genPartIdxMother[k]!=jgen){continue;}
           jgen = k;
         }
+	W_motherIdx = j; // store idx of W: W->W'
 
 	t_daughter_gen_info[13] = GenPart_pt[jgen];
         t_daughter_gen_info[14] = GenPart_eta[jgen];
@@ -156,12 +157,11 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
 	for(unsigned int p=jgen; p<nGenPart; p++){
           int p_id = GenPart_pdgId[p];
-          int p_mother = GenPart_genPartIdxMother[p];
-          if(p_mother!=jgen){continue;}
-          //if(abs(p_id)==11 | abs(p_id)==13 | abs(p_id)==15){
-	  if(abs(p_id)==11 | abs(p_id)==13){ // reconstruction code does not include tau
+         
+          if(GenPart_genPartIdxMother[p]!=jgen){continue;}
+          if(abs(p_id)==11 || abs(p_id)==13 || abs(p_id)==15){
             trueLeptonicT = 1;
-            t_daughter_gen_info[20] = GenPart_pt[p];
+            t_daughter_gen_info[20] = GenPart_pt[p]; // should I take the last copy?
             t_daughter_gen_info[21] = GenPart_eta[p];
             t_daughter_gen_info[22] = GenPart_phi[p];
             t_daughter_gen_info[23] = GenPart_mass[p];
@@ -169,24 +169,22 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[25] = GenPart_status[p];
           }
         }
+	if(trueLeptonicT == -9){trueLeptonicT = 0;}
       }
       t_daughter_gen_info[26] = trueLeptonicT;
     }
-    //std::cout << "reco: " << t_mass << std::endl;
-    //std::cout << "gen: " << t_daughter_gen_info[3] << "\n" << std::endl;
     return t_daughter_gen_info;
   };
 
   // ----------------------------------------------------           
   //           W truth extraction: 
   // ---------------------------------------------------- 
-  auto W_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
+  auto W_daughter_gen=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
     ROOT::VecOps::RVec<float> W_daughter_gen_info(14,-999);
-
     if(sample!="Bprime"){return W_daughter_gen_info;}
 
     int W_motherIdx = -1; // if not W->W', no need to store the mother idx info  
-    int trueW_decayMode = -1; // -1: did not decay, 0: hadronic, 1: leptonic 
+    int trueLeptonicW = -1; // -1: did not decay, 0: hadronic, 1: leptonic 
 
     for(unsigned int i=0; i<nGenPart; i++){
       int id = GenPart_pdgId[i];
@@ -196,13 +194,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       if(abs(id)!=24){continue;} // B->tW, pick out W 
 
       int igen = i;
-
+      
       for(unsigned int j=i; j<nGenPart; j++){
 	if((GenPart_pdgId[j])!=id){continue;}
         if((GenPart_genPartIdxMother[j])!=igen){continue;} // pick out the daughter of W
-        W_motherIdx = j; // store idx of W': W->...->W'
         igen = j;
       }
+      W_motherIdx = i; // store idx of W': W->...->W'
 
       W_daughter_gen_info[0] = GenPart_pt[igen];
       W_daughter_gen_info[1] = GenPart_eta[igen];
@@ -216,9 +214,8 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
         int p_id = GenPart_pdgId[p];
         int p_mother = GenPart_genPartIdxMother[p];
         if(p_mother!=igen){continue;}
-        //if(abs(p_id)==11 | abs(p_id)==13 | abs(p_id)==15){
-	if(abs(p_id)==11 | abs(p_id)==13){
-          trueW_decayMode = 1; // leptonic
+        if(abs(p_id)==11 || abs(p_id)==13 || abs(p_id)==15){
+          trueLeptonicW = 1; // leptonic
           W_daughter_gen_info[7] = GenPart_pt[p];
           W_daughter_gen_info[8] = GenPart_eta[p];
           W_daughter_gen_info[9] = GenPart_phi[p];
@@ -226,49 +223,106 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           W_daughter_gen_info[11] = GenPart_pdgId[p];
           W_daughter_gen_info[12] = GenPart_status[p];
         }
-        else{trueW_decayMode = 0;} // hadronic
+        else if(abs(p_id)!=12 && abs(p_id)!=14 && abs(p_id)!=16){trueLeptonicW = 0;} // hadronic
       }
-      W_daughter_gen_info[13] = trueW_decayMode;
+      W_daughter_gen_info[13] = trueLeptonicW;
     }
     return W_daughter_gen_info;
   };
 
   // The following functions could probably all go to the plotting marco
-  auto leptonicCheck = [sample](bool leptonicParticle, int trueLeptonicT, int trueW_decayMode){
-    if(sample!="Bprime"){return 0;} // not sure if this line is needed. check.
+  auto leptonicCheck = [sample](int trueLeptonicT, int trueLeptonicW){
+    if(sample!="Bprime"){return -9;} // not sure if this line is needed. check.
     
-    int isSingleLept_gen = -1;
-    int label=-1;
+    int trueLeptonicMode = -9;
     
-    if ((trueLeptonicT!=1) & (trueW_decayMode==1)){isSingleLept_gen = 0;} // leptonic W
-    else if ((trueLeptonicT==1) & (trueW_decayMode!=1)){isSingleLept_gen = 1;} // leptonic T
+    if ((trueLeptonicT!=1) && (trueLeptonicW==1)){trueLeptonicMode = 0;} // leptonic W
+    else if ((trueLeptonicT==1) && (trueLeptonicW!=1)){trueLeptonicMode = 1;} // leptonic T
+    else if ((trueLeptonicT==1) && (trueLeptonicW==1)){trueLeptonicMode = 2;} // dileptonic
+    else if ((trueLeptonicT==0) && (trueLeptonicW==0)){trueLeptonicMode = -1;} // hadronic
 
-    if(leptonicParticle==isSingleLept_gen){ // leptonicParticle=1 for leptonicT, 0 for leptonicW
-      if(isSingleLept_gen==0){label=0;} // set trueW label
-      else if(isSingleLept_gen==1){label=1;} // set trueT label
-    } // if neither trueT nor trueW, label=-1
-
-    return label;
+    return trueLeptonicMode;
   };
 
+  auto FatJet_matching = [](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<float>& SubJet_pt, unsigned int& nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+   
+    ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
+ 
+    int nFatJets = gcFatJet_eta.size();
+    ROOT::VecOps::RVec<int> matched_GenPart(nFatJets,-9);
+   
+    for(unsigned int i=0; i<nFatJets; i++){
 
-  auto genFatJet_matching = [](ROOT::VecOps::RVec<float> goodcleanFatJets, ROOT::VecOps::RVec<int>& FatJet_genJetAK8Idx, ROOT::VecOps::RVec<float>& FatJet_mass, ROOT::VecOps::RVec<float>& GenJetAK8_mass, ROOT::VecOps::RVec<int>& GenJetAK8_partonFlavour, ROOT::VecOps::RVec<float>& GenJetAK8_pt){
+      double fatjet_eta = gcFatJet_eta[i];
+      double fatjet_phi = gcFatJet_phi[i];
 
-    //std::cout << "Event: " << std::endl;
+      ROOT::VecOps::RVec<int> daughtersIdx;
+      ROOT::VecOps::RVec<int> mothersIdx;
+      for(unsigned int p=0; p<nGenPart; p++){
+	int id = GenPart_pdgId[p];
+	if(abs(id)>5){continue;}
 
-    ROOT::VecOps::RVec<float> matching_info(3,-9.);
-    ROOT::VecOps::RVec<int> gen_idx = FatJet_genJetAK8Idx[goodcleanFatJets];
-    ROOT::VecOps::RVec<float> reco_mass = FatJet_mass[goodcleanFatJets];
+	std::bitset<15> statusFlags(GenPart_statusFlags[p]);
+	if(statusFlags.to_string()[2]=='0'){continue;} // take the first copy
 
-    for(unsigned int i=0; i<gen_idx.size(); i++){
-      matching_info[0] = reco_mass[i] - GenJetAK8_mass[gen_idx[i]];
-      matching_info[1] = GenJetAK8_partonFlavour[gen_idx[i]];
-      matching_info[2] = GenJetAK8_pt[gen_idx[i]];
-      //std::cout << "gen_mass: " << GenJetAK8_mass[idx] << std::endl;
-      //std::cout << "parton: " << GenJetAK8_partonFlavour[gen_idx[i]] << std::endl;
+	double part_eta = GenPart_eta[p];
+	double part_phi = GenPart_phi[p];
+	double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
+	if(dR>0.8){continue;}
+	daughtersIdx.push_back(p);
+	mothersIdx.push_back(GenPart_genPartIdxMother[p]);
+      }
+      
+      int nDaughters = daughtersIdx.size();
+      if(nDaughters==0){continue;}
+      
+      if(nDaughters==3){
+	if(mothersIdx[0] == mothersIdx[1]){
+	  int motherIdx = mothersIdx[2];
+	  if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+	    if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
+	  }
+	}
+	else if(mothersIdx[2] == mothersIdx[0]){
+          int motherIdx= mothersIdx[1];
+          if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+            if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
+          }
+        }
+	else if(mothersIdx[1] == mothersIdx[2]){
+          int motherIdx= mothersIdx[0];
+          if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+            if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
+          }
+        }
+      }
+
+      if(nDaughters==2){
+	if(mothersIdx[0] == mothersIdx[1]){
+	  int motherIdx = mothersIdx[0];
+	  if(GenPart_pt[motherIdx]>200){
+	    bool noOtherDaughters = true;
+	    for(unsigned int d=0; d<nGenPart; d++){
+	      if(GenPart_genPartIdxMother[d] == motherIdx){
+		if(d!= daughtersIdx[0] && d!= daughtersIdx[1]){
+		  noOtherDaughters = false;
+		}
+	      }
+	    }
+	    if(noOtherDaughters){matched_GenPart[i] = abs(GenPart_pdgId[motherIdx]);}
+	  }
+	}
+      }
+      
+      if(matched_GenPart[i] == -9){
+	int firstsub = FatJet_subJetIdx1[i];
+	for(int isub = firstsub; isub < nSubJet; isub++){
+	  if(SubJet_hadronFlavour[isub] == 5 || SubJet_hadronFlavour[isub] == 4 || SubJet_hadronFlavour[isub] == 0){matched_GenPart[i] = SubJet_hadronFlavour[isub];}
+	}
+      }
     }
-    
-    return 0;
+       
+    return matched_GenPart;
   };
 
   // ----------------------------------------------------
@@ -401,9 +455,74 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //               Flags and First Filter 
   // -------------------------------------------------------
   // Twiki with reccommended ultralegacy values
-  auto rdf = ROOT::RDataFrame("Events",filename); // Initial data
+  auto rdf_input = ROOT::RDataFrame("Events",filename); // Initial data
   //  std::cout << "Number of Events: " << rdf.Count().GetValue() << std::endl;
+
+  auto rdf = rdf_input.Define("Bprime_gen_info", Bprime_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
+    .Define("Bprime_gen_eta", "Bprime_gen_info[1]")
+    .Define("Bprime_gen_phi", "Bprime_gen_info[2]")
+    .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
+    .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
+    .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
+    .Define("Bprime_gen_exist", "(int) Bprime_gen_info[6]")
+    .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("t_gen_pt", "t_daughter_gen_info[0]")
+    .Define("t_gen_eta", "t_daughter_gen_info[1]")
+    .Define("t_gen_phi", "t_daughter_gen_info[2]")
+    .Define("t_gen_mass", "t_daughter_gen_info[3]")
+    .Define("t_gen_pdgId", "(int) t_daughter_gen_info[4]")
+    .Define("t_gen_status", "(int) t_daughter_gen_info[5]")
+    .Define("t_motherIdx", "(int) t_daughter_gen_info[6]")
+    .Define("t_islastcopy", "(int) t_daughter_gen_info[7]")
+    .Define("daughterb_gen_pt", "t_daughter_gen_info[8]")
+    .Define("daughterb_gen_eta", "t_daughter_gen_info[9]")
+    .Define("daughterb_gen_phi", "t_daughter_gen_info[10]")
+    .Define("daughterb_gen_pdgId", "(int) t_daughter_gen_info[11]")
+    .Define("daughterb_gen_status", "(int) t_daughter_gen_info[12]")
+    .Define("daughterW_gen_pt", "t_daughter_gen_info[13]")
+    .Define("daughterW_gen_eta", "t_daughter_gen_info[14]")
+    .Define("daughterW_gen_phi", "t_daughter_gen_info[15]")
+    .Define("daughterW_gen_mass", "t_daughter_gen_info[16]")
+    .Define("daughterW_gen_pdgId", "(int) t_daughter_gen_info[17]")
+    .Define("daughterW_gen_status", "(int) t_daughter_gen_info[18]")
+    .Define("daughterW_motherIdx", "(int) t_daughter_gen_info[19]")
+    .Define("Tlepton_gen_pt", "t_daughter_gen_info[20]")
+    .Define("Tlepton_gen_eta", "t_daughter_gen_info[21]")
+    .Define("Tlepton_gen_phi", "t_daughter_gen_info[22]")
+    .Define("Tlepton_gen_mass", "t_daughter_gen_info[23]")
+    .Define("Tlepton_gen_pdgId", "(int) t_daughter_gen_info[24]")
+    .Define("Tlepton_gen_status", "(int) t_daughter_gen_info[25]")
+    .Define("trueLeptonicT", "(int) t_daughter_gen_info[26]")
+    .Define("W_daughter_gen_info", W_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("W_gen_pt", "W_daughter_gen_info[0]")
+    .Define("W_gen_eta", "W_daughter_gen_info[1]")
+    .Define("W_gen_phi", "W_daughter_gen_info[2]")
+    .Define("W_gen_mass", "W_daughter_gen_info[3]")
+    .Define("W_gen_pdgId", "(int) W_daughter_gen_info[4]")
+    .Define("W_gen_status", "(int) W_daughter_gen_info[5]")
+    .Define("W_motherIdx", "(int) W_daughter_gen_info[6]")
+    .Define("Wlepton_gen_pt", "W_daughter_gen_info[7]")
+    .Define("Wlepton_gen_eta", "W_daughter_gen_info[8]")
+    .Define("Wlepton_gen_phi", "W_daughter_gen_info[9]")
+    .Define("Wlepton_gen_mass", "W_daughter_gen_info[10]")
+    .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
+    .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
+    .Define("trueLeptonicW", "(int) W_daughter_gen_info[13]")
+    .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"});
+  //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
   
+  // ---------------------------------------------------------                          
+  //               Save rdf before any cuts
+  // ---------------------------------------------------------  
+  /*
+  TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
+  const char* stdOutputFileNC = outputFileNC;
+  std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
+  rdf.Snapshot("Events", stdOutputFileNC);
+  std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
+  */
+   
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
   //  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
@@ -412,13 +531,12 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //                    Lepton Filters
   // ---------------------------------------------------------
 
-  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 50 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_miniIsoId >= 3") \
+  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 30 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_pfIsoId >= 4") \
     .Define("nTPassMu","(int) Sum(TPassMu)")				\
-    .Define("TPassEl","Electron_pt > 50 && Electron_mvaFall17V2noIso_WP90 == true && \
-							 Electron_miniPFRelIso_all < 0.1 && abs(Electron_eta) < 2.5")\
+    .Define("TPassEl","Electron_pt > 38 && Electron_mvaFall17V2noIso_WP90 == true && abs(Electron_eta) < 2.5")\
     .Define("nTPassEl","(int) Sum(TPassEl)")				\
-    .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_Mu50 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
-    .Define("isEl","(nElectron > 0 && nTPassEl == 1 && (HLT_Ele38_WPTight_Gsf == 1 || HLT_Ele35_WPTight_Gsf == 1) && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
+    .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_IsoMu27 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
+    .Define("isEl","(nElectron > 0 && nTPassEl == 1 && HLT_Ele35_WPTight_Gsf == 1 && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
     .Filter("isMu || isEl","Event is either muon or electron");
   
   auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,TPassMu,TPassEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
@@ -473,17 +591,16 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------
   auto HT_calc = jet_df0.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])") \
     .Filter("Jet_HT > 250","Pass HT > 250")						\
-    .Filter("NFatJets > 0","Pass N good central AK8 > 0");				        
-  //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
+    .Filter("NFatJets > 0","Pass N good central AK8 > 0");
   
   // ---------------------------------------------------------
   //    Uncomment to save seperate Preselection .root file
   // ---------------------------------------------------------
-  // TString outputFilePS = "RDF_"+sample+"_presel_"+chan+"_"+testnum+".root";
-  // const char* stdOutputFilePS = outputFilePS;
-  // std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
-  // HT_calc.Snapshot("Events", stdOutputFilePS);
-  // std::cout << "Output File: " << outputFilePS << std::endl << "-------------------------------------------------" << std::endl;
+  //TString outputFilePS = "RDF_"+sample+"_presel_"+testNum+".root";
+  //const char* stdOutputFilePS = outputFilePS;
+  //std::cout << "------------------------------------------------" << std::endl << ">>> Saving Preselection Snapshot..." << std::endl;
+  //HT_calc.Snapshot("Events", stdOutputFilePS);
+  //std::cout << "Output File: " << outputFilePS << std::endl << "-------------------------------------------------" << std::endl;
   // }
   //----------------------------------------------------------
   //       Uncomment from here to the bottom if starting from a preselection file!!
@@ -493,6 +610,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------
   // 		Post Preselection Analysis
   // ---------------------------------------------------------
+  
   auto postPresel = HT_calc.Define("genttbarMass",genttbarMassCalc,{"nGenPart","GenPart_pdgId","GenPart_mass", \
 	"GenPart_pt","GenPart_phi","GenPart_eta",			\
 	"GenPart_genPartIdxMother","GenPart_status"})			\
@@ -557,6 +675,11 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("DR_lep_Jets","DR_calc(gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass, \
 					   	 lepton_pt,lepton_eta,lepton_phi,lepton_mass)")\
     .Define("W_lv","W_reco(MET_pt,MET_phi,lepton_lv)")			\
+    .Define("W_pt", "W_lv.Pt()")
+    .Define("W_eta", "W_lv.Eta()")
+    .Define("W_phi", "W_lv.Phi()")
+    .Define("W_mass", "W_lv.M()")
+    .Define("W_MT", "sqrt(2*lepton_pt*MET_pt*(1-cos(lepton_phi - MET_phi)))")
     .Define("minMlj_output",minM_lep_jet_calc,{"gcJet_pt","gcJet_eta", "gcJet_phi","gcJet_mass", \
 	  "lepton_lv"})							\
     .Define("DR_W_lep","dR_Wt_Calc(W_lv,lepton_lv)")			\
@@ -592,61 +715,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("mlp_HT500_WJets","dnn_scores[3]")				\
     .Define("mlp_HT500_TTbar","dnn_scores[4]")				\
     .Define("mlp_HT500_Bprime","dnn_scores[5]")
-    .Define("Bprime_gen_info", Bprime_gen_info, {"nGenPart", "GenPart_pdgId\
-", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
-    .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
-    .Define("Bprime_gen_eta", "Bprime_gen_info[1]")
-    .Define("Bprime_gen_phi", "Bprime_gen_info[2]")
-    .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
-    .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
-    .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
-    .Define("t_daughter_gen_info", t_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "t_mass"})
-    .Define("t_gen_pt", "t_daughter_gen_info[0]")
-    .Define("t_gen_eta", "t_daughter_gen_info[1]")
-    .Define("t_gen_phi", "t_daughter_gen_info[2]")
-    .Define("t_gen_mass", "t_daughter_gen_info[3]")
-    .Define("t_gen_pdgId", "(int) t_daughter_gen_info[4]")
-    .Define("t_gen_status", "(int) t_daughter_gen_info[5]")
-    .Define("t_motherIdx", "(int) t_daughter_gen_info[6]")
-    .Define("daughterb_gen_pt", "t_daughter_gen_info[7]")
-    .Define("daughterb_gen_eta", "t_daughter_gen_info[8]")
-    .Define("daughterb_gen_phi", "t_daughter_gen_info[9]")
-    .Define("daughterb_gen_mass", "t_daughter_gen_info[10]")
-    .Define("daughterb_gen_pdgId", "(int) t_daughter_gen_info[11]")
-    .Define("daughterb_gen_status", "(int) t_daughter_gen_info[12]")
-    .Define("daughterW_gen_pt", "t_daughter_gen_info[13]")
-    .Define("daughterW_gen_eta", "t_daughter_gen_info[14]")
-    .Define("daughterW_gen_phi", "t_daughter_gen_info[15]")
-    .Define("daughterW_gen_mass", "t_daughter_gen_info[16]")
-    .Define("daughterW_gen_pdgId", "(int) t_daughter_gen_info[17]")
-    .Define("daughterW_gen_status", "(int) t_daughter_gen_info[18]")
-    .Define("daughterW_motherIdx", "(int) t_daughter_gen_info[19]")
-    .Define("Tlepton_gen_pt", "t_daughter_gen_info[20]")
-    .Define("Tlepton_gen_eta", "t_daughter_gen_info[21]")
-    .Define("Tlepton_gen_phi", "t_daughter_gen_info[22]")
-    .Define("Tlepton_gen_mass", "t_daughter_gen_info[23]")
-    .Define("Tlepton_gen_pdgId", "(int) t_daughter_gen_info[24]")
-    .Define("Tlepton_gen_status", "(int) t_daughter_gen_info[25]")
-    .Define("trueLeptonicT", "(int) t_daughter_gen_info[26]")
-    .Define("W_daughter_gen_info", W_daughter_gen, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
-    .Define("W_gen_pt", "W_daughter_gen_info[0]")
-    .Define("W_gen_eta", "W_daughter_gen_info[1]")
-    .Define("W_gen_phi", "W_daughter_gen_info[2]")
-    .Define("W_gen_mass", "W_daughter_gen_info[3]")
-    .Define("W_gen_pdgId", "(int) W_daughter_gen_info[4]")
-    .Define("W_gen_status", "(int) W_daughter_gen_info[5]")
-    .Define("W_motherIdx", "(int) W_daughter_gen_info[6]")
-    .Define("Wlepton_gen_pt", "W_daughter_gen_info[7]")
-    .Define("wlepton_gen_eta", "W_daughter_gen_info[8]")
-    .Define("Wlepton_gen_phi", "W_daughter_gen_info[9]")
-    .Define("Wlepton_gen_mass", "W_daughter_gen_info[10]")
-    .Define("Wlepton_gen_pdgId", "(int) W_daughter_gen_info[11]")
-    .Define("Wlepton_gen_status", "(int) W_daughter_gen_info[12]")
-    .Define("trueW_decayMode", "(int) W_daughter_gen_info[13]")
-    .Define("leptonicCheck", leptonicCheck, {"leptonicParticle", "trueLeptonicT", "trueW_decayMode"})
-    .Define("DelM_W", "W_lv[3] - W_gen_mass") // could it be moved to plotting script?
-    .Define("DelM_t", "t_mass - t_gen_mass")
-    .Define("genFatJet_matching", genFatJet_matching, {"goodcleanFatJets","FatJet_genJetAK8Idx", "FatJet_mass", "GenJetAK8_mass", "GenJetAK8_partonFlavour", "GenJetAK8_pt"});
+    .Define("genFatJet_matching", FatJet_matching, {"goodcleanFatJets", "gcFatJet_eta", "gcFatJet_phi", "FatJet_subJetIdx1", "nSubJet", "SubJet_hadronFlavour", "SubJet_pt", "nGenPart", "GenPart_pdgId", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_statusFlags"});
 
   // -------------------------------------------------
   // 		Save Snapshot to file
@@ -657,6 +726,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
+ 
   time.Stop();
   time.Print();
   std::cout << "Cut statistics:" << std::endl;
