@@ -169,7 +169,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[25] = GenPart_status[p];
           }
         }
-	if(trueLeptonicT == -9){trueLeptonicT = 0;}
+	if(trueLeptonicT == -1){trueLeptonicT = 0;}
       }
       t_daughter_gen_info[26] = trueLeptonicT;
     }
@@ -515,13 +515,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  /*
+  
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-  */
+  
    
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
@@ -726,7 +726,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
- 
+  
   time.Stop();
   time.Print();
   std::cout << "Cut statistics:" << std::endl;
