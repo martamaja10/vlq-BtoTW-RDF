@@ -97,7 +97,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     if(sample!="Bprime"){return t_daughter_gen_info;}
 
     int t_motherIdx = -1, W_motherIdx = -1; // if not t->t' or W->W', no need to store the mother idx info
-    int trueLeptonicT = -1; // -1: did not decay, 0: hadronic, 1:leptonic
+    int trueLeptonicT = -1; // 0: hadronic, 1:leptonic
  
     for(unsigned int i=0; i<nGenPart; i++){
       int id = GenPart_pdgId[i];
@@ -167,6 +167,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
             t_daughter_gen_info[23] = GenPart_mass[p];
             t_daughter_gen_info[24] = GenPart_pdgId[p];
             t_daughter_gen_info[25] = GenPart_status[p];
+	    break;
           }
         }
 	if(trueLeptonicT == -1){trueLeptonicT = 0;}
@@ -222,6 +223,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           W_daughter_gen_info[10] = GenPart_mass[p];
           W_daughter_gen_info[11] = GenPart_pdgId[p];
           W_daughter_gen_info[12] = GenPart_status[p];
+	  break;
         }
       }
       if(trueLeptonicW == -1){trueLeptonicW = 0;}
