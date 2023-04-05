@@ -281,19 +281,22 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       if(nDaughters==3){
 	if(mothersIdx[0] == mothersIdx[1]){
 	  int motherIdx = mothersIdx[2];
-	  if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+	  int bIdx = daughtersIdx[2];
+	  if(abs(GenPart_pdgId[bIdx]) == 5 && GenPart_pt[motherIdx]>400){
 	    if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
 	  }
 	}
 	else if(mothersIdx[2] == mothersIdx[0]){
           int motherIdx= mothersIdx[1];
-          if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+	  int bIdx = daughtersIdx[1];
+          if(abs(GenPart_pdgId[bIdx]) == 5 && GenPart_pt[motherIdx]>400){
             if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
           }
         }
 	else if(mothersIdx[1] == mothersIdx[2]){
           int motherIdx= mothersIdx[0];
-          if(motherIdx == 5 && GenPart_pt[motherIdx]>400){
+	  int bIdx = daughtersIdx[0];
+          if(abs(GenPart_pdgId[bIdx]) == 5 && GenPart_pt[motherIdx]>400){
             if(abs(GenPart_pdgId[motherIdx]) == 6){matched_GenPart[i] = 6;}
           }
         }
@@ -323,7 +326,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 	}
       }
     }
-       
+   
     return matched_GenPart;
   };
 
@@ -517,13 +520,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  /*  
+  
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-  */
+  
    
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
