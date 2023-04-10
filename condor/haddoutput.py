@@ -45,7 +45,7 @@ for sample in dirList:
 
         outsample = sample+'_'+outlabel
         if outlabel == 'none': outsample = sample
-        
+
         rootfiles = EOSlist_root_files(inDir+'/'+outsample)
 
         print "------------ hadding Sample:",outsample,"---------------"
@@ -53,7 +53,7 @@ for sample in dirList:
 
 
         nFilesPerHadd = 900
-        
+
         onefile = ' root://cmseos.fnal.gov/'+inDir+'/'+outsample+'/'+rootfiles[-1]
         manyfiles = nFilesPerHadd*onefile
         lengthcheck = len('hadd -f root://cmseos.fnal.gov/'+outDir+'/'+outsample+'_hadd.root '+manyfiles)
