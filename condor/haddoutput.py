@@ -8,17 +8,17 @@ start_time = time.time()
 
 #inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel'
 #outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel/Bprime_hadds/'
-inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1'
-outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1/Bprime_hadds/'
+inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_175'
+outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_175/Bprime_hadds/'
 scratchDir='/uscmst1b_scratch/lpc1/3DayLifetime/xshen'
 
 if not os.path.exists(scratchDir): os.system('mkdir -p '+scratchDir)
 os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir)
 
 dirList = [
-    #'Bprime1400',
-    #'Bprime2000',
-    #'Bprime800',
+    'Bprime1400',
+    'Bprime2000',
+    'Bprime800',
     #'WJets1200',
     #'WJets200',
     #'WJets2500',
@@ -28,7 +28,7 @@ dirList = [
     #'singleT',
     #'singleTb',
     #'ttbar',
-    'QCD200',
+    #'QCD200',
     #'QCD300',
     #'QCD500',
     #'QCD700',
