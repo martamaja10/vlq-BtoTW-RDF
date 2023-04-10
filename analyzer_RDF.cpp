@@ -520,14 +520,14 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  
+  /*
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-  
-   
+  */
+
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
   //  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
@@ -640,6 +640,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("dpak8_W_1","dpak8_W[0]")					\
     .Define("dpak8_W_2","dpak8_W[1]")					\
     .Define("dpak8_tag","maxFxn(dpak8_J,dpak8_T,dpak8_W)")		\
+    .Define("dpak8_tag_alt","JetDiscriminator(dpak8_J,dpak8_T,dpak8_W)")\
     .Define("dpak8_tag_1","dpak8_tag[0]")				\
     .Define("dpak8_tag_2","dpak8_tag[1]")				\
     .Define("nJ_dpak8","Sum(dpak8_tag == 0)")				\
@@ -657,6 +658,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("pNet_W_1","pNet_W[0]")					\
     .Define("pNet_W_2","pNet_W[1]")					\
     .Define("pNet_tag","maxFxn(pNet_J,pNet_T,pNet_W)")			\
+    .Define("pNet_tag_alt","JetDiscriminator(pNet_J,pNet_T,pNet_W)")    \
     .Define("pNet_tag_1","pNet_tag[0]")					\
     .Define("pNet_tag_2","pNet_tag[1]")					\
     .Define("nJ_pNet","Sum(pNet_tag == 0)")				\
