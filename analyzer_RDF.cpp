@@ -640,7 +640,6 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("dpak8_W_1","dpak8_W[0]")					\
     .Define("dpak8_W_2","dpak8_W[1]")					\
     .Define("dpak8_tag","maxFxn(dpak8_J,dpak8_T,dpak8_W)")		\
-    .Define("dpak8_tag_alt","JetDiscriminator(dpak8_J,dpak8_T,dpak8_W)")\
     .Define("dpak8_tag_1","dpak8_tag[0]")				\
     .Define("dpak8_tag_2","dpak8_tag[1]")				\
     .Define("nJ_dpak8","Sum(dpak8_tag == 0)")				\
@@ -651,14 +650,16 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("pNet_J_2","pNet_J[1]")					\
     .Define("raw_pNet_T","(FatJet_particleNet_TvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_TvsQCD)") \
     .Define("pNet_T","raw_pNet_T[goodcleanFatJets == true]")		\
+    .Define("pNet_T_alt","FatJet_particleNet_TvsQCD[goodcleanFatJets == true]")            \
     .Define("pNet_T_1","pNet_T[0]")					\
     .Define("pNet_T_2","pNet_T[1]")					\
     .Define("raw_pNet_W","(FatJet_particleNet_WvsQCD * FatJet_particleNet_QCD) / (1 - FatJet_particleNet_WvsQCD)") \
     .Define("pNet_W","raw_pNet_W[goodcleanFatJets == true]")		\
+    .Define("pNet_W_alt","FatJet_particleNet_WvsQCD[goodcleanFatJets == true]")
     .Define("pNet_W_1","pNet_W[0]")					\
     .Define("pNet_W_2","pNet_W[1]")					\
     .Define("pNet_tag","maxFxn(pNet_J,pNet_T,pNet_W)")			\
-    .Define("pNet_tag_alt","JetDiscriminator(pNet_J,pNet_T,pNet_W)")    \
+    .Define("pNet_tag_alt","JetDiscriminator(pNet_T_alt, pNet_W_alt)")  \
     .Define("pNet_tag_1","pNet_tag[0]")					\
     .Define("pNet_tag_2","pNet_tag[1]")					\
     .Define("nJ_pNet","Sum(pNet_tag == 0)")				\

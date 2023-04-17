@@ -16,8 +16,8 @@ ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RV
 	return maxInt;
 };
 
-ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW){
-  int nJets = dnnJ.size();
+ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW){
+  int nJets = dnnT.size();
   ROOT::VecOps::RVec<int> tag (nJets, -1);
   
   for(int i=0; i<nJets; i++){
