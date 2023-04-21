@@ -704,6 +704,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("t_lv","lvConstructor(t_pt,t_eta,t_phi,t_mass)")
     .Define("Bprime_output","BPrime_reco(t_lv,W_lv,leptonicParticle,\
 	  				       gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass,pNet_tag,gcFatJet_msoftdrop)")\
+    .Define("Bprime_output_alt","BPrime_reco_alt(lepton_lv, t_lv,W_lv,leptonicParticle, gcFatJet_pt,gcFatJet_eta,gcFatJet_phi,gcFatJet_mass,pNet_tag,gcFatJet_msoftdrop)")
     .Define("Bprime_mass","Bprime_output[0]")				\
     .Define("Bprime_pt","Bprime_output[1]")				\
     .Define("Bprime_eta","Bprime_output[2]")				\
