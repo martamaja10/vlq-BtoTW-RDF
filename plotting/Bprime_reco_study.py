@@ -1,6 +1,6 @@
 from ROOT import TFile, TTree, gStyle, TH1F, TCanvas
 
-tfile = TFile.Open("root://cmseos.fnal.gov//store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_170/Bprime_hadds_alt/Bprime800_hadd.root")
+tfile = TFile.Open("root://cmseos.fnal.gov//store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_170/Bprime_hadds_alt/Bprime2000_hadd.root")
 ftree = tfile.Get("Events")
 
 countT = 0
@@ -12,7 +12,7 @@ for i in range(nEntries):
         n_gcFatJet = len(genFatJet_matching)
         if(genFatJet_matching[0]==6): countT+=1
         elif(genFatJet_matching[0]==24): countW+=1
-        
+
         if(n_gcFatJet>1):
             if(genFatJet_matching[1]==6): countT+=1
             elif(genFatJet_matching[1]==24): countW+=1
