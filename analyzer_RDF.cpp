@@ -87,7 +87,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ----------------------------------------------------                        
   //           t truth extraction:    
   // ---------------------------------------------------- 
-  auto t_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+  auto t_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
 
     ROOT::VecOps::RVec<float> t_gen_info(35,-999); 
     if(sample!="Bprime"){return t_gen_info;}
@@ -105,7 +105,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
         if(GenPart_genPartIdxMother[j]!=igen){continue;}
         igen = j; // take the last copy of t
       }
-      
+     
       t_gen_info[0] = GenPart_pt[igen];
       t_gen_info[1] = GenPart_eta[igen];
       t_gen_info[2] = GenPart_phi[igen];
@@ -145,7 +145,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
           if(GenPart_genPartIdxMother[k]!=jgen){continue;}
           jgen = k;
         }
-
+	
 	t_gen_info[13] = GenPart_pt[jgen];
         t_gen_info[14] = GenPart_eta[jgen];
         t_gen_info[15] = GenPart_phi[jgen];
@@ -221,7 +221,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ----------------------------------------------------           
   //           W truth extraction: 
   // ---------------------------------------------------- 
-  auto W_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+  auto W_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
     ROOT::VecOps::RVec<float> W_gen_info(22,-999);
     if(sample!="Bprime"){return W_gen_info;}
 
@@ -232,8 +232,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       if(abs(motherid)!=6000007){continue;}
       if(abs(id)!=24){continue;} // B->tW, pick out W 
 
-      int igen = i;
-      
+      int igen = i;      
       for(unsigned int j=i; j<nGenPart; j++){
 	if((GenPart_pdgId[j])!=id){continue;}
         if((GenPart_genPartIdxMother[j])!=igen){continue;}
@@ -550,7 +549,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
     .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
     .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
-    .Define("t_gen_info", t_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("t_gen_info", t_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("t_gen_pt", "t_gen_info[0]")
     .Define("t_gen_eta", "t_gen_info[1]")
     .Define("t_gen_phi", "t_gen_info[2]")
@@ -586,7 +585,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("tDaughter2_gen_status", "(int) t_gen_info[32]")
     .Define("tDaughter2_gen_motherIdx", "(int) t_gen_info[33]")
     .Define("trueLeptonicT", "(int) t_gen_info[34]")
-    .Define("W_gen_info", W_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
+    .Define("W_gen_info", W_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("W_gen_pt", "W_gen_info[0]")
     .Define("W_gen_eta", "W_gen_info[1]")
     .Define("W_gen_phi", "W_gen_info[2]")
