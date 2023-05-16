@@ -1,5 +1,4 @@
 import os,sys,shutil,datetime,time
-from ROOT import *
 
 execfile("/uscms_data/d3/khowey/EOSSafeUtils.py")
 
@@ -8,10 +7,11 @@ start_time = time.time()
 makelists = False
 if len(sys.argv) > 1: makelists = bool(eval(sys.argv[1]))
 
-relbase = '/uscms_data/d3/khowey/BtoTW/CMSSW_11_0_0/'
-outDir='/store/user/khowey/BtoTW_RDF'
-condorDir='/uscms_data/d3/khowey/BtoTW/rdfjobs/'
-tarfile = '/uscms_data/d3/khowey/BtoTW/rdfjobs.tar'
+relbase = '/uscms/home/xshen/nobackup/CMSSW_11_0_0/'
+#outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel/'
+outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1/'
+condorDir='/uscms/home/xshen/nobackup/CMSSW_11_0_0/src/vlq-BtoTW-RDF/condor/'
+tarfile = '/uscms/home/xshen/nobackup/rdfjobs.tar' # outside the CMSSW
 
 runDir=os.getcwd()
 
@@ -30,7 +30,7 @@ print 'Starting submission'
 count=0
 
 if makelists:
-    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > WJetsNanoList.txt')
+    #os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > WJetsNanoList.txt')
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > ttbarNanoList.txt')
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > ttjetsTNanoList.txt')
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > ttjetsTbNanoList.txt')
@@ -42,6 +42,13 @@ if makelists:
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > WJets800NanoList.txt')
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > WJets1200NanoList.txt')
     os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM" > WJets2500NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD200NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT300to500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD300NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT500to700_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD500NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT700to1000_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD700NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD1000NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD1500NanoList.txt')
+    os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = /QCD_HT2000toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM" > QCD2000NanoList.txt')
 
 else:
     textlist = sys.argv[2]#'singleTbNanoList.txt'
