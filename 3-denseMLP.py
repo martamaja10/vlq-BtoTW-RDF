@@ -1,3 +1,5 @@
+#%% 
+### Imports
 # baseline keras model
 import numpy as np
 import pandas as pd
@@ -64,7 +66,7 @@ relativeSize = (len(Bp800) + len(Bp1400) + len(Bp2000)) / len(background)
 # %%
 ### Processing datai
 print('Scaling and separating data...')
-# Background Events
+# Background events are undersampled to balance dataset
 eventData = []
 weights = []
 labels = []
@@ -76,24 +78,27 @@ for i in range(len(background)):
 eventData = np.array(eventData)
 weights = np.array(weights)
 labels = np.array(labels)
-
 X_Back_train_val, X_Back_test, Y_Back_train_val, Y_Back_test, weights_Back_train, weights_Back_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
 
+# Low Mass Bprime
 eventData = Bp800[:, :NDIM]
 weights = Bp800[:, NDIM]
 labels = Bp800[:, NDIM+1]
 X_800_train_val, X_800_test, Y_800_train_val, Y_800_test, weights_800_train, weights_800_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
 
+# Medium Mass Bprime
 eventData = Bp1400[:, :NDIM]
 weights = Bp1400[:, NDIM]
 labels = Bp1400[:, NDIM + 1]
 X_1400_train_val, X_1400_test, Y_1400_train_val, Y_1400_test, weights_1400_train, weights_1400_test = train_test_split(eventData, labels, weights, test_size=0.9, random_state=7)
 
+# Large Mass Bprime
 eventData = Bp2000[:, :NDIM]
 weights = Bp2000[:, NDIM]
 labels = Bp2000[:, NDIM + 1]
 X_2000_train_val, X_2000_test, Y_2000_train_val, Y_2000_test, weights_2000_train, weights_2000_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
 
+# Creation of training dataset
 X_train_val = np.concatenate((X_Back_train_val, X_800_train_val, X_1400_train_val, X_2000_train_val)) # Take low mass BP and background for training
 Y_train_val = np.concatenate((Y_Back_train_val, Y_800_train_val, Y_1400_train_val, Y_2000_train_val)) 
 weights_train = np.concatenate((weights_Back_train, weights_800_train, weights_1400_train, weights_2000_train))
@@ -104,16 +109,18 @@ X_train_val = X_train_val[indices]
 Y_train_val = Y_train_val[indices]
 weights_train = weights_train[indices]
 
-# Building training set out of all events left
+# Building testing set out of all events left
 X_test = np.concatenate((X_Back_test, X_800_test, X_1400_test, X_2000_test))
 Y_test = np.concatenate((Y_Back_test, Y_800_test, Y_1400_test, Y_2000_test))
 weights_test = np.concatenate((weights_Back_test, weights_800_test, weights_1400_test, weights_2000_test))
 
+# Randomly shuffling testing set
 indices = np.random.permutation(len(X_test))
 X_test = X_test[indices]
 Y_test = Y_test[indices]
 weights_test = weights_test[indices]
 
+# Applying scaler to avoid confusing the network
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler().fit(X_train_val)
 pickle.dump(scaler, open(outPath + 'dnn_scaler.pkl', 'wb'))
@@ -136,7 +143,7 @@ model_checkpoint = ModelCheckpoint(outPath + 'MLP.h5', monitor='val_loss',
 ### Training the model
 # Train classifieri
 print('Training Model...')
-with tf.device('/CPU:0'):
+with tf.device('/CPU:0'): # I was experimenting on TF-GPU/CPU, so this line is not necessary on CPU only systems
         history = model.fit(X_train_val, 
                     tf.keras.utils.to_categorical(Y_train_val), 
                     epochs=1000, 
@@ -147,7 +154,8 @@ with tf.device('/CPU:0'):
                     sample_weight = weights_train
                     )
 
-
+# %%
+### Getting predictions from model
 pred_mlp = model.predict(X_test).argmax(axis = -1)
 
 from sklearn.metrics import confusion_matrix
@@ -162,6 +170,17 @@ probs_wjets = model.predict(wjets_test)
 probs_ttbar = model.predict(ttbar_test)
 probs_bprime = model.predict(bprime_test)
 
+print(probs_bprime[0])
+probs_bprime_fixed = np.zeros((len(probs_bprime), 3))
+for i, event in enumerate(probs_bprime):
+       probs_bprime_fixed[i][0] = event[0]
+       probs_bprime_fixed[i][1] = event[1]
+       probs_bprime_fixed[i][2] = event[2] + event[3] + event[4]
+probs_bprime = probs_bprime_fixed
+print(probs_bprime.shape)
+
+# %%
+### Generating plots for model evaluation
 plt.figure()
 plt.xlabel('Predicted W boson score',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -194,11 +213,11 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_wjets.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_ttbar.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(np.concatenate((probs_bprime.T[2], probs_bprime.T[3], probs_bprime.T[4])), bins=20, range=(0,1), label=r'$\mathrm{Bprime}$', color='m', histtype='step', log=True, density=True)
+plt.hist(probs_bprime.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime}$', color='m', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig('plots/score_bprime.png')
 
-
+# Trying to generate a heatmap (so far unsuccessfully)
 myXI, myYI = np.meshgrid(np.linspace(-2, 2, 200), np.linspace(-2, 2, 200))
 print(myXI.shape)
 
@@ -217,3 +236,5 @@ plt.figure(figsize=(20, 7))
 
 ax = plt.subplot(1, 2, 1)
 cm = plt.cm.RdBu
+
+# %%
