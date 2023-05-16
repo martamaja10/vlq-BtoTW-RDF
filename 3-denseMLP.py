@@ -10,6 +10,7 @@ from keras.utils import np_utils
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import random
 
 # %%
 ### Loading data
@@ -24,8 +25,9 @@ archive = np.load(npzPath)
 
 # Three datasets
 background = archive['background']
-Bp800 = archive['lowMass']
-Bp2000 = archive['largeMass']
+Bp800 = archive['mass800']
+Bp1400 = archive['mass1400']
+Bp2000 = archive['mass2000']
 
 VARS = ['pNet_J_1',#'pNet_J_2',
         'pNet_T_1',#'pNet_T_2',
@@ -45,7 +47,7 @@ inputs = Input(shape=(NDIM,), name = 'input')
 dense1 = Dense(10, activation = 'relu')(inputs)
 dense2 = Dense(25, activation = 'relu')(dense1)
 dense3 = Dense(10, activation = 'relu')(dense2)   
-outputs = Dense(3, name = 'output', kernel_initializer='normal', activation='softmax')(dense3)
+outputs = Dense(5, name = 'output', kernel_initializer='normal', activation='softmax')(dense3)
 
 #%%
 ### Creating the modeli
@@ -57,29 +59,45 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 # print the model summary
 model.summary()
 
+relativeSize = (len(Bp800) + len(Bp1400) + len(Bp2000)) / len(background)
+
 # %%
 ### Processing datai
 print('Scaling and separating data...')
 # Background Events
-eventData = background[:, :NDIM]
-weights = background[:, NDIM]
-labels = background[:, NDIM+1]
-X_Back_train_val, X_Back_test, Y_Back_train_val, Y_Back_test, weights_Back_train, weights_Back_test = train_test_split(eventData, labels, weights, test_size=0.9, random_state=7)
+eventData = []
+weights = []
+labels = []
+for i in range(len(background)):
+      if(random.random() < relativeSize):
+            eventData.append(background[i, :NDIM])
+            labels.append(background[i, NDIM + 1])
+            weights.append(background[i, NDIM])
+eventData = np.array(eventData)
+weights = np.array(weights)
+labels = np.array(labels)
+
+X_Back_train_val, X_Back_test, Y_Back_train_val, Y_Back_test, weights_Back_train, weights_Back_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
 
 eventData = Bp800[:, :NDIM]
 weights = Bp800[:, NDIM]
 labels = Bp800[:, NDIM+1]
-X_LM_train_val, X_LM_test, Y_LM_train_val, Y_LM_test, weights_LM_train, weights_LM_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
+X_800_train_val, X_800_test, Y_800_train_val, Y_800_test, weights_800_train, weights_800_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
+
+eventData = Bp1400[:, :NDIM]
+weights = Bp1400[:, NDIM]
+labels = Bp1400[:, NDIM + 1]
+X_1400_train_val, X_1400_test, Y_1400_train_val, Y_1400_test, weights_1400_train, weights_1400_test = train_test_split(eventData, labels, weights, test_size=0.9, random_state=7)
 
 eventData = Bp2000[:, :NDIM]
 weights = Bp2000[:, NDIM]
 labels = Bp2000[:, NDIM + 1]
-X_HM_train_val, X_HM_test, Y_HM_train_val, Y_HM_test, weights_HM_train, weights_HM_test = train_test_split(eventData, labels, weights, test_size=0.9, random_state=7)
+X_2000_train_val, X_2000_test, Y_2000_train_val, Y_2000_test, weights_2000_train, weights_2000_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
 
 
-X_train_val = np.concatenate((X_Back_train_val[:9000], X_LM_train_val[:3000], X_HM_train_val[:1000])) # Take low mass BP and background for training
-Y_train_val = np.concatenate((Y_Back_train_val[:9000], Y_LM_train_val[:3000], Y_HM_train_val[:1000])) 
-weights_train = np.concatenate((weights_Back_train[:9000], weights_LM_train[:3000], weights_HM_train[:1000]))
+X_train_val = np.concatenate((X_Back_train_val, X_800_train_val, X_1400_train_val, X_2000_train_val)) # Take low mass BP and background for training
+Y_train_val = np.concatenate((Y_Back_train_val, Y_800_train_val, Y_1400_train_val, Y_2000_train_val)) 
+weights_train = np.concatenate((weights_Back_train, weights_800_train, weights_1400_train, weights_2000_train))
 
 # Randomly shuffling training set
 indices = np.random.permutation(len(X_train_val))
@@ -88,9 +106,9 @@ Y_train_val = Y_train_val[indices]
 weights_train = weights_train[indices]
 
 # Building training set out of all events left
-X_test = np.concatenate((X_Back_test, X_LM_test, Bp2000[:, :NDIM]))
-Y_test = np.concatenate((Y_Back_test, Y_LM_test, Bp2000[:, NDIM+1]))
-weights_test = np.concatenate((weights_Back_test, weights_LM_test, Bp2000[:, NDIM]))
+X_test = np.concatenate((X_Back_test, X_800_test, X_1400_test, X_2000_test))
+Y_test = np.concatenate((Y_Back_test, Y_800_test, Y_1400_test, Y_2000_test))
+weights_test = np.concatenate((weights_Back_test, weights_800_test, weights_1400_test, weights_2000_test))
 
 indices = np.random.permutation(len(X_test))
 X_test = X_test[indices]
@@ -135,12 +153,12 @@ pred_mlp = model.predict(X_test).argmax(axis = -1)
 
 from sklearn.metrics import ConfusionMatrixDisplay
 
-ConfusionMatrixDisplay.from_predictions(Y_test, pred_mlp, display_labels=['WJet', 'TTbar', 'Bprime'], normalize = 'true')
+ConfusionMatrixDisplay.from_predictions(Y_test, pred_mlp, normalize='true')
 plt.show()
 
 wjets_test = X_test[Y_test == 0]
 ttbar_test = X_test[Y_test == 1]
-bprime_test = X_test[Y_test == 2]
+bprime_test = X_test[Y_test > 1]
 
 probs_wjets = model.predict(wjets_test)
 probs_ttbar = model.predict(ttbar_test)
@@ -170,7 +188,6 @@ plt.hist(probs_bprime.T[1], bins=20, range=(0,1), label=r'$\mathrm{Bprime}$', co
 plt.legend(loc='best')
 plt.savefig('plots/score_TTbarT.png')
 
-
 plt.figure()
 plt.xlabel('Predicted Bprime score',horizontalalignment='right',x=1.0,size=14)
 plt.ylabel('Events per bin',horizontalalignment='right',y=1.0,size=14)
@@ -179,6 +196,26 @@ plt.title('Work in progress',loc='right',size=14,style='italic')
 plt.ylim([0.01,10.**4])
 plt.hist(probs_wjets.T[2], bins=20, range=(0,1), label=r'$\mathrm{W+jets}$', color='g', histtype='step', log=True, density=True)
 plt.hist(probs_ttbar.T[2], bins=20, range=(0,1), label=r'$\mathrm{t\bar{t}}$', color='y', histtype='step', log=True, density=True)
-plt.hist(probs_bprime.T[2], bins=20, range=(0,1), label=r'$\mathrm{Bprime}$', color='m', histtype='step', log=True, density=True)
+plt.hist(np.concatenate((probs_bprime.T[2], probs_bprime.T[3], probs_bprime.T[4])), bins=20, range=(0,1), label=r'$\mathrm{Bprime}$', color='m', histtype='step', log=True, density=True)
 plt.legend(loc='best')
 plt.savefig('plots/score_bprime.png')
+
+
+myXI, myYI = np.meshgrid(np.linspace(-2, 2, 200), np.linspace(-2, 2, 200))
+print(myXI.shape)
+
+for i in range(len(myXI)):
+        for j in range(len(myYI)):
+                myXI[i, j]
+                myYI[i, j]
+                myZI[i, j] = model.predict
+
+myZI = model.predict(np.c_[myXI.ravel(), myYI.ravel()])
+myZI = myZI.reshape(myXI.shape)
+
+from matplotlib.colors import ListedColormap
+
+plt.figure(figsize=(20, 7))
+
+ax = plt.subplot(1, 2, 1)
+cm = plt.cm.RdBu

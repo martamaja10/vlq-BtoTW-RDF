@@ -86,13 +86,17 @@ for i,key in enumerate(filename.keys()): ## Need .keys() here, or different list
 #df[key]= df[key][(df[key][VARS[0]] > -999) & (df[key][VARS[1]] > -999)]
 
     if 'Bp' in key: ## Only label Bprime as signal
-        df[key]['isSignal'] = np.full(len(df[key]), 2) 
+        if '800' in key:
+            df[key]['isSignal'] = np.full(len(df[key])), 2
+        elif '1400' in key:
+            df[key]['isSignal'] = np.full(len(df[key]), 3)
+        elif '2000' in key:
+	        df[key]['isSignal'] = np.full(len(df[key]), 4)
     elif 'tt' in key:
         df[key]['isSignal'] = np.ones(len(df[key]))
     else:
         df[key]['isSignal'] = np.zeros(len(df[key]))
 
 print('Completed loading files, pickling input data...')
-df_LM = pd.concat([df['BpM2000'], df['BpM1400']])
 df_background = pd.concat([df['ttbarT'],df['ttbarTb'], df['WJets200'], df['WJets400'], df['WJets600'], df['WJets800'], df['WJets1200'], df['WJets2500']])
-np.savez('NewAnalysisArrays', largeMass = df_LM.values, lowMass = df['BpM800'].values, background = df_background.values)
+np.savez('NewAnalysisArrays', mass2000 = df['BpM2000'], mass1400 = df['BpM1400'], mass800 = df['BpM800'].values, background = df_background.values)

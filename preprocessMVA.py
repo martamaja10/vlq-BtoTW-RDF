@@ -111,6 +111,7 @@ eosdir = "root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/"
 # Defining selection criteria for the events
 
 seltest = "Bprime_mass > 0 && NJets_forward > 0 && FatJet_phi[0] > 0"
+seltrain = seltest
 
 treeVars = vars
 
