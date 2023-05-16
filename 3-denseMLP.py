@@ -94,7 +94,6 @@ weights = Bp2000[:, NDIM]
 labels = Bp2000[:, NDIM + 1]
 X_2000_train_val, X_2000_test, Y_2000_train_val, Y_2000_test, weights_2000_train, weights_2000_test = train_test_split(eventData, labels, weights, test_size=0.1, random_state=7)
 
-
 X_train_val = np.concatenate((X_Back_train_val, X_800_train_val, X_1400_train_val, X_2000_train_val)) # Take low mass BP and background for training
 Y_train_val = np.concatenate((Y_Back_train_val, Y_800_train_val, Y_1400_train_val, Y_2000_train_val)) 
 weights_train = np.concatenate((weights_Back_train, weights_800_train, weights_1400_train, weights_2000_train))
