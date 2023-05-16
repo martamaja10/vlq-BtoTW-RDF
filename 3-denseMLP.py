@@ -170,6 +170,7 @@ probs_wjets = model.predict(wjets_test)
 probs_ttbar = model.predict(ttbar_test)
 probs_bprime = model.predict(bprime_test)
 
+# Combining Bprime scores to show as a single unified rating for signal
 print(probs_bprime[0])
 probs_bprime_fixed = np.zeros((len(probs_bprime), 3))
 for i, event in enumerate(probs_bprime):
