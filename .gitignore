@@ -10,4 +10,7 @@ c
 *NN_logs2018.txt
 *.swp
 NewAnalysisArrays.npz
+<<<<<<< HEAD
 *.h5
+=======
+>>>>>>> 419b194afef5710d1e01a65a7c09e3da12d49394

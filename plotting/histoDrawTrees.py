@@ -12,7 +12,7 @@ indir = "/store/user/jmanagan/BtoTW_RDF_MLPs_hadds"
 outdir = os.getcwd()+'/plots_forwardjet/'
 if not os.path.exists(outdir): os.system('mkdir -p '+outdir)
 samples = {'Bp800':'BpM800_', 
-           'Bp1400':'BpM14000_',
+           'Bp1400':'BpM1400_',
            'Bp2000':'BpM2000_',
            'ttbar':'ttbarInc_',
            'wjets200':'WJets200_',
@@ -130,6 +130,9 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
     'mlp_HT250_Bprime':('mlp_HT250_Bprime',linspace(0,1,51).tolist(),';MLP (HT 250) T score'), # later, these should exist
     'mlp_HT250_TTbar': ('mlp_HT250_TTbar',linspace(0,1,51).tolist(),';MLP (HT 250) t#bar{t} score'),
     'mlp_HT250_WJets': ('mlp_HT250_WJets',linspace(0,1,51).tolist(),';MLP (HT 250) W+jets score'),
+    'mlp_wjets': ('mlp_wjets',linspace(0,1,51).tolist(),';MLP T score'),
+    'mlp_ttbar': ('mlp_ttbar',linspace(0,1,51).tolist(),';MLP t#bar{t} score'),
+    'mlp_bprime': ('mlp_bprime',linspace(0,1,51).tolist(),';MLP T score'),
 }
 
 # open an output file for the histos
@@ -139,14 +142,17 @@ hists = {}
 start_time = time.time()
 print 'Building histograms...'
 for sample in samples.keys():
-    if (sample == 'Bp1400'): # This is to correcct a bug (14000 should be 1400) which hopefully will be irrelevant s    omeday
-        tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_wjet.root")
+    print '\t Sample =',sample
+    tfile = TFile.Open("root://cmseos.fnal.gov/"+indir+"/"+samples[sample]+"hadd.root")
+    ttree = tfile.Get("Events")
+    if (sample == 'Bp1400'): # This is to correcct a bug (14000 should be 1400) which hopefully will be irrelevant someday
+	tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_wjet.root")
         tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_ttbar.root")
-        tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_bprime.root")
+    	tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_bprime.root")
     else:
-        tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_wjet.    root")
-        tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_ttbar    .root")
-        tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_bprim    e.root")
+	tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_wjet.root")
+        tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_ttbar.root")
+        tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_bprime.root")
     # Three trees for each different class get merged into one
     ttree2 = tfile2.Get("Events")
     ttree3 = tfile3.Get("Events")
@@ -177,7 +183,7 @@ for tag in tags.keys():
     hists['wjets_'+tag].Add(hists['wjets1200_'+tag])
     hists['wjets_'+tag].Add(hists['wjets2500_'+tag])
     hists['wjets_'+tag].Write()
-    hists['data_obs_'+tag].Write()
+    #hists['data_obs_'+tag].Write()
     hists['Bp800_'+tag].Write()
     hists['Bp1400_'+tag].Write()
     hists['Bp2000_'+tag].Write()
