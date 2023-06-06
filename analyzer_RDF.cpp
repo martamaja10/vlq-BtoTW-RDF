@@ -89,7 +89,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //           t truth extraction:    
   // ---------------------------------------------------- 
   auto t_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
-    ROOT::VecOps::RVec<double> t_gen_info(30,-999); 
+    ROOT::VecOps::RVec<float> t_gen_info(30,-999); 
     if(sample!="Bprime"){return t_gen_info;}
 
     int trueLeptonicT = -1;
@@ -165,7 +165,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //           W truth extraction: 
   // ---------------------------------------------------- 
   auto W_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, int daughterW_gen_pdgId){
-    ROOT::VecOps::RVec<double> W_gen_info(19,-999);
+    ROOT::VecOps::RVec<float> W_gen_info(19,-999);
     if(sample!="Bprime"){return W_gen_info;}
     int trueLeptonicW = -1;
 
@@ -406,58 +406,58 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
   auto rdf = rdf_input.Define("Bprime_gen_info", Bprime_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "GenPart_statusFlags"})
     .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
-    .Define("Bprime_gen_eta", "Bprime_gen_info[1]")
-    .Define("Bprime_gen_phi", "Bprime_gen_info[2]")
+    .Define("Bprime_gen_eta", "(double) Bprime_gen_info[1]")
+    .Define("Bprime_gen_phi", "(double) Bprime_gen_info[2]")
     .Define("Bprime_gen_mass", "Bprime_gen_info[3]")
     .Define("Bprime_gen_pdgId", "(int) Bprime_gen_info[4]")
     .Define("Bprime_gen_status", "(int) Bprime_gen_info[5]")
     .Define("t_gen_info", t_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status"})
     .Define("t_gen_pt", "t_gen_info[0]")
-    .Define("t_gen_eta", "t_gen_info[1]")
-    .Define("t_gen_phi", "t_gen_info[2]")
+    .Define("t_gen_eta", "(double) t_gen_info[1]")
+    .Define("t_gen_phi", "(double) t_gen_info[2]")
     .Define("t_gen_mass", "t_gen_info[3]")
     .Define("t_gen_pdgId", "(int) t_gen_info[4]")
     .Define("t_gen_status", "(int) t_gen_info[5]")
     .Define("daughterb_gen_pt", "t_gen_info[6]")
-    .Define("daughterb_gen_eta", "t_gen_info[7]")
-    .Define("daughterb_gen_phi", "t_gen_info[8]")
+    .Define("daughterb_gen_eta", "(double) t_gen_info[7]")
+    .Define("daughterb_gen_phi", "(double) t_gen_info[8]")
     .Define("daughterb_gen_pdgId", "(int) t_gen_info[9]")
     .Define("daughterb_gen_status", "(int) t_gen_info[10]")
     .Define("daughterW_gen_pt", "t_gen_info[11]")
-    .Define("daughterW_gen_eta", "t_gen_info[12]")
-    .Define("daughterW_gen_phi", "t_gen_info[13]")
+    .Define("daughterW_gen_eta", "(double) t_gen_info[12]")
+    .Define("daughterW_gen_phi", "(double) t_gen_info[13]")
     .Define("daughterW_gen_mass", "t_gen_info[14]")
     .Define("daughterW_gen_pdgId", "(int) t_gen_info[15]")
     .Define("daughterW_gen_status", "(int) t_gen_info[16]")
     .Define("tDaughter1_gen_pt", "t_gen_info[17]") // e/mu/tau or quark1
-    .Define("tDaughter1_gen_eta", "t_gen_info[18]")
-    .Define("tDaughter1_gen_phi", "t_gen_info[19]")
+    .Define("tDaughter1_gen_eta", "(double) t_gen_info[18]")
+    .Define("tDaughter1_gen_phi", "(double) t_gen_info[19]")
     .Define("tDaughter1_gen_mass", "t_gen_info[20]")
     .Define("tDaughter1_gen_pdgId", "(int) t_gen_info[21]")
     .Define("tDaughter1_gen_status", "(int) t_gen_info[22]")
     .Define("tDaughter2_gen_pt", "t_gen_info[23]") // neutrino or quark2
-    .Define("tDaughter2_gen_eta", "t_gen_info[24]")
-    .Define("tDaughter2_gen_phi", "t_gen_info[25]")
+    .Define("tDaughter2_gen_eta", "(double) t_gen_info[24]")
+    .Define("tDaughter2_gen_phi", "(double) t_gen_info[25]")
     .Define("tDaughter2_gen_mass", "t_gen_info[26]")
     .Define("tDaughter2_gen_pdgId", "(int) t_gen_info[27]")
     .Define("tDaughter2_gen_status", "(int) t_gen_info[28]")
     .Define("trueLeptonicT", "(int) t_gen_info[29]")
     .Define("W_gen_info", W_gen_info, {"nGenPart", "GenPart_pdgId", "GenPart_mass", "GenPart_pt", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "GenPart_status", "daughterW_gen_pdgId"})
     .Define("W_gen_pt", "W_gen_info[0]")
-    .Define("W_gen_eta", "W_gen_info[1]")
-    .Define("W_gen_phi", "W_gen_info[2]")
+    .Define("W_gen_eta", "(double) W_gen_info[1]")
+    .Define("W_gen_phi", "(double) W_gen_info[2]")
     .Define("W_gen_mass", "W_gen_info[3]")
     .Define("W_gen_pdgId", "(int) W_gen_info[4]")
     .Define("W_gen_status", "(int) W_gen_info[5]")
     .Define("WDaughter1_gen_pt", "W_gen_info[6]")
-    .Define("WDaughter1_gen_eta", "W_gen_info[7]")
-    .Define("WDaughter1_gen_phi", "W_gen_info[8]")
+    .Define("WDaughter1_gen_eta", "(double) W_gen_info[7]")
+    .Define("WDaughter1_gen_phi", "(double) W_gen_info[8]")
     .Define("WDaughter1_gen_mass", "W_gen_info[9]")
     .Define("WDaughter1_gen_pdgId", "(int) W_gen_info[10]")
     .Define("WDaughter1_gen_status", "(int) W_gen_info[11]")
     .Define("WDaughter2_gen_pt", "W_gen_info[12]")
-    .Define("WDaughter2_gen_eta", "W_gen_info[13]")
-    .Define("WDaughter2_gen_phi", "W_gen_info[14]")
+    .Define("WDaughter2_gen_eta", "(double) W_gen_info[13]")
+    .Define("WDaughter2_gen_phi", "(double) W_gen_info[14]")
     .Define("WDaughter2_gen_mass", "W_gen_info[15]")
     .Define("WDaughter2_gen_pdgId", "(int) W_gen_info[16]")
     .Define("WDaughter2_gen_status", "(int) W_gen_info[17]")
