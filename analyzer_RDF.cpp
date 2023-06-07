@@ -227,7 +227,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   auto FatJet_matching = [](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int& NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, unsigned int& nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId){
 
     ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
-    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets*2,-9);
+    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
 
     //std::cout << "Event: " << std::endl;
     for(unsigned int i=0; i<NFatJets; i++){
