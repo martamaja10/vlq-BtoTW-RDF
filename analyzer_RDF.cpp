@@ -514,9 +514,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //                    Lepton Filters
   // ---------------------------------------------------------
 
-  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 30 && abs(Muon_eta) < 2.4 && Muon_tightId == true && Muon_pfIsoId >= 4") \
+  auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 55 && abs(Muon_eta) < 2.4") \
     .Define("nTPassMu","(int) Sum(TPassMu)")				\
-    .Define("TPassEl","Electron_pt > 38 && Electron_mvaFall17V2noIso_WP90 == true && abs(Electron_eta) < 2.5")\
+    .Define("TPassEl","Electron_pt > 80 && abs(Electron_eta) < 2.5")\
     .Define("nTPassEl","(int) Sum(TPassEl)")				\
     .Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_IsoMu27 == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
     .Define("isEl","(nElectron > 0 && nTPassEl == 1 && HLT_Ele35_WPTight_Gsf == 1 && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
