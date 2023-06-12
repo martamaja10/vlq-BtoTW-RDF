@@ -56,7 +56,7 @@ ROOT::VecOps::RVec<float> cleanJets(ROOT::VecOps::RVec<float>& jt_pt, ROOT::VecO
 		dR[i] = DeltaR(jt_eta[i],lep_eta,jt_phi[i],lep_phi);
 		pt_rel[i] = (Jets.Vect().Cross(Leptons.Vect())).Mag()/Jets.P();
 		isClean = true;
-		if(dR[i] < dR_LIM && pt_rel[i] < 20){isClean = false;}
+		if(dR[i] < dR_LIM && pt_rel[i] < 25){isClean = false;}
 		if(isClean == false){continue;}
 		if(isClean == true){cleanJets_[i] = 1;}
 	}
