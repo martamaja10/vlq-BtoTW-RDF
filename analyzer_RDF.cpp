@@ -315,9 +315,11 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   };
   
   auto FatJet_matching_sig = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int& NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<int>& GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId){
+   
+    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
+    if(sample!="Bprime"){return matched_GenPart;}
 
     ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
-    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
 
     //std::cout << "Event: " << std::endl;
     for(unsigned int i=0; i<NFatJets; i++){
@@ -365,7 +367,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     }
     return matched_GenPart;
   };
-
+  
   auto FatJet_matching_bkg = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int& NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& t_bkg_idx, ROOT::VecOps::RVec<int>& W_bkg_idx){
 
     ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
@@ -591,7 +593,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
     return mlp_scores;
   };
- 
+    
   // -------------------------------------------------------
   //               Flags and First Filter 
   // -------------------------------------------------------
@@ -665,13 +667,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  /*
+  
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-  */
+   
   
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
@@ -881,7 +883,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
-  
+
   time.Stop();
   time.Print();
   std::cout << "Cut statistics:" << std::endl;
