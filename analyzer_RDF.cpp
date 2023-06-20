@@ -84,7 +84,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
    
     return BPrimeInfo; // if entries -999, then no Bprime was found
   };
-
+ 
   // ----------------------------------------------------                        
   //           t truth extraction:    
   // ---------------------------------------------------- 
@@ -314,7 +314,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     return trueLeptonicMode;
   };
   
-  auto FatJet_matching_sig = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int& NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<int>& GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId){
+  auto FatJet_matching_sig = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<int>& GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId){
    
     ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
     if(sample!="Bprime"){return matched_GenPart;}
@@ -348,38 +348,27 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 	else{matched_GenPart[i] = -24;}
       }
 
-      //std::cout << tDaughter1_gen_pdgId << " " << tDaughter2_gen_pdgId << " " << WDaughter1_gen_pdgId << " " << WDaughter2_gen_pdgId << std::endl;
-      //std::cout << dR_b << " " << dR_q1 << " " << dR_q2 << std::endl;
-      //std::cout << dR_q3 << " " << dR_q4 << " " << std::endl;
-    
-      ///////// NOT considered: Momentum requirement + hadronic tau ///////
-      if(matched_GenPart[i]!=-9){
-	//std::cout << "matched: " << matched_GenPart[i] << std::endl;
-	continue;}
+      if(matched_GenPart[i]!=-9){continue;}
 
       int firstsub = FatJet_subJetIdx1[i];
       for(int isub = firstsub; isub < nSubJet; isub++){
 	if(SubJet_hadronFlavour[isub]!=0){matched_GenPart[i] = SubJet_hadronFlavour[isub];}
 	else{matched_GenPart[i] = 0;}
       }
-
-      //std::cout << "matched: " << matched_GenPart[i] << std::endl;
     }
     return matched_GenPart;
   };
-  
-  auto FatJet_matching_bkg = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int& NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int& nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& t_bkg_idx, ROOT::VecOps::RVec<int>& W_bkg_idx){
+   
+  auto FatJet_matching_bkg = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& t_bkg_idx, ROOT::VecOps::RVec<int>& W_bkg_idx){
 
     ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
     if(sample=="Bprime"){return matched_GenPart;}
 
     ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];    
 
-    //std::cout << "Event" << std::endl;
     int ntD = t_bkg_idx.size();
     int nWD = W_bkg_idx.size();
-    //std::cout << ntD << ", " << nWD << std::endl;
-    
+      
     ROOT::VecOps::RVec<double> t_eta(ntD, -9);
     ROOT::VecOps::RVec<double> t_phi(ntD, -9);
     ROOT::VecOps::RVec<double> W_eta(nWD, -9);
@@ -416,16 +405,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     for(unsigned int i=0; i<NFatJets; i++){
       double fatjet_eta = gcFatJet_eta[i];
       double fatjet_phi = gcFatJet_phi[i];
-      //std::cout << "FatJet: " << std::endl;
-      /*
-      for(unsigned int j=0; j<nGenPart; j++){
-	double part_eta = GenPart_eta[j];
-	double part_phi = GenPart_phi[j];
 
-	double dR = DeltaR(fatjet_eta, part_eta, fatjet_phi, part_phi);
-	if(dR<0.8){std::cout << GenPart_pdgId[j] << ", idx: " << j << ", mother: " << GenPart_genPartIdxMother[j] << std::endl;}
-      }
-      */
       for(unsigned int j=0; j<t_bkg_idx.size()/3; j++){
 	double dR_b = DeltaR(fatjet_eta, t_eta[j*3], fatjet_phi, t_phi[j*3]);
 	double dR_q1 = DeltaR(fatjet_eta, t_eta[j*3+1], fatjet_phi, t_phi[j*3+1]);
@@ -440,8 +420,6 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 	  else{matched_GenPart[i] = -24; break;}
 	}
       }
-      
-      //std::cout << "matched: " << matched_GenPart[i] << std::endl;
       
       if(matched_GenPart[i]!=-9){continue;}
       for(unsigned int j=0; j<W_bkg_idx.size()/2; j++){
@@ -460,11 +438,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
         if(SubJet_hadronFlavour[isub]!=0){matched_GenPart[i] = SubJet_hadronFlavour[isub];}
         else{matched_GenPart[i] = 0;}
       }
-      /*
-      if(abs(matched_GenPart[i])==24){
-	std::cout << "matched: " << matched_GenPart[i] << std::endl;}
     }
-      */
     return matched_GenPart;
   };
   
@@ -533,7 +507,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ----------------------------------------------------
   //     minM_lep_jet VECTOR RETURN + NJETSDEEPFLAV
   // ----------------------------------------------------
-  
+ 
   auto minM_lep_jet_calc = [isNominal](ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector lepton_lv)
     {
       float ind_MinMlj = -1; // This gets changed into int in .Define()
@@ -593,7 +567,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
 
     return mlp_scores;
   };
-    
+  
   // -------------------------------------------------------
   //               Flags and First Filter 
   // -------------------------------------------------------
@@ -667,13 +641,13 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  
+      
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-   
+
   
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
@@ -682,7 +656,7 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------
   //                    Lepton Filters
   // ---------------------------------------------------------
-
+  
   auto Lep_df0 = METfilters.Define("TPassMu","Muon_pt > 55 && abs(Muon_eta) < 2.4") \
     .Define("nTPassMu","(int) Sum(TPassMu)")				\
     .Define("TPassEl","Electron_pt > 80 && abs(Electron_eta) < 2.5")\
