@@ -1,11 +1,11 @@
 import os,sys,datetime,time, subprocess, math
 from ROOT import *
+
 execfile("/uscms_data/d3/jmanagan/EOSSafeUtils.py")
 
 start_time = time.time()
 
 #IO directories must be full paths
-
 #inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel'
 #outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel/Bprime_hadds/'
 inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_175'
