@@ -8,8 +8,10 @@ start_time = time.time()
 
 #inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel'
 #outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel/Bprime_hadds/'
-inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_175'
-outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_175/Bprime_hadds/'
+#inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_173'
+#outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_173/Bprime_hadds_alt/'
+inDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update2_TOP21'
+outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update2_TOP21/Bprime_hadds/'
 scratchDir='/uscmst1b_scratch/lpc1/3DayLifetime/xshen'
 
 if not os.path.exists(scratchDir): os.system('mkdir -p '+scratchDir)

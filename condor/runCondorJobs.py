@@ -9,7 +9,8 @@ if len(sys.argv) > 1: makelists = bool(eval(sys.argv[1]))
 
 relbase = '/uscms/home/xshen/nobackup/CMSSW_11_0_0/'
 #outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/presel/'
-outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1/'
+#outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_173/'
+outDir='/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update2_TOP21/'
 condorDir='/uscms/home/xshen/nobackup/CMSSW_11_0_0/src/vlq-BtoTW-RDF/condor/'
 tarfile = '/uscms/home/xshen/nobackup/rdfjobs.tar' # outside the CMSSW
 
