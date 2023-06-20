@@ -8,7 +8,8 @@ import random
 import math
 from ROOT import TTree, TH1D, TFile, RDataFrame
 from root_numpy import tree2array
-import itertools
+from multiprocessing import Pool
+from contextlib import closing
 
 # %%
 ### Reading in basic parameters
@@ -36,7 +37,9 @@ def arch2tuple(n):
       out = out + tup
    return (out)
 
-def resample_with_replacement(X_train, sample_weight):
+def resample_with_replacement(args):
+   X_train = args[0]
+   sample_weight = args[1]
    # normalize sample_weights if not already
    sample_weight = sample_weight / sample_weight.sum(dtype=np.float64)
    
@@ -289,14 +292,26 @@ testBprime2 = [sub[1:] for sub in testBprime2]
 testWJets = [sub[1:] for sub in testWJets]
 #testSingleT = [sub[1:] for sub in testSingleT]
 
-RStrainTTbarT = (resample_with_replacement(trainTTbarT, weightsTrainTTbarT)).tolist()
-RStrainBprime = (resample_with_replacement(trainBprime, weightsTrainBprime)).tolist()
-RStrainWJets = (resample_with_replacement(trainWJets, weightsTrainWJets)).tolist()
+args = [[trainTTbarT, weightsTrainTTbarT], [trainBprime, weightsTrainBprime], [trainWJets, weightsTrainWJets]]
+if __name__ == "__main__":
+   with closing(Pool(processes = 3)) as pool:
+      result = pool.map(resample_with_replacement, args)
+      RStrainTTbarT = result[0].tolist()
+      RStrainBprime = result[1].tolist()
+      RStrainWJets = result[2].tolist()
+      pool.close()
 #RStrainSingleT = (resample_with_replacement(trainSingleT, weightsTrainSingleT)).tolist()
-RStestTTbarT = (resample_with_replacement(testTTbarT, weightsTestTTbarT)).tolist()
-RStestBprime = (resample_with_replacement(testBprime, weightsTestBprime)).tolist()
-RStestBprime2 = (resample_with_replacement(testBprime2, weightsTestBprime2)).tolist()
-RStestWJets = (resample_with_replacement(testWJets, weightsTestWJets)).tolist()
+
+args = [[testTTbarT, weightsTestTTbarT], [testBprime, weightsTestBprime], [testBprime2, weightsTestBprime2], [testWJets, weightsTestWJets]]
+if __name__ == "__main__":
+   with closing(Pool(processes=4)) as pool:
+      result = pool.map(resample_with_replacement, args)
+      RStestTTbarT = result[0].tolist()
+      RStestBprime = result[1].tolist()
+      RStestBprime2 = result[2].tolist()
+      RStestWJets = result[3].tolist()
+      pool.close()
+
 #RStestSingleT = (resample_with_replacement(testSingleT, weightsTestSingleT)).tolist()
 
 ## New versions are used for merging and copies are used for unaltered plotting
@@ -441,4 +456,4 @@ np.savez(outdirName + 'Arrays' + outStr, trainData=trainData, trainLabel = train
     testBprime2 = testBprime2)#, testSingleT = testSingleT)
 
 print('Done')
-print('Time Taken: %s minutes' % (round(time.time() - start_time, 2)/60)) 
+print('Time Taken: %s minutes' % (round(time.time() - start_time, 2)/60))

@@ -1,4 +1,4 @@
-
+*.root
 *.npz
 /settings.json
 test.py
@@ -8,3 +8,6 @@ c
 *.pkl
 *.txt
 *NN_logs2018.txt
+*.swp
+*.h5
+
