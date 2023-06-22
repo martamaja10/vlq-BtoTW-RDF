@@ -11,8 +11,8 @@ from sklearn.preprocessing import StandardScaler
 filename = {}
 
 #import scaler and model
-scaler = pickle.load(open('/uscms/home/khowey/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/NewAnalysisModels/dnn_scaler.pkl'))
-model = keras.models.load_model('/uscms/home/khowey/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/NewAnalysisModels/MLP.h5')
+scaler = pickle.load(open('/uscms/home/kjohnso/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/AnalysisModels-800/dnn_scaler.pkl', 'rb'))
+model = keras.models.load_model('/uscms/home/kjohnso/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/AnalysisModels-800/MLP.h5')
 
 #define dictionary with all events
 filename['BpM2000'] = 'root://cmseos.fnal.gov//store/user/jmanagan/BtoTW_RDF/BpM2000_hadd.root' #troublemaker with 1 inf
@@ -49,28 +49,37 @@ def get_features_from_file(filename='', treename='', branches=[]):
     infCheck = np.isinf(t)
     for idx, x in np.ndenumerate(infCheck):
         if x == True:
-            print "index of infinity:", idx
+            print ("index of infinity:", idx)
             #print "event:", t[idx[0],:]
-            print "changed to = 1"
+            print ("changed to = 1")
             t[idx[0],idx[1]] = 1
     return t
 
 def write_prediction_to_file(features, model, filename='',treename='',branch=['']):
     y_predict_all = model.predict(features) # normal numpy array
          #print y_predict_all.shape
-    print y_predict_all.shape
-    print y_predict_all[0]
+    print (y_predict_all.shape)
+    print (y_predict_all[0])
     y_wjet = np.array(y_predict_all[:, 0], dtype=[(branch[0], np.float64)])
     y_ttbar = np.array(y_predict_all[:, 1], dtype=[(branch[1], np.float64)])
-    y_bprime = np.array(y_predict_all[:,2], dtype=[(branch[2], np.float64)])
-    print y_wjet.shape
-    print y_wjet[0]
-    print y_ttbar[0]
-    print y_bprime[0]
+    y_bprime_800 = np.array(y_predict_all[:,2], dtype=[(branch[2], np.float64)])
+    y_bprime_1400 = np.array(y_predict_all[:,3], dtype=[(branch[3], np.float64)])
+    y_bprime_2000 = np.array(y_predict_all[:,4], dtype=[(branch[4], np.float64)])
+    print (y_wjet.shape)
+    print (y_wjet.shape)
+    print (y_wjet[0])
+    print (y_ttbar[0])
+    print (y_bprime_800[0])
+    print (y_bprime_1400[0])
+    print (y_bprime_2000[0])
 
-    array2root(y_wjet, filename.replace('predict', 'predict_wjet'), treename=treename, mode='recreate')
-    array2root(y_ttbar, filename.replace('predict', 'predict_ttbar'), treename=treename, mode='recreate')
-    array2root(y_bprime, filename.replace('predict', 'predict_bprime'), treename=treename, mode='recreate')
+    array2root(y_wjet, filename, treename=treename, mode='recreate')
+    array2root(y_ttbar, filename, treename=treename, mode='update')
+    array2root(y_bprime_800, filename, treename=treename, mode='update')
+    array2root(y_bprime_1400, filename, treename=treename, mode='update')
+    array2root(y_bprime_2000, filename, treename=treename, mode='update')
+
+
 
 #running the get_features, scaler.transform, and write functions over all .root files
 for key in filename.keys():
@@ -81,8 +90,8 @@ for key in filename.keys():
     X_all = scaler.transform(X_all)
     write_prediction_to_file(X_all,
                              model,
-                             filename[key].replace('hadd','predict').replace('/jmanagan/BtoTW_RDF','/samuelca'),
+                             filename[key].replace('hadd','predict').replace('/jmanagan/BtoTW_RDF','/kjohnso/Bprime_800'),
                              treename='Events',
-                             branch=['mlp_wjets', 'mlp_ttbar', 'mlp_bprime'])
+                             branch=['mlp_wjets', 'mlp_ttbar', 'mlp_bprime_800', 'mlp_bprime_1400', 'mlp_bprime_2000'])
 print('Complete!')
 
