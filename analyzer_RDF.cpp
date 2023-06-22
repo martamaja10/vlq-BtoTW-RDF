@@ -81,7 +81,6 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
       BPrimeInfo[4] = GenPart_pdgId[i];
       BPrimeInfo[5] = GenPart_status[i];
     }
-   
     return BPrimeInfo; // if entries -999, then no Bprime was found
   };
  
@@ -441,7 +440,18 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     }
     return matched_GenPart;
   };
-  
+
+  auto Electron_cutBasedIdNoIso_tight = [](unsigned int nElectron, ROOT::VecOps::RVec<int>& Electron_vidNestedWPBitmap){
+    int noIso_tight = 0;
+    for(unsigned int i=0; i<nElectron; i++){                                                  
+      std::list<int> vars{0, 1, 3, 4, 5, 6, 7};
+      for(int x : vars){
+	if(((Electron_vidNestedWPBitmap[i] >> (x*3)) & 0x7) >= 4){noIso_tight = 1;}
+      }
+    }   
+    return noIso_tight;
+  };
+
   // ----------------------------------------------------
   //   		ttbar background mass CALCULATOR:
   // ----------------------------------------------------
@@ -635,19 +645,20 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("trueLeptonicW", "(int) W_gen_info[18]")
     .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"})
     .Define("t_bkg_idx", t_bkg_idx, {"nGenPart", "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_statusFlags"})
-    .Define("W_bkg_idx", W_bkg_idx, {"nGenPart", "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_statusFlags", "t_bkg_idx"});
+    .Define("W_bkg_idx", W_bkg_idx, {"nGenPart", "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_statusFlags", "t_bkg_idx"})
+    .Define("Electron_cutBasedIdNoIso_tight", Electron_cutBasedIdNoIso_tight, {"nElectron", "Electron_vidNestedWPBitmap"});
   //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
   
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-      
+  /*
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-
+  */
   
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
@@ -657,15 +668,20 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   //                    Lepton Filters
   // ---------------------------------------------------------
   
-  auto Lep_df0 = METfilters.Define("TPassMu","HLT_Mu50_v && Muon_tightId==true && Muon_pt>50 && abs(Muon_eta)<2.4") \
-    .Define("nTPassMu","(int) Sum(TPassMu)")				\
-    .Define("TPassEl","(HLT_Ele115_CaloIdVT_GsfTrkIdT_v || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165_v) && Electron_mvaFall17V2noIso_WP90 == true && Electron_pt>80 && abs(Electron_eta)<2.5")\
-    .Define("nTPassEl","(int) Sum(TPassEl)")				\
-    .Define("isMu","(nMuon > 0 && nTPassMu == 1 (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
-    .Define("isEl","(nElectron > 0 && nTPassEl == 1 && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
+  auto Lep_df0 = METfilters.Define("TPassMu","abs(Muon_eta)<2.4 && (Muon_highPtId==2)") \
+    .Define("TPassEl","(abs(Electron_eta)<2.5) && (abs(Electron_deltaEtaSC+Electron_eta)<2.5) && (Electron_cutBasedIdNoIso_tight==1)")\
+    .Define("SignalMu", "TPassMu && (Muon_pt>55)") \
+    .Define("SignalEl", "TPassEl && (Electron_pt>80)") \
+    .Define("nSignalMu", "(int) Sum(SignalMu)") \
+    .Define("nSignalEl", "(int) Sum(SignalEl)") \
+    .Define("VetoMu", "TPassMu && (Muon_pt>25)") \
+    .Define("VetoEl", "TPassEl && (Electron_pt>25)")    \
+    .Define("nVetoLep", "(int) (Sum(VetoMu)+Sum(VetoEl))") \
+    .Define("isMu","(nMuon>0) && HLT_Mu50 && (nSignalMu==1) && (nVetoLep==0)") \
+    .Define("isEl","(nElectron>0) && (HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165) && (nSignalEl==1) && (nVetoLep==0)") \
     .Filter("isMu || isEl","Event is either muon or electron");
   
-  auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,TPassMu,TPassEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
+  auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,SignalMu,SignalEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
     .Define("lepton_pt","assignleps[0]")				\
     .Define("lepton_eta","assignleps[1]")				\
     .Define("lepton_phi","assignleps[2]")				\
@@ -857,9 +873,9 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   const char* stdfinalFile = finalFile;
   postPresel.Snapshot("Events", stdfinalFile);
   std::cout << "Output File: " << finalFile << std::endl << "-------------------------------------------------" << std::endl;
-
+  
   time.Stop();
   time.Print();
-  std::cout << "Cut statistics:" << std::endl;
-  postPresel.Report()->Print();
+  //std::cout << "Cut statistics:" << std::endl;
+  //postPresel.Report()->Print();
 }
