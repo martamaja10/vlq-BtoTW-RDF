@@ -652,21 +652,28 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
   // ---------------------------------------------------------                          
   //               Save rdf before any cuts
   // ---------------------------------------------------------  
-  /*
   TString outputFileNC = "RDF_"+sample+"_nocuts_"+testNum+".root";
   const char* stdOutputFileNC = outputFileNC;
   std::cout << "------------------------------------------------" << std::endl << ">>> Saving original Snapshot..." << std::endl;
   rdf.Snapshot("Events", stdOutputFileNC);
   std::cout << "Output File: " << outputFileNC << std::endl << "-------------------------------------------------" << std::endl;
-  */
+
   
+  // ---------------------------------------------------------
+  //                    Lepton Filters
+  // ---------------------------------------------------------
+
   auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1","MET Filters")
     .Filter("MET_pt > 50","Pass MET > 50");
   //  std::cout << "Number of Events post MET filters: " << METfilters.Count().GetValue() << std::endl;
 
-  // ---------------------------------------------------------
-  //                    Lepton Filters
-  // ---------------------------------------------------------
+  // Save rdf after MET filter
+  TString outputFileMET = "RDF_"+sample+"_MET_"+testNum+".root"; 
+  const char* stdOutputFileMET = outputFileMET;
+  std::cout << "------------------------------------------------" << std::endl << ">>> Saving MET Snapshot..." << std::endl;                                                                                                     
+  rdf.Snapshot("Events", stdOutputFileMET);
+  std::cout << "Output File: " << outputFileMET << std::endl << "-------------------------------------------------" << std::endl;
+
   
   auto Lep_df0 = METfilters.Define("TPassMu","abs(Muon_eta)<2.4 && (Muon_highPtId==2)") \
     .Define("TPassEl","(abs(Electron_eta)<2.5) && (abs(Electron_deltaEtaSC+Electron_eta)<2.5) && (Electron_cutBasedIdNoIso_tight==1)")\
@@ -688,6 +695,12 @@ void rdf::analyzer_RDF(std::string filename, TString testNum, int year)
     .Define("lepton_mass","assignleps[3]")				\
     .Define("lepton_miniIso","assignleps[4]");
   
+  // Save rdf after Lep filter
+  TString outputFileLep = "RDF_"+sample+"_Lep_"+testNum+".root";
+  const char* stdOutputFileLep = outputFileLep;
+  std::cout << "------------------------------------------------" << std::endl << ">>> Saving Lep Snapshot..." << std::endl;
+  rdf.Snapshot("Events", stdOutputFileLep);
+  std::cout << "Output File: " << outputFileLep << std::endl << "-------------------------------------------------" << std::endl;
     
   // --------------------------------------------------------
   // 		      JET SELECTION w/ cleaning
