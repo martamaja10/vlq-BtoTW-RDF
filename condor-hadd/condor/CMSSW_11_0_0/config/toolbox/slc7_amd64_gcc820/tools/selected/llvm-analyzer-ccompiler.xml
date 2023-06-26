@@ -1,0 +1,7 @@
+  <tool name="llvm-analyzer-ccompiler" version="8.0.1-nmpfii5" type="compiler">
+    <use name="llvm-ccompiler"/>
+    <client>
+      <environment name="LLVM_ANALYZER_CCOMPILER_BASE" default="/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/llvm/8.0.1-nmpfii5"/>
+      <environment name="CC" value="$LLVM_ANALYZER_CCOMPILER_BASE/bin/ccc-analyzer"/>
+    </client>
+  </tool>
