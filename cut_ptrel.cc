@@ -2,7 +2,7 @@
 //     Calculate pass/fail for (minDRAK4 > 0.4 OR ptRelAK4 > 25) on lepton candidates
 // ----------------------------------------------------------------------------------------------
 
-auto cut_ptrel(double dR_LIM_AK4, double ptrel, RVec<TLorentzVector> leptons, double NJets_forward, RVec<double> gcforwJet_eta, RVec<double> gcforwJet_phi, RVec<double> gcforwJet_pt, RVec<double> gcforwJet_mass)
+auto cut_ptrel(double dR_LIM_AK4, double ptrel_LIM, RVec<TLorentzVector> leptons, double NJets_forward, RVec<double> gcforwJet_eta, RVec<double> gcforwJet_phi, RVec<double> gcforwJet_pt, RVec<double> gcforwJet_mass)
 {
     // First, loop through all the muons.  We do each one seperately
     ROOT::RVec<int> passOrFail;
@@ -26,13 +26,13 @@ auto cut_ptrel(double dR_LIM_AK4, double ptrel, RVec<TLorentzVector> leptons, do
         // Find the index of the smallest value in dr, and use it to save the minimum value to minDR
         auto minIndex = ROOT::VecOps::ArgMin(dr);
         //std::cout << "Min Index: " << minIndex << std::endl;
-        auto minDR = dr[0];
+        auto minDR = dr[minIndex];
         //std::cout << "Min DR: " << minDR << std::endl;
         
         TLorentzVector jet;
         jet.SetPtEtaPhiM(gcforwJet_pt[minIndex], gcforwJet_eta[minIndex], gcforwJet_phi[minIndex], gcforwJet_mass[minIndex]); 
         auto ptRel = (jet.Vect().Cross(lepton.Vect())).Mag() / jet.P();
-        if (minDR > dR_LIM_AK4 || ptRel > ptrel)
+        if (minDR > dR_LIM_AK4 || ptRel > ptrel_LIM)
         {
             passOrFail.push_back(1);
         }

@@ -890,16 +890,16 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
                      .Define("Electron_massPass", "Electron_mass[LPassEl == true]")
                      .Define("TLMuon_P4", "fVectorConstructor(Muon_ptPass,Muon_etaPass,Muon_phiPass,Muon_massPass)")
                      .Define("TLElectron_P4", "fVectorConstructor(Electron_ptPass,Electron_etaPass,Electron_phiPass,Electron_massPass)")
-                     .Define("LMuon_JetIdx", "Muon_jetIdx[LPassMu == true]")
-                     .Define("LMuon_MiniIso", "Muon_miniIsoId[LPassMu]")
-                     .Define("LElectron_JetIdx", "Electron_jetIdx[LPassEl]")
-                     .Define("LElectron_MiniIso", "Electron_miniPFRelIso_all[LPassEl]");
+                     .Define("LMuon_jetIdx", "Muon_jetIdx[LPassMu == true]")
+                     .Define("LMuon_miniIsoId", "Muon_miniIsoId[LPassMu]")
+                     .Define("LElectron_jetIdx", "Electron_jetIdx[LPassEl]")
+                     .Define("LElectron_miniIso", "Electron_miniPFRelIso_all[LPassEl]");
                      
   auto CleanJets = LepDefs.Define("Jet_P4", "fVectorConstructor(Jet_pt,Jet_eta,Jet_phi,Jet_mass)")
-                       .Define("cleanJets", "cleanJets(Jet_P4,Jet_rawFactor,TLMuon_P4,LMuon_JetIdx,TLElectron_P4,LElectron_JetIdx)")
+                       .Define("cleanJets", "cleanJets(Jet_P4,Jet_rawFactor,TLMuon_P4,LMuon_jetIdx,TLElectron_P4,LElectron_jetIdx)")
                        .Define("cleanJet_pt", "cleanJets[0]")
                        .Define("cleanJet_eta", "cleanJets[1]")
-                       .Define("cleanJvector<TLorentzVectoret_phi", "cleanJets[2]")
+                       .Define("cleanJet_phi", "cleanJets[2]")
                        .Define("cleanJet_mass", "cleanJets[3]")
                        .Define("cleanJet_rawFactor", "cleanJets[4]")
                        .Define("goodcleanJets", "cleanJet_pt > 30 && abs(cleanJet_eta) < 2.4 && Jet_jetId > 1")
@@ -920,11 +920,11 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
                        .Define("gcforwJet_DeepFlav", "Jet_btagDeepFlavB[goodcleanForwardJets == true]")
                        .Define("dR_LIM_AK4", "(float) 0.4")
                        .Define("ptrel25", "25")
-                       .Define("Muon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("Electron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("LMuon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("LElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
                        .Define("ptrel40", "40")
-                       .Define("Muon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("Electron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
+                       .Define("LMuon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("LElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
   
   // Want a list of pass/fail 0/1s for muons with the cut "minDR(jet,muon) > dR_LIM_AK4 || ptRel(minDRjet,muon) > X"
   // to-do list:
