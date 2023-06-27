@@ -75,354 +75,215 @@ auto Bprime_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &
   return BPrimeInfo; // if entries -999, then no Bprime was found
 };
 
-// ----------------------------------------------------
-//           t truth extraction:
-// ----------------------------------------------------
-auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<float> &GenPart_mass, ROOT::VecOps::RVec<float> &GenPart_pt, ROOT::VecOps::RVec<float> &GenPart_phi, ROOT::VecOps::RVec<float> &GenPart_eta, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &GenPart_status)
-{
-  ROOT::VecOps::RVec<float> t_gen_info(30, -999);
-  if (sample != "Bprime")
-  {
-    return t_gen_info;
-  }
+  // ----------------------------------------------------                        
+  //           t truth extraction:    
+  // ---------------------------------------------------- 
+  auto t_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status){
+    ROOT::VecOps::RVec<float> t_gen_info(30, -999);
+    if(sample!="Bprime"){return t_gen_info;}
 
-  int trueLeptonicT = -1;
-  for (unsigned int i = 0; i < nGenPart; i++)
-  {
-    int id = GenPart_pdgId[i];
-    int motherIdx = GenPart_genPartIdxMother[i];
-
-    if (abs(GenPart_pdgId[motherIdx]) != 6)
-    {
-      continue;
-    } // find t daughters
-    if (abs(id) != 24 && abs(id) != 5)
-    {
-      continue;
-    }
-
-    // store t info
-    t_gen_info[0] = GenPart_pt[motherIdx];
-    t_gen_info[1] = GenPart_eta[motherIdx];
-    t_gen_info[2] = GenPart_phi[motherIdx];
-    t_gen_info[3] = GenPart_mass[motherIdx];
-    t_gen_info[4] = GenPart_pdgId[motherIdx];
-    t_gen_info[5] = GenPart_status[motherIdx];
-
-    int igen = i;
-    for (unsigned int j = i; j < nGenPart; j++)
-    {
-      if (GenPart_pdgId[j] != id)
-      {
-        continue;
-      }
-      if (GenPart_genPartIdxMother[j] != igen)
-      {
-        continue;
-      }
-      igen = j; // take the last copy of t daughter
-    }
-
-    if (abs(id) == 5)
-    { // store b info
-      t_gen_info[6] = GenPart_pt[igen];
-      t_gen_info[7] = GenPart_eta[igen];
-      t_gen_info[8] = GenPart_phi[igen]; // did not record gen mass, because =0 for all b
-      t_gen_info[9] = GenPart_pdgId[igen];
-      t_gen_info[10] = GenPart_status[igen];
-    }
-    else
-    { // store W info
-      t_gen_info[11] = GenPart_pt[igen];
-      t_gen_info[12] = GenPart_eta[igen];
-      t_gen_info[13] = GenPart_phi[igen];
-      t_gen_info[14] = GenPart_mass[igen];
-      t_gen_info[15] = GenPart_pdgId[igen];
-      t_gen_info[16] = GenPart_status[igen];
-      for (unsigned int j = igen; j < nGenPart; j++)
-      {
-        if (GenPart_genPartIdxMother[j] != igen)
-        {
-          continue;
-        } // look for W daughters
-        int j_id = GenPart_pdgId[j];
-
-        int jgen = j;
-        for (unsigned int k = j; k < nGenPart; k++)
-        {
-          if (GenPart_pdgId[k] != j_id)
-          {
-            continue;
-          }
-          if (GenPart_genPartIdxMother[k] != j_id)
-          {
-            continue;
-          }
-          jgen = k; // take the last copy of W daughter
-        }
-
-        int n = 0;
-        if (abs(j_id) == 11 || abs(j_id) == 13 || abs(j_id) == 15)
-        {
-          trueLeptonicT = 1;
-        } // store e/mu/tau first
-        else if (abs(j_id) == 12 || abs(j_id) == 14 || abs(j_id) == 16)
-        {
-          trueLeptonicT = 1;
-          n = 6;
-        } // then neutrinos
-        else if (trueLeptonicT == -1)
-        {
-          trueLeptonicT = 0;
-        } // quark 1
-        else if (trueLeptonicT == 0)
-        {
-          n = 6;
-        } // quark 2
-        else
-        {
-          std::cout << "error" << std::endl;
-        }
-
-        t_gen_info[17 + n] = GenPart_pt[jgen];
-        t_gen_info[18 + n] = GenPart_eta[jgen];
-        t_gen_info[19 + n] = GenPart_phi[jgen];
-        t_gen_info[20 + n] = GenPart_mass[jgen];
-        t_gen_info[21 + n] = GenPart_pdgId[jgen];
-        t_gen_info[22 + n] = GenPart_status[jgen];
-      }
-    }
-  }
-  t_gen_info[29] = trueLeptonicT;
-
-  return t_gen_info;
-};
-
-  // ----------------------------------------------------
-  //           W truth extraction:
-  // ----------------------------------------------------
-  auto W_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<float> &GenPart_mass, ROOT::VecOps::RVec<float> &GenPart_pt, ROOT::VecOps::RVec<float> &GenPart_phi, ROOT::VecOps::RVec<float> &GenPart_eta, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &GenPart_status, int daughterW_gen_pdgId)
-  {
-    ROOT::VecOps::RVec<float> W_gen_info(19, -999);
-    if (sample != "Bprime")
-    {
-      return W_gen_info;
-    }
-    int trueLeptonicW = -1;
-
-    for (unsigned int i = 0; i < nGenPart; i++)
-    {
+    int trueLeptonicT = -1;    
+    for(unsigned int i=0; i<nGenPart; i++){
       int id = GenPart_pdgId[i];
       int motherIdx = GenPart_genPartIdxMother[i];
 
-      if (abs(id) > 17 || GenPart_pdgId[motherIdx] != (-daughterW_gen_pdgId))
-      {
-        continue;
-      } // look for daughters of W
+      if(abs(GenPart_pdgId[motherIdx])!=6){continue;} // find t daughters
+      if(abs(id)!=24 && abs(id)!=5){continue;}
+      
+      // store t info
+      t_gen_info[0] = GenPart_pt[motherIdx];
+      t_gen_info[1] = GenPart_eta[motherIdx];
+      t_gen_info[2] = GenPart_phi[motherIdx];
+      t_gen_info[3] = GenPart_mass[motherIdx];
+      t_gen_info[4] = GenPart_pdgId[motherIdx];
+      t_gen_info[5] = GenPart_status[motherIdx];
+     
+      int igen = i;
+      for(unsigned int j=i; j<nGenPart; j++){
+        if(GenPart_pdgId[j]!=id){continue;}
+        if(GenPart_genPartIdxMother[j]!=igen){continue;}
+	igen = j; // take the last copy of t daughter
+      }
+      
+      if(abs(id)==5){ // store b info
+	t_gen_info[6] = GenPart_pt[igen];
+        t_gen_info[7] = GenPart_eta[igen];
+        t_gen_info[8] = GenPart_phi[igen]; // did not record gen mass, because =0 for all b 
+        t_gen_info[9] = GenPart_pdgId[igen];
+        t_gen_info[10] = GenPart_status[igen];
+      }
+      else{ // store W info
+	t_gen_info[11] = GenPart_pt[igen];
+        t_gen_info[12] = GenPart_eta[igen];
+        t_gen_info[13] = GenPart_phi[igen];
+        t_gen_info[14] = GenPart_mass[igen];
+        t_gen_info[15] = GenPart_pdgId[igen];
+        t_gen_info[16] = GenPart_status[igen];
+	for(unsigned int j=igen; j<nGenPart; j++){
+	  if(GenPart_genPartIdxMother[j]!=igen){continue;} // look for W daughters
+	  int j_id = GenPart_pdgId[j];
 
-      if (trueLeptonicW == -1)
-      {
-        W_gen_info[0] = GenPart_pt[motherIdx];
-        W_gen_info[1] = GenPart_eta[motherIdx];
-        W_gen_info[2] = GenPart_phi[motherIdx];
-        W_gen_info[3] = GenPart_mass[motherIdx];
-        W_gen_info[4] = GenPart_pdgId[motherIdx];
-        W_gen_info[5] = GenPart_status[motherIdx];
+	  int jgen = j;
+	  for(unsigned int k=j; k<nGenPart; k++){
+	    if(GenPart_pdgId[k]!=j_id){continue;}
+	    if(GenPart_genPartIdxMother[k]!=j_id){continue;}
+	    jgen = k; // take the last copy of W daughter
+	  }
+
+	  int n = 0;
+	  if(abs(j_id)==11 || abs(j_id)==13 || abs(j_id)==15){trueLeptonicT = 1;} //store e/mu/tau first
+	  else if(abs(j_id)==12 || abs(j_id)==14 || abs(j_id)==16){trueLeptonicT = 1; n = 6;} // then neutrinos
+	  else if(trueLeptonicT==-1){trueLeptonicT = 0;} // quark 1
+	  else if(trueLeptonicT==0){n = 6;} // quark 2
+	  else{std::cout << "error" << std::endl;}
+	  
+          t_gen_info[17+n] = GenPart_pt[jgen];
+          t_gen_info[18+n] = GenPart_eta[jgen];
+          t_gen_info[19+n] = GenPart_phi[jgen];
+          t_gen_info[20+n] = GenPart_mass[jgen];
+          t_gen_info[21+n] = GenPart_pdgId[jgen];	
+	  t_gen_info[22+n] = GenPart_status[jgen];
+	}
+      }
+    }
+    t_gen_info[29] = trueLeptonicT;
+
+    return t_gen_info;
+  };
+
+  // ----------------------------------------------------           
+  //           W truth extraction: 
+  // ---------------------------------------------------- 
+  auto W_gen_info=[sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_mass, ROOT::VecOps::RVec<float>& GenPart_pt, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_status, int daughterW_gen_pdgId){
+    ROOT::VecOps::RVec<float> W_gen_info(19,-999);
+    if(sample!="Bprime"){return W_gen_info;}
+    int trueLeptonicW = -1;
+
+    for(unsigned int i=0; i<nGenPart; i++){
+      int id = GenPart_pdgId[i];
+      int motherIdx = GenPart_genPartIdxMother[i];
+
+      if(abs(id)>17 || GenPart_pdgId[motherIdx]!=(-daughterW_gen_pdgId)){continue;} // look for daughters of W
+
+      if(trueLeptonicW==-1){
+	W_gen_info[0] = GenPart_pt[motherIdx];
+	W_gen_info[1] = GenPart_eta[motherIdx];
+	W_gen_info[2] = GenPart_phi[motherIdx];
+	W_gen_info[3] = GenPart_mass[motherIdx];
+	W_gen_info[4] = GenPart_pdgId[motherIdx];
+	W_gen_info[5] = GenPart_status[motherIdx];
       }
 
       int igen = i;
-      for (unsigned int j = igen; j < nGenPart; j++)
-      {
-        if (GenPart_pdgId[j] != id)
-        {
-          continue;
-        }
-        if (GenPart_genPartIdxMother[j] != igen)
-        {
-          continue;
-        }
-        igen = j; // take the last copy of W daughter
+      for(unsigned int j=igen; j<nGenPart; j++){
+	if(GenPart_pdgId[j]!=id){continue;}
+	if(GenPart_genPartIdxMother[j]!=igen){continue;}
+	igen = j; // take the last copy of W daughter                         
       }
-
+      
       int n = 0;
-      if (abs(id) == 11 || abs(id) == 13 || abs(id) == 15)
-      {
-        trueLeptonicW = 1;
-      } // store e/mu/tau first
-      else if (abs(id) == 12 || abs(id) == 14 || abs(id) == 16)
-      {
-        trueLeptonicW = 1;
-        n = 6;
-      } // then neutrinos
-      else if (trueLeptonicW == -1)
-      {
-        trueLeptonicW = 0;
-      } // quark 1
-      else if (trueLeptonicW == 0)
-      {
-        n = 6;
-      } // quark 2
-      else
-      {
-        std::cout << "error" << std::endl;
-      }
+      if(abs(id)==11 || abs(id)==13 || abs(id)==15){trueLeptonicW = 1;} //store e/mu/tau first
+      else if(abs(id)==12 || abs(id)==14 || abs(id)==16){trueLeptonicW = 1; n = 6;} // then neutrinos
+      else if(trueLeptonicW==-1){trueLeptonicW = 0;} // quark 1                                                                   
+      else if(trueLeptonicW==0){n = 6;} // quark 2                                                                                                         
+      else{std::cout << "error" << std::endl;}
 
-      W_gen_info[6 + n] = GenPart_pt[i];
-      W_gen_info[7 + n] = GenPart_eta[i];
-      W_gen_info[8 + n] = GenPart_phi[i];
-      W_gen_info[9 + n] = GenPart_mass[i];
-      W_gen_info[10 + n] = GenPart_pdgId[i];
-      W_gen_info[11 + n] = GenPart_status[i];
+      W_gen_info[6+n] = GenPart_pt[i];
+      W_gen_info[7+n] = GenPart_eta[i];
+      W_gen_info[8+n] = GenPart_phi[i];
+      W_gen_info[9+n] = GenPart_mass[i];
+      W_gen_info[10+n] = GenPart_pdgId[i];
+      W_gen_info[11+n] = GenPart_status[i];
     }
     W_gen_info[18] = trueLeptonicW;
 
     return W_gen_info;
   };
-
+  
   // ----------------------------------------------------
   //           W,t truth extraction for bkg:
   // ----------------------------------------------------
 
-  auto t_bkg_idx = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &GenPart_statusFlags)
-  {
-    if (sample == "Bprime")
-    {
+  auto t_bkg_idx = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags){
+    if(sample=="Bprime"){
       ROOT::VecOps::RVec<int> t_daughter_idx;
       return t_daughter_idx;
     }
 
     ROOT::VecOps::RVec<int> t_idx;
-    for (unsigned int i = 0; i < nGenPart; i++)
-    {
-      if (abs(GenPart_pdgId[i]) != 6)
-      {
-        continue;
-      }
+    for(unsigned int i=0; i<nGenPart; i++){
+      if(abs(GenPart_pdgId[i])!=6){continue;}
       std::bitset<15> statusFlags(GenPart_statusFlags[i]);
 
-      if (statusFlags.to_string()[1] == '0')
-      {
-        continue;
-      } // take last copy of t
+      if(statusFlags.to_string()[1]=='0'){continue;} // take last copy of t
       t_idx.push_back(i);
     }
 
     int Nt = t_idx.size();
-    ROOT::VecOps::RVec<int> t_daughter_idx(Nt * 3, -99);
+    ROOT::VecOps::RVec<int> t_daughter_idx(Nt*3, -99);
+    
+    for(unsigned int i=0; i<Nt; i++){
+      for(unsigned int j=t_idx[i]; j<nGenPart; j++){                                                      
+	if(GenPart_genPartIdxMother[j]!=t_idx[i]){continue;} // pick out daughters of t
 
-    for (unsigned int i = 0; i < Nt; i++)
-    {
-      for (unsigned int j = t_idx[i]; j < nGenPart; j++)
-      {
-        if (GenPart_genPartIdxMother[j] != t_idx[i])
-        {
-          continue;
-        } // pick out daughters of t
+	int id = GenPart_pdgId[j];
+	if(abs(id)!=5 && abs(id)!=24){continue;} // pick out daughter b, W
 
-        int id = GenPart_pdgId[j];
-        if (abs(id) != 5 && abs(id) != 24)
-        {
-          continue;
-        } // pick out daughter b, W
-
-        if (abs(id) == 5)
-        {
-          t_daughter_idx[i * 3] = j;
-        } // record the first copy of b
-        else
-        {
-          int jgen = j;
-          for (unsigned int k = j; k < nGenPart; k++)
-          {
-            if (GenPart_pdgId[k] != id)
-            {
-              continue;
-            }
-            if (GenPart_genPartIdxMother[k] != jgen)
-            {
-              continue;
-            }
-            jgen = k; // take the last copy of W
-          }
-
-          int n = 1;
-          for (unsigned int k = j; k < nGenPart; k++)
-          {
-            if (GenPart_genPartIdxMother[k] != jgen)
-            {
-              continue;
-            } // pick out daughters of W
-            if (abs(GenPart_pdgId[k]) > 17)
-            {
-              continue;
-            }                              // to exclude 24->22,24
-            t_daughter_idx[i * 3 + n] = k; // record the first copy of W daughter
-            n += 1;
-          }
-        }
+	if(abs(id)==5){t_daughter_idx[i*3] = j;} // record the first copy of b
+	else{
+	  int jgen = j;
+	  for(unsigned int k=j; k<nGenPart; k++){
+	    if(GenPart_pdgId[k]!=id){continue;}
+	    if(GenPart_genPartIdxMother[k]!=jgen){continue;}
+	    jgen = k; // take the last copy of W  
+	  }
+       
+	  int n = 1;
+	  for(unsigned int k=j; k<nGenPart; k++){
+	    if(GenPart_genPartIdxMother[k]!=jgen){continue;} // pick out daughters of W
+	    if(abs(GenPart_pdgId[k])>17){continue;} // to exclude 24->22,24
+	    t_daughter_idx[i*3+n] = k; // record the first copy of W daughter
+	    n+=1;
+	  }
+	}
       }
     }
     return t_daughter_idx;
   };
 
-  auto W_bkg_idx = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &GenPart_statusFlags, ROOT::VecOps::RVec<int> &t_bkg_idx)
-  {
-    if (sample == "Bprime")
-    {
+  auto W_bkg_idx = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& GenPart_statusFlags, ROOT::VecOps::RVec<int>& t_bkg_idx){
+    if(sample=="Bprime"){
       ROOT::VecOps::RVec<int> W_daughter_idx;
       return W_daughter_idx;
     }
-    //std::cout << "Event" << std::endl;
+    std::cout << "Event" << std::endl;
     ROOT::VecOps::RVec<int> W_idx;
-    for (unsigned int i = 0; i < nGenPart; i++)
-    {
-      if (abs(GenPart_pdgId[i]) != 24)
-      {
-        continue;
-      }
+    for(unsigned int i=0; i<nGenPart; i++){
+      if(abs(GenPart_pdgId[i])!=24){continue;}
 
       std::bitset<15> statusFlags(GenPart_statusFlags[i]);
-      if (statusFlags.to_string()[1] == '0')
-      {
-        continue;
-      } // take last copy of W
+      if(statusFlags.to_string()[1]=='0'){continue;} // take last copy of W
 
       bool exclude = false;
-      for (unsigned int j = 0; j < t_bkg_idx.size(); j += 3)
-      {
-        if (i == GenPart_genPartIdxMother[t_bkg_idx[j + 1]])
-        {
-          exclude = true;
-          break;
-        } // exclude W's from t
+      for(unsigned int j=0; j<t_bkg_idx.size(); j+=3){
+	if(i==GenPart_genPartIdxMother[t_bkg_idx[j+1]]){exclude = true; break;} // exclude W's from t
       }
-
-      if (exclude)
-      {
-        continue;
-      }
+      
+      if(exclude){continue;}
       W_idx.push_back(i);
     }
 
     int nW = W_idx.size();
-    ROOT::VecOps::RVec<int> W_daughter_idx(nW * 2, -99);
+    ROOT::VecOps::RVec<int> W_daughter_idx(nW*2, -99);
 
-    for (unsigned int i = 0; i < nW; i++)
-    {
+    for(unsigned int i=0; i<nW; i++){
       int n = 0;
-      for (unsigned int j = 0; j < nGenPart; j++)
-      {
-        if (GenPart_genPartIdxMother[j] != W_idx[i])
-        {
-          continue;
-        } // pick out daughters of W
-        if (abs(GenPart_pdgId[j]) > 17)
-        {
-          continue;
-        } // to exclude 24->22,24
-
-        W_daughter_idx[i * 2 + n] = j; // record the first copy of W daughter
-        n += 1;
+      for(unsigned int j=0; j<nGenPart; j++){
+	if(GenPart_genPartIdxMother[j]!=W_idx[i]){continue;} // pick out daughters of W
+	if(abs(GenPart_pdgId[j])>17){continue;} // to exclude 24->22,24
+	
+	W_daughter_idx[i*2+n] = j; // record the first copy of W daughter
+	n+=1;
       }
     }
 
@@ -430,52 +291,32 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
   };
 
   // The following functions could probably all go to the plotting marco
-  auto leptonicCheck = [sample](int trueLeptonicT, int trueLeptonicW)
-  {
-    if (sample != "Bprime")
-    {
-      return -9;
-    } // not sure if this line is needed. check.
-
+  auto leptonicCheck = [sample](int trueLeptonicT, int trueLeptonicW){
+    if(sample!="Bprime"){return -9;} // not sure if this line is needed. check.
+    
     int trueLeptonicMode = -9;
-
-    if ((trueLeptonicT != 1) && (trueLeptonicW == 1))
-    {
-      trueLeptonicMode = 0;
-    } // leptonic W
-    else if ((trueLeptonicT == 1) && (trueLeptonicW != 1))
-    {
-      trueLeptonicMode = 1;
-    } // leptonic T
-    else if ((trueLeptonicT == 1) && (trueLeptonicW == 1))
-    {
-      trueLeptonicMode = 2;
-    } // dileptonic
-    else if ((trueLeptonicT == 0) && (trueLeptonicW == 0))
-    {
-      trueLeptonicMode = -1;
-    } // hadronic
+    
+    if ((trueLeptonicT!=1) && (trueLeptonicW==1)){trueLeptonicMode = 0;} // leptonic W
+    else if ((trueLeptonicT==1) && (trueLeptonicW!=1)){trueLeptonicMode = 1;} // leptonic T
+    else if ((trueLeptonicT==1) && (trueLeptonicW==1)){trueLeptonicMode = 2;} // dileptonic
+    else if ((trueLeptonicT==0) && (trueLeptonicW==0)){trueLeptonicMode = -1;} // hadronic
 
     return trueLeptonicMode;
   };
 
-  auto FatJet_matching_sig = [sample](ROOT::VecOps::RVec<float> &goodcleanFatJets, ROOT::VecOps::RVec<float> &gcFatJet_eta, ROOT::VecOps::RVec<float> &gcFatJet_phi, int NFatJets, ROOT::VecOps::RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, ROOT::VecOps::RVec<int> &SubJet_hadronFlavour, ROOT::VecOps::RVec<int> &GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId)
-  {
-    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets, -9);
-    if (sample != "Bprime")
-    {
-      return matched_GenPart;
-    }
+  auto FatJet_matching_sig = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, ROOT::VecOps::RVec<int>& GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId){
+   
+    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
+    if(sample!="Bprime"){return matched_GenPart;}
 
     ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
 
-    // std::cout << "Event: " << std::endl;
-    for (unsigned int i = 0; i < NFatJets; i++)
-    {
-      // std::cout << "\n" << "Fatjet: " << std::endl;
+    //std::cout << "Event: " << std::endl;
+    for(unsigned int i=0; i<NFatJets; i++){
+      //std::cout << "\n" << "Fatjet: " << std::endl;
       double fatjet_eta = gcFatJet_eta[i];
       double fatjet_phi = gcFatJet_phi[i];
-
+                                                                      
       double dR_b = DeltaR(fatjet_eta, daughterb_gen_eta, fatjet_phi, daughterb_gen_phi);
       double dR_q1 = DeltaR(fatjet_eta, tDaughter1_gen_eta, fatjet_phi, tDaughter1_gen_phi);
       double dR_q2 = DeltaR(fatjet_eta, tDaughter2_gen_eta, fatjet_phi, tDaughter2_gen_phi);
@@ -483,207 +324,123 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
       double dR_q3 = DeltaR(fatjet_eta, WDaughter1_gen_eta, fatjet_phi, WDaughter1_gen_phi);
       double dR_q4 = DeltaR(fatjet_eta, WDaughter2_gen_eta, fatjet_phi, WDaughter2_gen_phi);
 
-      if (dR_b < 0.8 && dR_q1 < 0.8 && dR_q2 < 0.8)
-      {
-        if (abs(tDaughter1_gen_pdgId) < 6)
-        {
-          matched_GenPart[i] = 6;
-        } // pos stands for hadronic t
-        else
-        {
-          matched_GenPart[i] = -6;
-        } // neg stands for leptonic t
+      if(dR_b<0.8 && dR_q1<0.8 && dR_q2<0.8){
+	if(abs(tDaughter1_gen_pdgId)<6){matched_GenPart[i] = 6;} // pos stands for hadronic t
+	else{matched_GenPart[i] = -6;} // neg stands for leptonic t
       }
-      else if (dR_q1 < 0.8 && dR_q2 < 0.8)
-      {
-        if (abs(tDaughter1_gen_pdgId) < 6)
-        {
-          matched_GenPart[i] = 24;
-        }
-        else
-        {
-          matched_GenPart[i] = -24;
-        }
+      else if(dR_q1<0.8 && dR_q2<0.8){
+	if(abs(tDaughter1_gen_pdgId)<6){matched_GenPart[i] = 24;}
+        else{matched_GenPart[i] = -24;}
       }
 
-      if (dR_q3 < 0.8 && dR_q4 < 0.8)
-      {
-        if (abs(WDaughter1_gen_pdgId) < 6)
-        {
-          matched_GenPart[i] = 24;
-        }
-        else
-        {
-          matched_GenPart[i] = -24;
-        }
+      if(dR_q3<0.8 && dR_q4<0.8){
+	if(abs(WDaughter1_gen_pdgId)<6){matched_GenPart[i] = 24;}
+	else{matched_GenPart[i] = -24;}
       }
 
-      if (matched_GenPart[i] != -9)
-      {
-        continue;
-      }
+      if(matched_GenPart[i]!=-9){continue;}
 
       int firstsub = FatJet_subJetIdx1[i];
-      for (int isub = firstsub; isub < nSubJet; isub++)
-      {
-        if (SubJet_hadronFlavour[isub] != 0)
-        {
-          matched_GenPart[i] = SubJet_hadronFlavour[isub];
-        }
-        else
-        {
-          matched_GenPart[i] = 0;
-        }
+      for(int isub = firstsub; isub < nSubJet; isub++){
+	if(SubJet_hadronFlavour[isub]!=0){matched_GenPart[i] = SubJet_hadronFlavour[isub];}
+	else{matched_GenPart[i] = 0;}
       }
     }
     return matched_GenPart;
   };
+   
+  auto FatJet_matching_bkg = [sample](ROOT::VecOps::RVec<float>& goodcleanFatJets, ROOT::VecOps::RVec<float>& gcFatJet_eta, ROOT::VecOps::RVec<float>& gcFatJet_phi, int NFatJets, ROOT::VecOps::RVec<int>& FatJet_subJetIdx1, unsigned int nSubJet, ROOT::VecOps::RVec<int>& SubJet_hadronFlavour, unsigned int nGenPart, ROOT::VecOps::RVec<int>& GenPart_pdgId, ROOT::VecOps::RVec<float>& GenPart_phi, ROOT::VecOps::RVec<float>& GenPart_eta, ROOT::VecOps::RVec<int>& GenPart_genPartIdxMother, ROOT::VecOps::RVec<int>& t_bkg_idx, ROOT::VecOps::RVec<int>& W_bkg_idx){
 
-  auto FatJet_matching_bkg = [sample](ROOT::VecOps::RVec<float> &goodcleanFatJets, ROOT::VecOps::RVec<float> &gcFatJet_eta, ROOT::VecOps::RVec<float> &gcFatJet_phi, int NFatJets, ROOT::VecOps::RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, ROOT::VecOps::RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<float> &GenPart_phi, ROOT::VecOps::RVec<float> &GenPart_eta, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &t_bkg_idx, ROOT::VecOps::RVec<int> &W_bkg_idx)
-  {
-    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets, -9);
-    if (sample == "Bprime")
-    {
-      return matched_GenPart;
-    }
+    ROOT::VecOps::RVec<int> matched_GenPart(NFatJets,-9);
+    if(sample=="Bprime"){return matched_GenPart;}
 
-    ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
+    ROOT::VecOps::RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];    
 
     int ntD = t_bkg_idx.size();
     int nWD = W_bkg_idx.size();
-
+      
     ROOT::VecOps::RVec<double> t_eta(ntD, -9);
     ROOT::VecOps::RVec<double> t_phi(ntD, -9);
     ROOT::VecOps::RVec<double> W_eta(nWD, -9);
     ROOT::VecOps::RVec<double> W_phi(nWD, -9);
 
-    if (ntD != 0)
-    {
-      for (unsigned int i = 0; i < ntD; i++)
-      {
-        int igen = t_bkg_idx[i];
-        int id = GenPart_pdgId[igen];
-        for (unsigned int j = igen; j < nGenPart; j++)
-        {
-          if (GenPart_pdgId[j] != id)
-          {
-            continue;
-          }
-          if (GenPart_genPartIdxMother[j] != igen)
-          {
-            continue;
-          }
-          igen = j; // take the last copy of t daughter
-        }
-        t_eta[i] = GenPart_eta[igen];
-        t_phi[i] = GenPart_phi[igen];
+    if(ntD!=0){
+      for(unsigned int i=0; i<ntD; i++){
+	int igen = t_bkg_idx[i];
+	int id = GenPart_pdgId[igen];
+	for(unsigned int j=igen; j<nGenPart; j++){
+	  if(GenPart_pdgId[j]!=id){continue;}
+	  if(GenPart_genPartIdxMother[j]!=igen){continue;}
+	  igen = j; // take the last copy of t daughter
+	}
+	t_eta[i] = GenPart_eta[igen];
+	t_phi[i] = GenPart_phi[igen];
       }
     }
 
-    if (nWD != 0)
-    {
-      for (unsigned int i = 0; i < nWD; i++)
-      {
-        int igen = W_bkg_idx[i];
-        int id = GenPart_pdgId[igen];
-        for (unsigned int j = igen; j < nGenPart; j++)
-        {
-          if (GenPart_pdgId[j] != id)
-          {
-            continue;
-          }
-          if (GenPart_genPartIdxMother[j] != igen)
-          {
-            continue;
-          }
-          igen = j; // take the last copy of W daughter
-        }
-        W_eta[i] = GenPart_eta[igen];
-        W_phi[i] = GenPart_phi[igen];
+    if(nWD!=0){
+      for(unsigned int i=0; i<nWD; i++){
+	int igen = W_bkg_idx[i];
+	int id = GenPart_pdgId[igen];
+	for(unsigned int j=igen; j<nGenPart; j++){
+	  if(GenPart_pdgId[j]!=id){continue;}
+	  if(GenPart_genPartIdxMother[j]!=igen){continue;}
+	  igen = j; // take the last copy of W daughter
+	}
+	W_eta[i] = GenPart_eta[igen];
+	W_phi[i] = GenPart_phi[igen];
       }
     }
-
-    for (unsigned int i = 0; i < NFatJets; i++)
-    {
+    
+    for(unsigned int i=0; i<NFatJets; i++){
       double fatjet_eta = gcFatJet_eta[i];
       double fatjet_phi = gcFatJet_phi[i];
 
-      for (unsigned int j = 0; j < t_bkg_idx.size() / 3; j++)
-      {
-        double dR_b = DeltaR(fatjet_eta, t_eta[j * 3], fatjet_phi, t_phi[j * 3]);
-        double dR_q1 = DeltaR(fatjet_eta, t_eta[j * 3 + 1], fatjet_phi, t_phi[j * 3 + 1]);
-        double dR_q2 = DeltaR(fatjet_eta, t_eta[j * 3 + 2], fatjet_phi, t_phi[j * 3 + 2]);
+      for(unsigned int j=0; j<t_bkg_idx.size()/3; j++){
+	double dR_b = DeltaR(fatjet_eta, t_eta[j*3], fatjet_phi, t_phi[j*3]);
+	double dR_q1 = DeltaR(fatjet_eta, t_eta[j*3+1], fatjet_phi, t_phi[j*3+1]);
+	double dR_q2 = DeltaR(fatjet_eta, t_eta[j*3+2], fatjet_phi, t_phi[j*3+2]);
+	
+	if(dR_b<0.8 && dR_q1<0.8 && dR_q2<0.8){
+	  if(abs(GenPart_pdgId[t_bkg_idx[j*3+1]])<6){matched_GenPart[i] = 6; break;} // pos stands for hadronic t
+	  else{matched_GenPart[i] = -6; break;} // neg stands for leptonic t
+	}
+	else if(dR_q1<0.8 && dR_q2<0.8){
+	  if(abs(GenPart_pdgId[t_bkg_idx[j*3+1]])<6){matched_GenPart[i] = 24; break;}
+	  else{matched_GenPart[i] = -24; break;}
+	}
+      }
+      
+      if(matched_GenPart[i]!=-9){continue;}
+      for(unsigned int j=0; j<W_bkg_idx.size()/2; j++){
+	double dR_q1 = DeltaR(fatjet_eta, W_eta[j*2], fatjet_phi, W_phi[j*2]);
+        double dR_q2 = DeltaR(fatjet_eta, W_eta[j*2+1], fatjet_phi, W_phi[j*2+1]);
 
-        if (dR_b < 0.8 && dR_q1 < 0.8 && dR_q2 < 0.8)
-        {
-          if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
-          {
-            matched_GenPart[i] = 6;
-            break;
-          } // pos stands for hadronic t
-          else
-          {
-            matched_GenPart[i] = -6;
-            break;
-          } // neg stands for leptonic t
-        }
-        else if (dR_q1 < 0.8 && dR_q2 < 0.8)
-        {
-          if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
-          {
-            matched_GenPart[i] = 24;
-            break;
-          }
-          else
-          {
-            matched_GenPart[i] = -24;
-            break;
-          }
-        }
+	if(dR_q1<0.8 && dR_q2<0.8){
+	  if(abs(GenPart_pdgId[j*2])<6){matched_GenPart[i] = 24; break;}
+          else{matched_GenPart[i] = -24; break;}
+	}
       }
 
-      if (matched_GenPart[i] != -9)
-      {
-        continue;
-      }
-      for (unsigned int j = 0; j < W_bkg_idx.size() / 2; j++)
-      {
-        double dR_q1 = DeltaR(fatjet_eta, W_eta[j * 2], fatjet_phi, W_phi[j * 2]);
-        double dR_q2 = DeltaR(fatjet_eta, W_eta[j * 2 + 1], fatjet_phi, W_phi[j * 2 + 1]);
-
-        if (dR_q1 < 0.8 && dR_q2 < 0.8)
-        {
-          if (abs(GenPart_pdgId[j * 2]) < 6)
-          {
-            matched_GenPart[i] = 24;
-            break;
-          }
-          else
-          {
-            matched_GenPart[i] = -24;
-            break;
-          }
-        }
-      }
-
-      if (matched_GenPart[i] != -9)
-      {
-        continue;
-      }
+      if(matched_GenPart[i]!=-9){continue;}
       int firstsub = FatJet_subJetIdx1[i];
-      for (int isub = firstsub; isub < nSubJet; isub++)
-      {
-        if (SubJet_hadronFlavour[isub] != 0)
-        {
-          matched_GenPart[i] = SubJet_hadronFlavour[isub];
-        }
-        else
-        {
-          matched_GenPart[i] = 0;
-        }
+      for(int isub = firstsub; isub < nSubJet; isub++){
+        if(SubJet_hadronFlavour[isub]!=0){matched_GenPart[i] = SubJet_hadronFlavour[isub];}
+        else{matched_GenPart[i] = 0;}
       }
     }
     return matched_GenPart;
+  };
+
+  auto Electron_cutBasedIdNoIso_tight = [](unsigned int nElectron, ROOT::VecOps::RVec<int>& Electron_vidNestedWPBitmap){
+    ROOT::VecOps::RVec<int> noIso_tight(nElectron, 0);
+    for(unsigned int i=0; i<nElectron; i++){                                       
+      std::list<int> vars{0, 1, 2, 3, 4, 5, 6, 8, 9}; // checking this
+      for(int x : vars){
+	if(((Electron_vidNestedWPBitmap[i] >> (x*3)) & 0x7) >= 4){noIso_tight[i] = 1;}
+      }
+    }   
+    return noIso_tight;
   };
 
   // ----------------------------------------------------
@@ -851,7 +608,8 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
                  .Define("trueLeptonicW", "(int) W_gen_info[18]")
                  .Define("trueLeptonicMode", leptonicCheck, {"trueLeptonicT", "trueLeptonicW"})
                  .Define("t_bkg_idx", t_bkg_idx, {"nGenPart", "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_statusFlags"})
-                 .Define("W_bkg_idx", W_bkg_idx, {"nGenPart", "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_statusFlags", "t_bkg_idx"});
+                 .Define("W_bkg_idx", W_bkg_idx, {"nGenPart", "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_statusFlags", "t_bkg_idx"})
+                 .Define("Electron_cutBasedIdNoIso_tight", Electron_cutBasedIdNoIso_tight, {"nElectron", "Electron_vidNestedWPBitmap"});
   //  std::cout << "Number of Events passing Preselection (HT Cut): " << HT_calc.Count().GetValue() << std::endl;
 
   // ---------------------------------------------------------
@@ -874,29 +632,28 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
   //                    Lepton Filters
   // ---------------------------------------------------------
 
-  auto LepDefs = METfilters.Define("TPassMu", "Muon_tightId==true && Muon_pt>50 && abs(Muon_eta)<2.4")
-                     .Define("nTPassMu", "(int) Sum(TPassMu)")
-                     .Define("TPassEl", "Electron_mvaFall17V2noIso_WP90 == true && Electron_pt>80 && abs(Electron_eta)<2.5")
-                     .Define("nTPassEl", "(int) Sum(TPassEl)")
-                     .Define("LPassMu", "Muon_tightId==true && Muon_pt>25 && abs(Muon_eta)<2.4")
-                     .Define("LPassEl", "Electron_mvaFall17V2noIso_WP90 == true && Electron_pt>25 && abs(Electron_eta)<2.5")
-                     .Define("Muon_ptPass", "Muon_pt[LPassMu == true]")
-                     .Define("Muon_etaPass", "Muon_eta[LPassMu == true]")
-                     .Define("Muon_phiPass", "Muon_phi[LPassMu == true]")
-                     .Define("Muon_massPass", "Muon_mass[LPassMu == true]")
-                     .Define("Electron_ptPass", "Electron_pt[LPassEl == true]")
-                     .Define("Electron_etaPass", "Electron_eta[LPassEl == true]")
-                     .Define("Electron_phiPass", "Electron_phi[LPassEl == true]")
-                     .Define("Electron_massPass", "Electron_mass[LPassEl == true]")
-                     .Define("TLMuon_P4", "fVectorConstructor(Muon_ptPass,Muon_etaPass,Muon_phiPass,Muon_massPass)")
-                     .Define("TLElectron_P4", "fVectorConstructor(Electron_ptPass,Electron_etaPass,Electron_phiPass,Electron_massPass)")
-                     .Define("LMuon_jetIdx", "Muon_jetIdx[LPassMu == true]")
-                     .Define("LMuon_miniIsoId", "Muon_miniIsoId[LPassMu]")
-                     .Define("LElectron_jetIdx", "Electron_jetIdx[LPassEl]")
-                     .Define("LElectron_miniIso", "Electron_miniPFRelIso_all[LPassEl]");
-                     
+  auto LepDefs = METfilters.Define("TPassMu","abs(Muon_eta)<2.4 && (Muon_highPtId==2)") \
+    .Define("TPassEl","(abs(Electron_eta)<2.5) && (abs(Electron_deltaEtaSC+Electron_eta)<2.5) && (Electron_cutBasedIdNoIso_tight==1)") \
+    .Define("VetoMu", "TPassMu && (Muon_pt>25)")			\
+    .Define("VetoEl", "TPassEl && (Electron_pt>25)")			\
+    .Define("nVetoLep", "(int) (Sum(VetoMu)+Sum(VetoEl))")		\
+    .Define("VMuon_pt", "Muon_pt[VetoMu == true]")
+    .Define("VMuon_eta", "Muon_eta[VetoMu == true]")
+    .Define("VMuon_phi", "Muon_phi[VetoMu == true]")
+    .Define("VMuon_mass", "Muon_mass[VetoMu == true]")
+    .Define("VElectron_pt", "Electron_pt[VetoEl == true]")
+    .Define("VElectron_eta", "Electron_eta[VetoEl == true]")
+    .Define("VElectron_phi", "Electron_phi[VetoEl == true]")
+    .Define("VElectron_mass", "Electron_mass[VetoEl == true]")
+    .Define("VMuon_P4", "fVectorConstructor(VMuon_pt,VMuon_eta,VMuon_phi,VMuon_mass)")
+    .Define("VElectron_P4", "fVectorConstructor(VElectron_pt,VElectron_eta,VElectron_phi,VElectron_mass)")
+    .Define("VMuon_jetIdx", "Muon_jetIdx[VetoMu == true]")
+    .Define("VMuon_miniIsoId", "Muon_miniIsoId[VetoMu]")
+    .Define("VElectron_jetIdx", "Electron_jetIdx[VetoEl]")
+    .Define("VElectron_miniIso", "Electron_miniPFRelIso_all[VetoEl]");
+  
   auto CleanJets = LepDefs.Define("Jet_P4", "fVectorConstructor(Jet_pt,Jet_eta,Jet_phi,Jet_mass)")
-                       .Define("cleanJets", "cleanJets(Jet_P4,Jet_rawFactor,TLMuon_P4,LMuon_jetIdx,TLElectron_P4,LElectron_jetIdx)")
+                       .Define("cleanJets", "cleanJets(Jet_P4,Jet_rawFactor,VMuon_P4,VMuon_jetIdx,VElectron_P4,VElectron_jetIdx)")
                        .Define("cleanJet_pt", "cleanJets[0]")
                        .Define("cleanJet_eta", "cleanJets[1]")
                        .Define("cleanJet_phi", "cleanJets[2]")
@@ -920,11 +677,11 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
                        .Define("gcforwJet_DeepFlav", "Jet_btagDeepFlavB[goodcleanForwardJets == true]")
                        .Define("dR_LIM_AK4", "(float) 0.4")
                        .Define("ptrel25", "25")
-                       .Define("LMuon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("LElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VMuon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
                        .Define("ptrel40", "40")
-                       .Define("LMuon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("LElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
+                       .Define("VMuon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
   
   // Want a list of pass/fail 0/1s for muons with the cut "minDR(jet,muon) > dR_LIM_AK4 || ptRel(minDRjet,muon) > X"
   // to-do list:
@@ -935,8 +692,12 @@ auto t_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPa
   // ideally, function takes in a list of lepton lorentzVectors, list of jet lorentzVectors
   // best reference is ROOT::VecOps page and ROOT::TLorentzVector page
 
-  // auto LepSelect = CleanJets.Define("isMu","(nMuon > 0 && nTPassMu == 1 && HLT_Mu50_v == 1 && (nElectron == 0 || (nElectron > 0 && nTPassEl == 0)))") \
-  //   .Define("isEl","(nElectron > 0 && nTPassEl == 1 && (HLT_Ele115_CaloIdVT_GsfTrkIdT_v == 1 || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165_v == 1) && (nMuon == 0 || (nMuon > 0 && nTPassMu == 0)))") \
+  // auto LepSelect = CleanJets.Define("SignalMu", "TPassMu && (Muon_pt>55)")			\
+  //     .Define("SignalEl", "TPassEl && (Electron_pt>80)")			\
+  //     .Define("nSignalMu", "(int) Sum(SignalMu)")			\
+  //     .Define("nSignalEl", "(int) Sum(SignalEl)")			\
+  //     .Define("isMu","(nMuon>0) && HLT_Mu50 && (nSignalMu==1) && (nVetoLep==0)") \
+  //     .Define("isEl","(nElectron>0) && (HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165) && (nSignalEl==1) && (nVetoLep==0)") \
   //   .Filter("isMu || isEl","Event is either muon or electron");
 
   // auto Lep_df1 = Lep_df0.Define("assignleps","assign_leps(isMu,isEl,TPassMu,TPassEl,Muon_pt,Muon_eta,Muon_phi,Muon_mass,Muon_miniPFRelIso_all,Electron_pt,Electron_eta,Electron_phi,Electron_mass,Electron_miniPFRelIso_all)") \
