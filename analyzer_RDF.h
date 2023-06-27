@@ -22,9 +22,6 @@
 #include "ROOT/RDataFrame.hxx"
 #include "ROOT/RVec.hxx"
 
-#include "../lwtnn/include/lwtnn/LightweightNeuralNetwork.hh" 
-#include "../lwtnn/include/lwtnn/parse_json.hh" 
-
 enum shift:char;
 
 using namespace std;

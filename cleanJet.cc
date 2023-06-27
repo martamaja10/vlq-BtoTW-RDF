@@ -3,7 +3,9 @@
 // --------------------------------------------------------
 //auto cleanJets = [](ROOT::VecOps::RVec<float>& jt_pt, ROOT::VecOps::RVec<float>& jt_mass, ROOT::VecOps::RVec<int>& jt_id, ROOT::VecOps::RVec<float>& jt_eta, ROOT::VecOps::RVec<float>& jt_phi, ROOT::VecOps::RVec<float>& lep_pt, ROOT::VecOps::RVec<float>& lep_mass, ROOT::VecOps::RVec<float>& lep_eta, ROOT::VecOps::RVec<float>& lep_phi, float dR_LIM)
 
-ROOT::VecOps::RVec<float> assign_leps(bool isMu, bool isEl, ROOT::VecOps::RVec<int>& TPassMu,ROOT::VecOps::RVec<int>& TPassEl,ROOT::VecOps::RVec<float>& Muon_pt,ROOT::VecOps::RVec<float>& Muon_eta,ROOT::VecOps::RVec<float>& Muon_phi,ROOT::VecOps::RVec<float>& Muon_mass,ROOT::VecOps::RVec<float>& Muon_miniPFRelIso_all,ROOT::VecOps::RVec<float>& Electron_pt,ROOT::VecOps::RVec<float>& Electron_eta,ROOT::VecOps::RVec<float>& Electron_phi,ROOT::VecOps::RVec<float>& Electron_mass,ROOT::VecOps::RVec<float>& Electron_miniPFRelIso_all){
+using namespace ROOT::VecOps;
+
+RVec<float> assign_leps(bool isMu, bool isEl, RVec<int>& TPassMu,RVec<int>& TPassEl,RVec<float>& Muon_pt,RVec<float>& Muon_eta,RVec<float>& Muon_phi,RVec<float>& Muon_mass,RVec<float>& Muon_miniPFRelIso_all,RVec<float>& Electron_pt,RVec<float>& Electron_eta,RVec<float>& Electron_phi,RVec<float>& Electron_mass,RVec<float>& Electron_miniPFRelIso_all){
 
   float lep_pt = -9;
   float lep_eta = -9;
@@ -40,28 +42,71 @@ ROOT::VecOps::RVec<float> assign_leps(bool isMu, bool isEl, ROOT::VecOps::RVec<i
 
 }
 
-
-ROOT::VecOps::RVec<float> cleanJets(ROOT::VecOps::RVec<float>& jt_pt, ROOT::VecOps::RVec<float>& jt_mass, ROOT::VecOps::RVec<int>& jt_id, ROOT::VecOps::RVec<float>& jt_eta, ROOT::VecOps::RVec<float>& jt_phi, float lep_pt, float lep_mass, float lep_eta, float lep_phi, float dR_LIM)
+RVec< RVec< float> > cleanJets(RVec<TLorentzVector>& jt_p4, RVec<int>& jt_rf, RVec<TLorentzVector>& mu_p4, RVec<int> mu_jetid, RVec<TLorentzVector>& el_p4, RVec<int>& el_jetid)
 {
-	ROOT::VecOps::RVec<float> cleanJets_ (jt_id.size(),0);
-	ROOT::VecOps::RVec<float> dR (jt_id.size(),0);
-	ROOT::VecOps::RVec<float> pt_rel (jt_id.size(),0);
-	auto isClean = true;
-	int j = 0;
-	for(auto &i: Nonzero(jt_id))
-	{
-		TLorentzVector Jets, Leptons;
-		Jets.SetPtEtaPhiM(jt_pt[i],jt_eta[i],jt_phi[i],jt_mass[i]);
-		Leptons.SetPtEtaPhiM(lep_pt,lep_eta,lep_phi,lep_mass);
-		dR[i] = DeltaR(jt_eta[i],lep_eta,jt_phi[i],lep_phi);
-		pt_rel[i] = (Jets.Vect().Cross(Leptons.Vect())).Mag()/Jets.P();
-		isClean = true;
-		if(dR[i] < dR_LIM && pt_rel[i] < 25){isClean = false;}
-		if(isClean == false){continue;}
-		if(isClean == true){cleanJets_[i] = 1;}
-	}
-	return cleanJets_;
+  // This one is intended to read in jets that have NOT been filtered yet, for connection with JetIdx
+  // No filtering will happen and no reordering will happen, just sending back new 4-vec and raw factor
+  RVec<float> cleanJetPt;
+  RVec<float> cleanJetEta;
+  RVec<float> cleanJetPhi;
+  RVec<float> cleanJetMass;
 
+  for(unsigned int imu=0; imu < mu_p4.size(); imu++) {
+
+    if(mu_jetid[imu] == -1) continue; // no matched jet for this muon
+
+    // first correct jet by its rawfactor
+    TLorentzVector newJet = jt_p4[mu_jetid[imu]] - mu_p4[imu]; // subtract muon
+    // then correctionLib needs to now go here to correct this jet
+    float newraw = jt_rf[mu_jetid[imu]]; // dummy, FIXME
+
+    jt_p4[mu_jetid[imu]] = newJet; // overwrite the old jet
+    jt_rf[mu_jetid[imu]] = newraw; // overwrite the old correction factor
+
+  }
+
+  for(unsigned int iel=0; iel < el_p4.size(); iel++) {
+
+    if(el_jetid[iel] == -1) continue; // no matched jet for this electron
+
+    // first correct jet by its rawfactor
+    TLorentzVector newJet = jt_p4[el_jetid[iel]] - el_p4[iel]; // subtract electron
+    // then correctionLib needs to now go here to correct this jet
+    float newraw = jt_rf[el_jetid[iel]]; // dummy, FIXME
+
+    jt_p4[el_jetid[iel]] = newJet; // overwrite the old jet
+    jt_rf[el_jetid[iel]] = newraw; // overwrite the old correction factor
+
+  }
+    
+  for(unsigned int ijet=0; ijet < jt_p4.size(); ijet++) {
+    cleanJetPt.push_back(jt_p4[ijet].Pt());
+    cleanJetEta.push_back(jt_p4[ijet].Eta());
+    cleanJetPhi.push_back(jt_p4[ijet].Phi());
+    cleanJetMass.push_back(jt_p4[ijet].M());
+  }
+
+  RVec< RVec< float > > output;
+  output.push_back(cleanJetPt);
+  output.push_back(cleanJetEta);
+  output.push_back(cleanJetPhi);
+  output.push_back(cleanJetMass);
+  output.push_back(jt_rf);
+
+  return output;
+
+
+  // the "2D cut variables"
+  //   dR[i] = DeltaR(jt_eta[i],lep_eta,jt_phi[i],lep_phi);
+  //   pt_rel[i] = 
+
+	//   isClean = true;
+	//   if(dR[i] < dR_LIM && pt_rel[i] < 25){isClean = false;}
+	//   if(isClean == false){continue;}
+	//   if(isClean == true){cleanJets_[i] = 1;}
+	// }
+  //return cleanJets_;
+	
 	// FIXME: this is just the 2D cut. Try Electron/Muon/Jet_cleanmask, try Electron/Muon_jetidx, try Electron/Muon_jetPtRelv2, 
 	// Can I implement the adjustment and re-JEC of jets? 
 	// Better to just add it to CRAB job when getting the JEC unc?

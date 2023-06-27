@@ -31,11 +31,15 @@ ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::
 // -------------------------------------------
 // 	  TLORENTZVECTOR CONSTRUCTOR
 // -------------------------------------------
-TLorentzVector fVectorConstructor(ROOT::VecOps::RVec<float>& pt, ROOT::VecOps::RVec<float>& eta, ROOT::VecOps::RVec<float>& phi, ROOT::VecOps::RVec<float>& mass)
+ROOT::VecOps::RVec<TLorentzVector> fVectorConstructor(ROOT::VecOps::RVec<float>& pt, ROOT::VecOps::RVec<float>& eta, ROOT::VecOps::RVec<float>& phi, ROOT::VecOps::RVec<float>& mass)
 {
-	TLorentzVector lv;
-	for(int i = 0; i < pt.size(); i++){lv.SetPtEtaPhiM(pt[i],eta[i],phi[i],mass[i]);}
-	return lv;
+  ROOT::VecOps::RVec<TLorentzVector> lv;
+  TLorentzVector tlv;
+  for(int i = 0; i < pt.size(); i++){
+    tlv.SetPtEtaPhiM(pt[i],eta[i],phi[i],mass[i]);
+    lv.push_back(tlv);
+  }
+  return lv;
 };
 
 // --------------------------------------------
