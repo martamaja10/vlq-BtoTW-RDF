@@ -8,43 +8,44 @@ from ROOT import *
 iPlot = sys.argv[1] 
 
 # Samples to process and categories to plot
-indir = "/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_170/Bprime_hadds/"
+#indir = "/store/user/sxiaohe/vlq-BtoTW-RDF/cut_update1_173/"
+indir = "/store/user/jmanagan/BtoTW_RDF_MLPs_hadds/"
 outdir = os.getcwd()+'/plots_forwardjet/'
 if not os.path.exists(outdir): os.system('mkdir -p '+outdir)
-samples = {'Bp800':'Bprime800_hadd.root', 
-           'Bp1400':'Bprime1400_hadd.root',
-           'Bp2000':'Bprime2000_hadd.root',
+samples = {'Bp800':'BpM800_', 
+           'Bp1400':'BpM1400_',
+           'Bp2000':'BpM2000_',
            #'qcd200':'QCD200_hadd.root',                                  
-           'qcd300':'QCD300_hadd.root',                                  
-           'qcd500':'QCD500_hadd.root',                                  
-           'qcd700':'QCD700_hadd.root',                                  
-           'qcd1000':'QCD1000_hadd.root',                                
-           'qcd1500':'QCD1500_hadd.root',                                
-           'qcd2000':'QCD2000_hadd.root',
-           'ttbar':'ttbar_hadd.root',
-           'wjets200':'WJets200_hadd.root',
-           'wjets400':'WJets400_hadd.root',
-           'wjets600':'WJets600_hadd.root',
-           'wjets800':'WJets800_hadd.root',
-           'wjets1200':'WJets1200_hadd.root',
-           'wjets2500':'WJets2500_hadd.root',
-           'singleT':'singleT_hadd.root',
-           'singleTb':'singleTb_hadd.root',
-           'data_obs':'ttbar_hadd.root' # data is a copy of ttbar for now, need histograms in the file for limits
+           #'qcd300':'QCD300_hadd.root',                                  
+           #'qcd500':'QCD500_hadd.root',                                  
+           #'qcd700':'QCD700_hadd.root',                                  
+           #'qcd1000':'QCD1000_hadd.root',                                
+           #'qcd1500':'QCD1500_hadd.root',                                
+           #'qcd2000':'QCD2000_hadd.root',
+           'ttbar':'ttbarInc_',
+           'wjets200':'WJets200_',
+           'wjets400':'WJets400_',
+           'wjets600':'WJets600_',
+           'wjets800':'WJets800_',
+           'wjets1200':'WJets1200_',
+           'wjets2500':'WJets2500_',
+           'singleT':'singleT_',
+           'singleTb':'singleTb_',
+           'data_obs':'ttbarInc_' # data is a copy of ttbar for now, need histograms in the file for limits
 }
 tags = {'tjet':'taggedTjet == 1',
         'Wjet':'taggedWjet == 1',
         'Wbjet':'taggedWbjetJet == 1',
         'other':'isValidBDecay < 1', # later likely some other selection like a network score
         'all':'isValidBDecay == 1', # combine all tagged events
-        'genLeptonicT':'trueLeptonicMode == 1',
-        'genLeptonicW':'trueLeptonicMode == 0',
-        'trueSingleLepT':'leptonicParticle == 1 && trueLeptonicMode == 1',
-        'trueSingleLepW':'leptonicParticle == 0 && trueLeptonicMode == 0',
-        'falseSingleLepW':'leptonicParticle == 0 && trueLeptonicMode == 1',
-        'falseSingleLepT':'leptonicParticle == 1 && trueLeptonicMode == 0',
-        'correctTag':'(taggedTjet == 1 && trueLeptonicMode == 1) && (taggedWjet == 1 && trueLeptonicMode == 0)',
-        'flippedTag':'(taggedTjet == 1 && trueLeptonicMode == 0) && (taggedWjet == 1 && trueLeptonicMode == 1)'
+      # 'genLeptonicT':'trueLeptonicMode == 1',
+      # 'genLeptonicW':'trueLeptonicMode == 0',
+      # 'trueSingleLepT':'leptonicParticle == 1 && trueLeptonicMode == 1',
+      # 'trueSingleLepW':'leptonicParticle == 0 && trueLeptonicMode == 0',
+      # 'falseSingleLepW':'leptonicParticle == 0 && trueLeptonicMode == 1',
+      # 'falseSingleLepT':'leptonicParticle == 1 && trueLeptonicMode == 0',
+      # 'correctTag':'(taggedTjet == 1 && trueLeptonicMode == 1) && (taggedWjet == 1 && trueLeptonicMode == 0)',
+      # 'flippedTag':'(taggedTjet == 1 && trueLeptonicMode == 0) && (taggedWjet == 1 && trueLeptonicMode == 1)'
     }
 
 # Numbers to weight the samples relative to each other
@@ -93,9 +94,10 @@ sig1leg='B (0.8 TeV)'
 sig2leg='B (2.0 TeV)'
 sig3leg='B (1.4 TeV)'
 sigScaleFact = 1 # zoom in/out on signal
-print 'Scale factor = ',sigScaleFact
+print ('Scale factor = ',sigScaleFact)
 bkgProcList = [#'qcd200',
-'qcd300','qcd500','qcd700','qcd1000','qcd1500','qcd2000','wjets200','wjets400','wjets600','wjets800','wjets1200','wjets2500','ttbar','singleT','singleTb']
+#'qcd300','qcd500','qcd700','qcd1000','qcd1500','qcd2000',
+'wjets200','wjets400','wjets600','wjets800','wjets1200','wjets2500','ttbar','singleT','singleTb']
 bkgHistColors = {#'qcd200':kOrange-5,
 'qcd300':kOrange-5,'qcd500':kOrange-5,'qcd700':kOrange-5,'qcd1000':kOrange-5,'qcd1500':kOrange-5,'qcd2000':kOrange-5,
                  'ttbar':kAzure+8,
@@ -156,17 +158,18 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
     'BpPtBal':('Bprime_ptbal',linspace(0,3,51).tolist(),';B quark t/W p_{T} ratio'),
     'BpChi2':('Bprime_chi2',linspace(0,1000,51).tolist(),';B quark reconstruction #chi^{2}'), # CHECK ME, what range?
 
-    'mlp_HT500_Bprime':('mlp_HT500_Bprime',linspace(0,1,51).tolist(),';MLP (HT 500) T score'), # later, these should exist
-    'mlp_HT500_TTbar': ('mlp_HT500_TTbar',linspace(0,1,51).tolist(),';MLP (HT 500) t#bar{t} score'),
-    'mlp_HT500_WJets': ('mlp_HT500_WJets',linspace(0,1,51).tolist(),';MLP (HT 500) W+jets score'),
-    'mlp_HT250_Bprime':('mlp_HT250_Bprime',linspace(0,1,51).tolist(),';MLP (HT 250) T score'), # later, these should exist
-    'mlp_HT250_TTbar': ('mlp_HT250_TTbar',linspace(0,1,51).tolist(),';MLP (HT 250) t#bar{t} score'),
-    'mlp_HT250_WJets': ('mlp_HT250_WJets',linspace(0,1,51).tolist(),';MLP (HT 250) W+jets score'),
+    'mlp_bprime_800':('mlp_bprime_800',linspace(0,1,51).tolist(),';MLP B score (800)'),
+    'mlp_bprime_1400':('mlp_bprime_1400',linspace(0,1,51).tolist(),';MLP B score (1400)'),
+    'mlp_bprime_2000':('mlp_bprime_2000',linspace(0,1,51).tolist(),';MLP B score (2000)'), 
+    'mlp_bprime_all':('mlp_bprime_800 + mlp_bprime_1400 + mlp_bprime_2000',linspace(0,1,51).tolist(),';MLP B score (all)'),
+    'mlp_bprime_1400':('mlp_bprime_1400',linspace(0,1,51).tolist(),';MLP B score (1400)'),
+    'mlp_ttbar': ('mlp_ttbar',linspace(0,1,51).tolist(),';MLP t#bar{t} score'),
+    'mlp_wjets': ('mlp_wjets',linspace(0,1,51).tolist(),';MLP W+jets score'), # Make sure these match
 
     "Bprime_gen_pt":('Bprime_gen_pt',linspace(0,1500,51).tolist(),';B quark p_{T gen} [GeV]'),
     "Bprime_gen_eta":('Bprime_gen_eta',linspace(-10,10,51).tolist(),';B quark #eta _{gen}'),
     "Bprime_gen_phi":('Bprime_gen_phi',linspace(-3.5,3.5,51).tolist(),';B quark #phi _{gen}'),
-    "Bprime_gen_mass":('Bprime_gen_mass',linspace(700,2300,51).tolist(),';M_{gen}(B) [GeV]'),
+    #"Bprime_gen_mass":('Bprime_gen_mass',linspace(700,2300,51).tolist(),';M_{gen}(B) [GeV]'),
 
     "t_gen_pt":('t_gen_pt',linspace(0,1800,51).tolist(),';p_{T gen}(t) [GeV]'),
     "t_gen_eta":('t_gen_eta',linspace(-4,4,51).tolist(),';#eta (t)'),
@@ -211,34 +214,26 @@ outputFile = TFile.Open("histos_"+iPlot+".root","RECREATE")
 
 hists = {}
 start_time = time.time()
-print 'Building histograms...'
+print ('Building histograms...')
 for sample in samples.keys():
-    print '\t Sample =',sample
-    tfile = TFile.Open("root://cmseos.fnal.gov/"+indir+"/"+samples[sample]+"hadd.root")
+    print ('\t Sample =',sample)
+    tfile = TFile.Open("root://cmseos.fnal.gov/" + indir + "/" + samples[sample] + "hadd.root")
     ttree = tfile.Get("Events")
     if (sample == 'Bp1400'): # This is to correcct a bug (14000 should be 1400) which hopefully will be irrelevant someday
-	tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_wjet.root")
-        tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_ttbar.root")
-    	tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/BpM14000_predict_bprime.root")
+        tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/kjohnso/Kyle2023/BpM14000_predict.root")
     else:
-	tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_wjet.root")
-        tfile3 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_ttbar.root")
-        tfile4 = TFile.Open("root://cmseos.fnal.gov//store/user/khowey/BpMFiles/" + samples[sample] + "predict_bprime.root")
-    # Three trees for each different class get merged into one
+        tfile2 = TFile.Open("root://cmseos.fnal.gov//store/user/kjohnso/Kyle2023/" + samples[sample] + "predict.root")
+    # One tree gets merged into one and reformatted
     ttree2 = tfile2.Get("Events")
-    ttree3 = tfile3.Get("Events")
-    ttree4 = tfile4.Get("Events")
     ttree.AddFriend(ttree2)
-    ttree.AddFriend(ttree3)
-    ttree.AddFriend(ttree4)
 
     for tag in tags.keys():
-        print '\t\t tag =',tag
+        print ('\t\t tag =',tag)
         histo = TH1D(sample+'_'+tag, plotList[iPlot][2]+';Events / bin',len(plotList[iPlot][1])-1,array('d',plotList[iPlot][1]))
         histo.Sumw2()
         
         weightstr = "(Generator_weight*{}*{}/({}*abs(Generator_weight)))".format(lumi,xsec[sample],nRun[sample])
-        ttree.Draw(plotList[iPlot][0]+' >> '+sample+'_'+tag,weightstr+'*(NJets_forward > 0 && Bprime_mass > 0 && Bprime_gen_mass!=-999 && '+tags[tag]+')','GOFF')
+        ttree.Draw(plotList[iPlot][0]+' >> '+sample+'_'+tag,weightstr+'*(NJets_forward > 0 && Bprime_mass > 0 && '+tags[tag]+')','GOFF') # && Bprime_gen_mass!=-99
         histo.SetDirectory(0)
         hists[sample+'_'+tag] = histo
 
@@ -266,7 +261,7 @@ plot_time = time.time()
 #hists = {}
 if doPlotting:
 
-    print 'Plotting...',iPlot
+    print ('Plotting...',iPlot)
 
     #for iPtr in histos.keys():
     #    hists[iPtr] = histos[iPtr].GetValue()
@@ -274,7 +269,7 @@ if doPlotting:
     #print hists
 
     for tag in tags.keys():
-        print '\t tag =',tag
+        print ('\t tag =',tag)
 
         histPrefix = iPlot+'_'+tag
         
