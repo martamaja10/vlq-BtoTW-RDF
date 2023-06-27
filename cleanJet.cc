@@ -42,7 +42,7 @@ RVec<float> assign_leps(bool isMu, bool isEl, RVec<int>& TPassMu,RVec<int>& TPas
 
 }
 
-RVec< RVec< float> > cleanJets(RVec<TLorentzVector>& jt_p4, RVec<int>& jt_rf, RVec<TLorentzVector>& mu_p4, RVec<int> mu_jetid, RVec<TLorentzVector>& el_p4, RVec<int>& el_jetid)
+RVec<RVec<float>> cleanJets(RVec<TLorentzVector>& jt_p4, RVec<float>& jt_rf, RVec<TLorentzVector>& mu_p4, RVec<int> mu_jetid, RVec<TLorentzVector>& el_p4, RVec<int>& el_jetid)
 {
   // This one is intended to read in jets that have NOT been filtered yet, for connection with JetIdx
   // No filtering will happen and no reordering will happen, just sending back new 4-vec and raw factor
