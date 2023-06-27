@@ -1,6 +1,0 @@
-<tool name="py2-coverage" version="4.5.4-nmpfii">
-  <client>
-    <environment name="PY2_COVERAGE_BASE" default="/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/py2-coverage/4.5.4-nmpfii"/>
-  </client>
-  <runtime name="PATH" value="$PY2_COVERAGE_BASE/bin" type="path"/>
-</tool>

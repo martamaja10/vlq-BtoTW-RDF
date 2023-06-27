@@ -1,6 +1,0 @@
-<tool name="py3-jupyter_console" version="6.0.0-nmpfii2">
-  <client>
-    <environment name="PY3_JUPYTER_CONSOLE_BASE" default="/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/py3-jupyter_console/6.0.0-nmpfii2"/>
-  </client>
-  <runtime name="PATH" value="$PY3_JUPYTER_CONSOLE_BASE/bin" type="path"/>
-</tool>
