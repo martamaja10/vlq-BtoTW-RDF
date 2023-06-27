@@ -65,7 +65,7 @@ bool isLeptonic_X(float minMleppJet)
 	bool isLeptonic_W = false;
 	bool isLeptonic_t = false;
 	// best combo of W vs t truth match with this
-	if(minMleppJet > 170){isLeptonic_W = true; isLep_X = 0;}
+	if(minMleppJet > 173){isLeptonic_W = true; isLep_X = 0;}
 	else{isLeptonic_t = true; isLep_X = 1;}
 	return isLep_X;
 };

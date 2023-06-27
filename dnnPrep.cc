@@ -16,14 +16,30 @@ ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RV
 	return maxInt;
 };
 
+ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW){
+  int nJets = dnnT.size();
+  ROOT::VecOps::RVec<int> tag (nJets, -1);
+  
+  for(int i=0; i<nJets; i++){
+    if(dnnT[i] > 0.58){tag[i] = 1;}
+    else if(dnnW[i] > 0.94){tag[i] = 2;}
+    else{tag[i] = 0;}
+  }
+  return tag;
+};
+
 // -------------------------------------------
 // 	  TLORENTZVECTOR CONSTRUCTOR
 // -------------------------------------------
-TLorentzVector fVectorConstructor(ROOT::VecOps::RVec<float>& pt, ROOT::VecOps::RVec<float>& eta, ROOT::VecOps::RVec<float>& phi, ROOT::VecOps::RVec<float>& mass)
+ROOT::VecOps::RVec<TLorentzVector> fVectorConstructor(ROOT::VecOps::RVec<float>& pt, ROOT::VecOps::RVec<float>& eta, ROOT::VecOps::RVec<float>& phi, ROOT::VecOps::RVec<float>& mass)
 {
-	TLorentzVector lv;
-	for(int i = 0; i < pt.size(); i++){lv.SetPtEtaPhiM(pt[i],eta[i],phi[i],mass[i]);}
-	return lv;
+  ROOT::VecOps::RVec<TLorentzVector> lv;
+  TLorentzVector tlv;
+  for(int i = 0; i < pt.size(); i++){
+    tlv.SetPtEtaPhiM(pt[i],eta[i],phi[i],mass[i]);
+    lv.push_back(tlv);
+  }
+  return lv;
 };
 
 // --------------------------------------------
