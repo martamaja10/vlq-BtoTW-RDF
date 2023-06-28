@@ -678,10 +678,10 @@ auto Bprime_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &
                        .Define("dR_LIM_AK4", "(float) 0.4")
                        .Define("ptrel25", "25")
                        .Define("VMuon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("VElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
                        .Define("ptrel40", "40")
                        .Define("VMuon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("VElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, TLElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
+                       .Define("VElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
   
   // Want a list of pass/fail 0/1s for muons with the cut "minDR(jet,muon) > dR_LIM_AK4 || ptRel(minDRjet,muon) > X"
   // to-do list:
@@ -870,7 +870,19 @@ auto Bprime_gen_info = [sample](unsigned int nGenPart, ROOT::VecOps::RVec<int> &
             << ">>> Saving " << sample << " Snapshot..." << std::endl;
   TString finalFile = "RDF_" + sample + "_finalsel_" + testNum + ".root";
   const char *stdfinalFile = finalFile;
-  CleanJets.Snapshot("Events", stdfinalFile); 
+
+  auto colNames = CleanJets.GetColumnNames();
+  std::vector<std::string> snapCol;
+  int i = 0;
+  for (auto &&colName : colNames) {
+    if (colName != "VMuon_P4" && colName != "VElectron_P4" && colName != "Jet_P4" && colName != "cleanJets") {
+      snapCol.push_back(colName);
+      i++;
+    }
+  }
+  std::cout << "Number of Columns in Snapshot: " << i << std::endl;
+
+  CleanJets.Snapshot("Events", stdfinalFile, snapCol); 
   std::cout << "Output File: " << finalFile << std::endl
             << "-------------------------------------------------" << std::endl;
 
