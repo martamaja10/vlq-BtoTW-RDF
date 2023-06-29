@@ -1,7 +1,15 @@
+// Methods in this file:
+// W_reco(C), dR_Wt_Calc(C), isLeptonic_X(C), t_reco(C), minM_lep_jet_calc(C)
+
 // -------------------------------------------------
 //         W-BOSON TLORENTZVECTOR CALCULATOR
 // -------------------------------------------------
+
+using namespace std;
+using namespace ROOT::VecOps;
+
 //This is needed for single search
+// Commented Method Only
 TLorentzVector W_reco(float corr_met, float corr_met_phi, TLorentzVector lepton_lv)
 {
 	const double MW = 80.4;
@@ -54,11 +62,13 @@ TLorentzVector W_reco(float corr_met, float corr_met_phi, TLorentzVector lepton_
 // 		  BABY dR_Wt CALCULATOR
 // ----------------------------------------------------
 
+// Commented Method Only
 double dR_Wt_Calc(TLorentzVector Wlv, TLorentzVector lepton_lv){return Wlv.DeltaR(lepton_lv);};
 
 // -----------------------------------------------------
 // 		    isLEPTONIC W or t
 // -----------------------------------------------------
+// Commented Method Only
 bool isLeptonic_X(float minMleppJet)
 {
 	int isLep_X = -1; // 0 for W --- 1 for t
@@ -73,8 +83,8 @@ bool isLeptonic_X(float minMleppJet)
 // -----------------------------------------------------
 // 	  HOMEMADE TLORENTZVECTOR CONSTRUCTOR
 // -----------------------------------------------------
-
-ROOT::VecOps::RVec<float> t_reco(int isLeptonic, ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector Wlv, float minMleppJet, int ind_MinMlj)
+// Commented Method Only
+RVec<float> t_reco(int isLeptonic, RVec<float>& jet_pt, RVec<float>& jet_eta, RVec<float>& jet_phi, RVec<float>& jet_mass, TLorentzVector Wlv, float minMleppJet, int ind_MinMlj)
 {
 	float t_mass = -999;
 	float t_pt = -999;
@@ -114,17 +124,31 @@ ROOT::VecOps::RVec<float> t_reco(int isLeptonic, ROOT::VecOps::RVec<float>& jet_
 		t_phi = 9;
 		t_mass = -999;
 	}
-	ROOT::VecOps::RVec<float> t_FiveVec = {t_pt,t_eta,t_phi,t_mass,t_dRWb};
+	RVec<float> t_FiveVec = {t_pt,t_eta,t_phi,t_mass,t_dRWb};
 	return t_FiveVec;
 };
 
-// -------------------------------------------------
-//    TLORENTZVECTOR CONSTRUCTOR FOR FLOAT ONLYS
-// -------------------------------------------------
-TLorentzVector lvConstructor(float pt, float eta, float phi, float mass)
+// ----------------------------------------------------
+//     minM_lep_jet VECTOR RETURN + NJETSDEEPFLAV
+// ----------------------------------------------------
+
+// Commented Method Only
+auto minM_lep_jet_calc(bool isNominal, RVec<float> &jet_pt, RVec<float> &jet_eta, RVec<float> &jet_phi, RVec<float> &jet_mass, TLorentzVector lepton_lv)
 {
-	TLorentzVector lv;
-	lv.SetPtEtaPhiM(pt,eta,phi,mass);
-	return lv;
+    float ind_MinMlj = -1; // This gets changed into int in .Define()
+    float minMleppJet = 1e8;
+    TLorentzVector jet_lv;
+
+    for (unsigned int ijet = 0; ijet < jet_pt.size(); ijet++)
+    {
+        jet_lv.SetPtEtaPhiM(jet_pt.at(ijet), jet_eta.at(ijet), jet_phi.at(ijet), jet_mass.at(ijet));
+        if ((lepton_lv + jet_lv).M() < minMleppJet)
+        {
+            minMleppJet = fabs((lepton_lv + jet_lv).M());
+            ind_MinMlj = ijet;
+        }
+    }
+    RVec<float> minMlj = {minMleppJet, ind_MinMlj};
+    return minMlj;
 };
 

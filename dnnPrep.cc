@@ -1,8 +1,12 @@
+// Methods in this file ---- all the methods in this file are in the commented section of analyzer_RDF.cc
+// maxFxn(), JetDiscriminator(), DR_calc(), minDR_ptRel_lead_calc()
+
 // --------------------------------------------------------
 // 		     MAX VARIABLE FXN
 // 	(Fxn to find max variable for dnnLargest)
 // --------------------------------------------------------
 
+// Commented fxn
 ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW)
 {
 	ROOT::VecOps::RVec<int> maxInt (dnnJ.size(),-1);
@@ -16,6 +20,7 @@ ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RV
 	return maxInt;
 };
 
+// Commented fxn
 ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW){
   int nJets = dnnT.size();
   ROOT::VecOps::RVec<int> tag (nJets, -1);
@@ -28,23 +33,10 @@ ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::
   return tag;
 };
 
-// -------------------------------------------
-// 	  TLORENTZVECTOR CONSTRUCTOR
-// -------------------------------------------
-ROOT::VecOps::RVec<TLorentzVector> fVectorConstructor(ROOT::VecOps::RVec<float>& pt, ROOT::VecOps::RVec<float>& eta, ROOT::VecOps::RVec<float>& phi, ROOT::VecOps::RVec<float>& mass)
-{
-  ROOT::VecOps::RVec<TLorentzVector> lv;
-  TLorentzVector tlv;
-  for(int i = 0; i < pt.size(); i++){
-    tlv.SetPtEtaPhiM(pt[i],eta[i],phi[i],mass[i]);
-    lv.push_back(tlv);
-  }
-  return lv;
-};
-
 // --------------------------------------------
 // 		 DR CALCULATOR
 // --------------------------------------------
+// Commented fxn
 ROOT::VecOps::RVec<float> DR_calc(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, float lep_pt, float lep_eta, float lep_phi, float lep_mass)
 {
 	ROOT::VecOps::RVec<float> DR (jet_pt.size(),0);
@@ -55,6 +47,7 @@ ROOT::VecOps::RVec<float> DR_calc(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOp
 // --------------------------------------------
 // 	   MINDR & PTREL CALCULATOR
 // --------------------------------------------
+// Commented fxn
 ROOT::VecOps::RVec<float> minDR_ptRel_lead_calc(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, TLorentzVector lepton_lv)
 {
 	TLorentzVector jet_TLV, leadJet;

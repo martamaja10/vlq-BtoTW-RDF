@@ -35,7 +35,7 @@ private:
   TFile *inputFile;
   TString psOutName, fsOutName;
   Int_t fCurrent; //! current Tree number in a TChain
-  std::vector<std::string> files;
+  vector<string> files;
 
   Bool_t isSig;
   Bool_t isTOP;
@@ -55,46 +55,41 @@ private:
   Bool_t isLUp;
   Bool_t isLDn;
 
-  TString sample;
+  string sample;
 
   // Fixed size dimensions of array or collections stored in the TTree if any.
 public:
-  rdf(std::string inputFileName, TString preselFileName, TString finalselFileName);
+  // Main Methods
+  rdf(string inputFileName, TString preselFileName, TString finalselFileName);
   virtual ~rdf();
   virtual void analyzer_RDF(TString testNum);
-  // virtual void     histoDrawRDF(vector<std::string> inputFile);
-
-  //auto Bprime_gen_info(unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<float> &GenPart_mass, ROOT::VecOps::RVec<float> &GenPart_pt, ROOT::VecOps::RVec<float> &GenPart_phi, ROOT::VecOps::RVec<float> &GenPart_eta, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &GenPart_status, ROOT::VecOps::RVec<int> &GenPart_statusFlags);
-  //auto t_gen_info(unsigned int nGenPart, ROOT::VecOps::RVec<int> &GenPart_pdgId, ROOT::VecOps::RVec<float> &GenPart_mass, ROOT::VecOps::RVec<float> &GenPart_pt, ROOT::VecOps::RVec<float> &GenPart_phi, ROOT::VecOps::RVec<float> &GenPart_eta, ROOT::VecOps::RVec<int> &GenPart_genPartIdxMother, ROOT::VecOps::RVec<int> &GenPart_status);
 };
 
 #endif
 
 #ifdef rdf_cxx
 
-rdf::rdf(std::string inputFileName, TString preselFileName, TString finalselFileName) : inputTree(0), inputFile(0)
+rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName) : inputTree(0), inputFile(0)
 {
   // Make the vector with the text file listed in the input
-  //inputFileName = "condor/BPrime.txt"; Delete after testing before submitting condor job
-
-  std::cout << "Input File Path: " << inputFileName << std::endl;
-  std::ifstream listFiles;
+  cout << "Input File Path: " << inputFileName << endl;
+  ifstream listFiles;
   listFiles.open(inputFileName);
 
-  std::string file;
+  string file;
   if (listFiles.is_open())
   {
     while (listFiles >> file)
     {
-      //std::cout << "Files: " << file << std::endl;
       files.push_back(file);
     }
   }
-  std::cout << "Number of Entries: " << files.size() << std::endl;
+  cout << "Number of Entries: " << files.size() << endl;
 
   // if parameter tree is not specified (or zero), connect the file
   // used to generate this class and read the Tree.
   TString sampleName = file;
+  cout << "Sample Name: " << sampleName << endl;
 
   // if parameter tree is not specified (or zero), connect the file
   // used to generate this class and read the Tree.
@@ -135,7 +130,7 @@ rdf::rdf(std::string inputFileName, TString preselFileName, TString finalselFile
   {
     sample = "wjets";
   }
-  std::cout << "Sample: " << sample << std::endl;
+  cout << "Sample: " << sample << endl;
 }
 
 rdf::~rdf()

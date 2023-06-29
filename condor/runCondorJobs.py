@@ -37,13 +37,14 @@ if makelists:
     
     # Loops through all the samples listed in samples.py
     for k,v in samples.items():
-        if (v.prefix != 'WJets2500'):
+        # BPrime given to me in correct format in a text file
+        if (v.prefix != 'WJets2500' and v.prefix != 'BPrime800' and v.prefix != 'BPrime1400' and v.prefix != 'BPrime2000'):
             query = queryStatement + v.samplename + additionalPath + "\" > " + v.textlist 
-        else:
+            os.system(query)
+        elif (v.prefix == 'WJets2500'):
             # 2500 is a special case because it is using v2 instead of v1
             query = queryStatement + v.samplename + '/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM' + "\" > " + v.textlist
-        # Queries the dasogo client for each sample
-        os.system(query)
+            os.system(query)
         
 if runanalyzer:    
     """

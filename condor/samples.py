@@ -2,19 +2,10 @@ import ROOT
 import os 
 
 class sample:
-    def __init__(self, prefix, textlist, samplename): #self, color, style, fill, leglabel, label, name=""):
+    def __init__(self, prefix, textlist, samplename):
         self.prefix = prefix
         self.textlist = textlist
         self.samplename = samplename
-        #self.color = color # I don't know what the attributes I should put in here are
-        #self.style = style
-        #self.fill = fill
-        #self.leglabel = leglabel
-        #self.label = label
-        #if name == "":
-        #    self.name = label
-        #else:
-        #    self.name = name
             
 singleTb = sample("singleTb", "singleTbNanoList.txt", 
                   "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8") 
@@ -52,6 +43,12 @@ QCD1500 = sample("QCD1500", "QCD1500NanoList.txt",
                 "QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8")
 QCD2000 = sample("QCD2000", "QCD2000NanoList.txt", 
                 "QCD_HT2000toInf_TuneCP5_13TeV-madgraphMLM-pythia8")
+BPrime800 = sample("BPrime800", "BPrime800NanoList.txt", 
+                "BprimeBToTW_M-800.txt")
+BPrime1400 = sample("BPrime1400", "BPrime1400NanoList.txt", 
+                "BprimeBToTW_M-1400.txt")
+BPrime2000 = sample("BPrime2000", "BPrime2000NanoList.txt", 
+                "BprimeBToTW_M-2000.txt")
 
 samples={
     "singleTb":singleTb,
@@ -72,5 +69,7 @@ samples={
     "QCD1000":QCD1000,
     "QCD1500":QCD1500,
     "QCD2000":QCD2000,
-
+    "BPrime800":BPrime800,
+    "BPrime1400":BPrime1400,
+    "BPrime2000":BPrime2000,
 }
