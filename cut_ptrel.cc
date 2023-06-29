@@ -17,15 +17,19 @@ auto cut_ptrel(double dR_LIM_AK4, double ptrel_LIM, RVec<TLorentzVector> leptons
     {
         // Now, call the built in DeltaR function with a for loop to calculate it individually for each jet
         RVec<double> dr;
-        double dr_temp;
+        RVec<double> leptonEta(gcforwJet_eta.size(), lepton.Eta());
+        RVec<double> leptonPhi(gcforwJet_phi.size(), lepton.Phi());
 
+        dr = DeltaR(leptonEta, gcforwJet_eta, leptonPhi, gcforwJet_phi);
+/*
+        double dr_temp;
         for (int i = 0; i < gcforwJet_eta.size(); i++)
         {
             // Calculate the dr for the jet compared to lepton and save to RVec<float> dr
             dr_temp = DeltaR(lepton.Eta(), gcforwJet_eta[i], lepton.Phi(), gcforwJet_phi[i]);
             dr.push_back(dr_temp);
         }
-
+*/
         // Find the index of the smallest value in dr, and use it to save the minimum value to minDR
         auto minIndex = ArgMin(dr);
         auto minDR = dr[minIndex];
