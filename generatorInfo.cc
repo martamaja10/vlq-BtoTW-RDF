@@ -337,7 +337,7 @@ auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
     RVec<int> W_daughter_idx;
     return W_daughter_idx;
   }
-  cout << "Event" << endl;
+  //cout << "Event" << endl;
   RVec<int> W_idx;
   for (unsigned int i = 0; i < nGenPart; i++)
   {

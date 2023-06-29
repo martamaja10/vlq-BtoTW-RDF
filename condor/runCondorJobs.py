@@ -11,16 +11,16 @@ start_time = time.time()
 
 makelists = False
 runanalyzer = False
-if len(sys.argv) >= 1: makelists = bool(eval(sys.argv[1]))
-if len(sys.argv) >= 2: runanalyzer = bool(eval(sys.argv[2]))
-if len(sys.argv) >= 3: 
+if len(sys.argv) >= 2: makelists = bool(eval(sys.argv[1]))
+if len(sys.argv) >= 3: runanalyzer = bool(eval(sys.argv[2]))
+if len(sys.argv) >= 4: 
     prefix = sys.argv[3] # 'singleTb'
     textlist = prefix + "NanoList.txt" # 'singleTbNanoList.txt'
 
-relbase = '/uscms/home/kjohnso/nobackup/BtoTW/CMSSW_11_0_0/'
-outDir='/store/user/kjohnso/vlq-BtoTW-RDF'
-condorDir='/uscms/home/kjohnso/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/condor/'
-tarfile = '/uscms/home/kjohnso/nobackup/rdfjobs.tar' # outside the CMSSW
+relbase = '/uscms/home/jmanagan/nobackup/BtoTW/CMSSW_11_0_0/'
+outDir='/store/user/jmanagan/BtoTW_Jul2023/LeptonChecks/'
+condorDir='/uscms/home/jmanagan/nobackup/BtoTW/condor_July2023/' # recommend this be outside git area!
+tarfile = '/uscms/home/jmanagan/nobackup/rdfjobs.tar' # outside the CMSSW
 
 runDir=os.getcwd()
 
@@ -66,7 +66,7 @@ if runanalyzer:
     print ('Length of Rootfiles: ',len(rootfiles))
     
     # Write rootfiles to a textfile. Read in analyzer_RDF.h in the constructor
-    fileName = condorDir+prefix+".txt"
+    fileName = prefix+".txt" # JH removing "condorDir" because I want condorDir to be outside git area
     listArgument = open(fileName, "w")
     listArgument.write(rootfiles)
     listArgument.close()
@@ -102,9 +102,6 @@ Error = %(PREFIX)s_RDF_%(TESTNUM)s.err
 Log = %(PREFIX)s_RDF_%(TESTNUM)s.log
 Notification = Never
 Arguments = %(FILENAME)s %(OUTPUTDIR)s %(TESTNUM)s 
-
-
-
 
 Queue 1"""%dict)
     jdf.close()
