@@ -44,7 +44,7 @@ void rdf::analyzer_RDF(TString testNum)
   // Twiki with reccommended ultralegacy values
   auto rdf_input = ROOT::RDataFrame("Events", files); // Initial data
 
-  auto rdf = rdf_input.Define("Bprime_gen_info", Form("Bprime_gen_info(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status, GenPart_statusFlags)", sample.c_str()))
+  auto truth = rdf_input.Define("Bprime_gen_info", Form("Bprime_gen_info(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status, GenPart_statusFlags)", sample.c_str()))
                  .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
                  .Define("Bprime_gen_eta", "(double) Bprime_gen_info[1]")
                  .Define("Bprime_gen_phi", "(double) Bprime_gen_info[2]")
@@ -120,7 +120,7 @@ void rdf::analyzer_RDF(TString testNum)
   // cout << "Output File: " << outputFileNC << endl
   //           << "-------------------------------------------------" << endl;
 
-  auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters")
+  auto METfilters = truth.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters")
                         .Filter("MET_pt > 50", "Pass MET > 50")
                         .Filter("nJet > 0 && nFatJet > 0", "Event has jets");
 
@@ -378,4 +378,12 @@ void rdf::analyzer_RDF(TString testNum)
   time.Print();
   cout << "Cut statistics:" << endl;
   CleanJets.Report()->Print();
+
+  cout << "Adding Counter tree to the file:" << endl;
+  auto rdf_runs = ROOT::RDataFrame("Runs", files); 
+  ROOT::RDF::RSnapshotOptions opts;
+  opts.fMode = "UPDATE";
+  rdf_runs.Snapshot("Runs", stdfinalFile, rdf_runs.GetColumnNames(), opts);
+
+  cout << "Done!" << endl;
 }
