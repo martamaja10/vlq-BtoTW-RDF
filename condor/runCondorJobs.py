@@ -47,51 +47,54 @@ if makelists:
             os.system(query)
         
 if runanalyzer:    
-    """
-    for k,v in samples.items():
-        prefix = v.prefix;
-        textlist = v.textlist;
-        
-        Indent everything below this and comment the two lines at the top of this section
-        to submit condor jobs for all samples at at once
-    """ 
-    
-    rootfiles = ''
-    
-    # Delimiter is  "\n" so I can write and read by line
-    with open(os.path.abspath(textlist),'r') as rootlist:
-        for line in rootlist:
-            rootfiles += "root://cmsxrootd.fnal.gov/" + line.strip() + "\n"
-        rootfiles = rootfiles[:-1]
-    print ('Length of Rootfiles: ',len(rootfiles))
-    
-    # Write rootfiles to a textfile. Read in analyzer_RDF.h in the constructor
-    fileName = prefix+".txt" # JH removing "condorDir" because I want condorDir to be outside git area
-    listArgument = open(fileName, "w")
-    listArgument.write(rootfiles)
-    listArgument.close()
-    print ('Wrote to File')
-    
-    # Redefining fileName so it is accessed from the directory above by analyzer_RDF.h
-    fileName = "condor/"+prefix+".txt"
-    
-    os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
-    os.system('mkdir -p '+condorDir+'/'+prefix)
-    
+
     print ('Making tar:')
     if os.path.exists(tarfile): print ('*********** tar already exists! I ASSUME YOU WANT TO MAKE A NEW ONE! *************')
 
     os.chdir(relbase)
-    print ('tar --exclude="src/.git" --exclude="tmp/" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
-    os.system('tar --exclude="src/.git" --exclude="tmp/" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
+    print ('tar --exclude="src/.git" --exclude="tmp/" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude="src/vlq-BtoTW-RDF/*.root" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
+    os.system('tar --exclude="src/.git" --exclude="tmp/" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude="src/vlq-BtoTW-RDF/*.root" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
     os.chdir(runDir)
+
+    for k,v in samples.items():
+        prefix = v.prefix;
+        textlist = v.textlist;
+        
+        #Indent everything below this and comment the two lines at the top of this section
+        #to submit condor jobs for all samples at at once
+
     
-    dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir+'/'+prefix, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix, 'LIST':rootfiles, 'FILENAME':fileName}
-    jdfName=condorDir+prefix+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
-    print ("jdfname: ",jdfName)
-    jdf=open(jdfName,'w')
-    jdf.write(
-        """use_x509userproxy = true
+        rootfiles = ''
+    
+        # Delimiter is  "\n" so I can write and read by line
+        with open(os.path.abspath(textlist),'r') as rootlist:
+            for line in rootlist:
+                if 'Bprime' not in textlist:
+                    rootfiles += "root://cmsxrootd.fnal.gov/" + line.strip() + "\n"
+                else:
+                    rootfiles += "root://cmseos.fnal.gov/" + line.strip() + "\n"
+            rootfiles = rootfiles[:-1]
+        print ('Length of Rootfiles: ',len(rootfiles))
+    
+        # Write rootfiles to a textfile. Read in analyzer_RDF.h in the constructor
+        fileName = prefix+".txt" # JH removing "condorDir" because I want condorDir to be outside git area
+        listArgument = open(fileName, "w")
+        listArgument.write(rootfiles)
+        listArgument.close()
+        print ('Wrote to File')
+    
+        # Redefining fileName so it is accessed from the directory above by analyzer_RDF.h
+        fileName = "condor/"+prefix+".txt"
+
+        os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
+        os.system('mkdir -p '+condorDir+'/'+prefix)
+                
+        dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir+'/'+prefix, 'TARBALL':tarfile, 'TESTNUM':count, 'PREFIX':prefix, 'LIST':rootfiles, 'FILENAME':fileName}
+        jdfName=condorDir+prefix+'/%(PREFIX)s_%(TESTNUM)s.job'%dict
+        print ("jdfname: ",jdfName)
+        jdf=open(jdfName,'w')
+        jdf.write(
+            """use_x509userproxy = true
 universe = vanilla
 Executable = %(RUNDIR)s/condorRDF.sh
 Should_Transfer_Files = YES
@@ -104,14 +107,14 @@ Notification = Never
 Arguments = %(FILENAME)s %(OUTPUTDIR)s %(TESTNUM)s 
 
 Queue 1"""%dict)
-    jdf.close()
-    os.chdir('%s/'%(condorDir+'/'+prefix))
-    os.system('condor_submit %(PREFIX)s_%(TESTNUM)s.job'%dict)
-    os.system('sleep 0.5')                                
-    os.chdir('%s'%(runDir))
-    print (count, " jobs submitted!!!")
+        jdf.close()
+        os.chdir('%s/'%(condorDir+'/'+prefix))
+        os.system('condor_submit %(PREFIX)s_%(TESTNUM)s.job'%dict)
+        os.system('sleep 0.5')                                
+        os.chdir('%s'%(runDir))
+        print (count, " jobs submitted!!!")
         
-    #Formatting line 101
+        #Formatting line 101
 
 print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
 
