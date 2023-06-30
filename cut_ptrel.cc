@@ -8,19 +8,23 @@
 using namespace std;
 using namespace ROOT::VecOps;
 
-auto cut_ptrel(double dR_LIM_AK4, double ptrel_LIM, RVec<TLorentzVector> leptons, double NJets_forward, RVec<double> gcforwJet_eta, RVec<double> gcforwJet_phi, RVec<double> gcforwJet_pt, RVec<double> gcforwJet_mass)
+auto cut_ptrel(double dR_LIM_AK4, double ptrel_LIM, RVec<TLorentzVector> leptons, RVec<double> gcJet_eta, RVec<double> gcJet_phi, RVec<double> gcJet_pt, RVec<double> gcJet_mass)
 {
     // First, loop through all the muons.  We do each one seperately
-    RVec<int> passOrFail;
+  int Nlep = leptons.size();
+  RVec<int> passOrFail(Nlep,1);
 
-    for (const TLorentzVector &lepton : leptons)
+  int NgcJets = gcJet_eta.size();
+  if(NgcJets==0){return passOrFail;}
+
+  for (unsigned int i=0; i<Nlep; i++)
     {
-        // Now, call the built in DeltaR function with a for loop to calculate it individually for each jet
-        RVec<double> dr;
-        RVec<double> leptonEta(gcforwJet_eta.size(), lepton.Eta());
-        RVec<double> leptonPhi(gcforwJet_phi.size(), lepton.Phi());
+      // Now, call the built in DeltaR function with a for loop to calculate it individually for each jet
+      RVec<double> dr;
+      RVec<double> leptonEta(NgcJets, leptons[i].Eta());
+      RVec<double> leptonPhi(NgcJets, leptons[i].Phi());
 
-        dr = DeltaR(leptonEta, gcforwJet_eta, leptonPhi, gcforwJet_phi);
+      dr = DeltaR(leptonEta, gcJet_eta, leptonPhi, gcJet_phi);
 /*
         double dr_temp;
         for (int i = 0; i < gcforwJet_eta.size(); i++)
@@ -30,21 +34,22 @@ auto cut_ptrel(double dR_LIM_AK4, double ptrel_LIM, RVec<TLorentzVector> leptons
             dr.push_back(dr_temp);
         }
 */
-        // Find the index of the smallest value in dr, and use it to save the minimum value to minDR
-        auto minIndex = ArgMin(dr);
-        auto minDR = dr[minIndex];
-
-        TLorentzVector jet;
-        jet.SetPtEtaPhiM(gcforwJet_pt[minIndex], gcforwJet_eta[minIndex], gcforwJet_phi[minIndex], gcforwJet_mass[minIndex]);
-        auto ptRel = (jet.Vect().Cross(lepton.Vect())).Mag() / jet.P();
-        if (minDR > dR_LIM_AK4 || ptRel > ptrel_LIM)
+      // Find the index of the smallest value in dr, and use it to save the minimum value to minDR
+      auto minIndex = ArgMin(dr);
+      auto minDR = dr[minIndex];
+		
+      TLorentzVector jet;
+      jet.SetPtEtaPhiM(gcJet_pt[minIndex], gcJet_eta[minIndex], gcJet_phi[minIndex], gcJet_mass[minIndex]);
+      auto ptRel = (jet.Vect().Cross(leptons[i].Vect())).Mag() / jet.P();
+      
+      if (minDR > dR_LIM_AK4 || ptRel > ptrel_LIM)
         {
-            passOrFail.push_back(1);
+	  passOrFail[i] = 1;
         }
-        else
+      else
         {
-            passOrFail.push_back(0);
+	  passOrFail[i] = 0;
         }
     }
-    return passOrFail;
+  return passOrFail;
 }
