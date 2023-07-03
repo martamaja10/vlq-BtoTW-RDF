@@ -44,7 +44,7 @@ void rdf::analyzer_RDF(TString testNum)
   // Twiki with reccommended ultralegacy values
   auto rdf_input = ROOT::RDataFrame("Events", files); // Initial data
 
-  auto rdf = rdf_input.Define("Bprime_gen_info", Form("Bprime_gen_info(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status, GenPart_statusFlags)", sample.c_str()))
+  auto truth = rdf_input.Define("Bprime_gen_info", Form("Bprime_gen_info(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status, GenPart_statusFlags)", sample.c_str()))
                  .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
                  .Define("Bprime_gen_eta", "(double) Bprime_gen_info[1]")
                  .Define("Bprime_gen_phi", "(double) Bprime_gen_info[2]")
@@ -120,7 +120,7 @@ void rdf::analyzer_RDF(TString testNum)
   // cout << "Output File: " << outputFileNC << endl
   //           << "-------------------------------------------------" << endl;
 
-  auto METfilters = rdf.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters")
+  auto METfilters = truth.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters")
                         .Filter("MET_pt > 50", "Pass MET > 50")
                         .Filter("nJet > 0 && nFatJet > 0", "Event has jets");
 
@@ -141,22 +141,30 @@ void rdf::analyzer_RDF(TString testNum)
                      .Define("VElectron_eta", "Electron_eta[VetoEl == true]")
                      .Define("VElectron_phi", "Electron_phi[VetoEl == true]")
                      .Define("VElectron_mass", "Electron_mass[VetoEl == true]")
-                     .Define("VMuon_P4", "fVectorConstructor(VMuon_pt,VMuon_eta,VMuon_phi,VMuon_mass)")
-                     .Define("VElectron_P4", "fVectorConstructor(VElectron_pt,VElectron_eta,VElectron_phi,VElectron_mass)")
+    .Define("VMuon_P4", "fVectorConstructor(VMuon_pt,VMuon_eta,VMuon_phi,VMuon_mass)")
+    .Define("VElectron_P4", "fVectorConstructor(VElectron_pt,VElectron_eta,VElectron_phi,VElectron_mass)")
                      .Define("VMuon_jetIdx", "Muon_jetIdx[VetoMu == true]")
                      .Define("VMuon_miniIsoId", "Muon_miniIsoId[VetoMu]")
                      .Define("VElectron_jetIdx", "Electron_jetIdx[VetoEl]")
                      .Define("VElectron_miniIso", "Electron_miniPFRelIso_all[VetoEl]");
-
+  /*
+  TString outputFileNC = "RDF_" + sample + "_nocuts_" + testNum + ".root";                                                                                                                
+  const char *stdOutputFileNC = outputFileNC;                                                                                                                                            
+  cout << "------------------------------------------------" << endl                                                                                                                               << ">>> Saving original Snapshot..." << endl;                                                                                                                                 
+  LepDefs.Snapshot("Events", stdOutputFileNC);                                                                                                                                     
+  cout << "Output File: " << outputFileNC << endl                                                                                                                                         
+       << "-------------------------------------------------" << endl; 
+  */
+  
   auto CleanJets = LepDefs.Define("Jet_P4", "fVectorConstructor(Jet_pt,Jet_eta,Jet_phi,Jet_mass)")
-                       .Define("cleanJets", "cleanJets(Jet_P4,Jet_rawFactor,VMuon_P4,VMuon_jetIdx,VElectron_P4,VElectron_jetIdx)")
+    .Define("cleanJets", "cleanJets(Jet_P4,Jet_rawFactor,VMuon_P4,VMuon_jetIdx,VElectron_P4,VElectron_jetIdx)")
                        .Define("cleanJet_pt", "cleanJets[0]")
                        .Define("cleanJet_eta", "cleanJets[1]")
                        .Define("cleanJet_phi", "cleanJets[2]")
-                       .Define("cleanJet_mass", "cleanJets[3]")
+    .Define("cleanJet_mass", "cleanJets[3]")
                        .Define("cleanJet_rawFactor", "cleanJets[4]")
                        .Define("goodcleanJets", "cleanJet_pt > 30 && abs(cleanJet_eta) < 2.4 && Jet_jetId > 1")
-                       .Define("NJets_central", "(int) Sum(goodcleanJets)")
+    .Define("NJets_central", "(int) Sum(goodcleanJets)")
                        .Define("gcJet_pt", "cleanJet_pt[goodcleanJets == true]")
                        .Define("gcJet_eta", "cleanJet_eta[goodcleanJets == true]")
                        .Define("gcJet_phi", "cleanJet_phi[goodcleanJets == true]")
@@ -171,14 +179,14 @@ void rdf::analyzer_RDF(TString testNum)
                        .Define("gcforwJet_phi", "cleanJet_phi[goodcleanForwardJets == true]")
                        .Define("gcforwJet_mass", "cleanJet_mass[goodcleanForwardJets == true]")
                        .Define("gcforwJet_DeepFlav", "Jet_btagDeepFlavB[goodcleanForwardJets == true]")
-                       .Define("dR_LIM_AK4", "(float) 0.4")
+    .Define("dR_LIM_AK4", "(float) 0.4")
                        .Define("ptrel25", "25")
-                       .Define("VMuon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("VElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VMuon_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VMuon_P4, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VElectron_2Dcut_ptrel25", "cut_ptrel(dR_LIM_AK4, ptrel25, VElectron_P4, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
                        .Define("ptrel40", "40")
-                       .Define("VMuon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VMuon_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
-                       .Define("VElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VElectron_P4, NJets_central, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
-
+                       .Define("VMuon_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VMuon_P4, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)")
+                       .Define("VElectron_2Dcut_ptrel40", "cut_ptrel(dR_LIM_AK4, ptrel40, VElectron_P4, gcJet_eta, gcJet_phi, gcJet_pt, gcJet_mass)");
+   
   // auto LepSelect = CleanJets.Define("SignalMu", "TPassMu && (Muon_pt>55)")			\
   //     .Define("SignalEl", "TPassEl && (Electron_pt>80)")			\
   //     .Define("nSignalMu", "(int) Sum(SignalMu)")			\
@@ -347,16 +355,25 @@ void rdf::analyzer_RDF(TString testNum)
   //   .Define("mlp_HT500_Bprime","dnn_scores[5]")
   //   .Define("genFatJet_matching_sig", FatJet_matching_sig, {"goodcleanFatJets", "gcFatJet_eta", "gcFatJet_phi", "NFatJets", "FatJet_subJetIdx1", "nSubJet", "SubJet_hadronFlavour", "GenPart_pdgId", "daughterb_gen_eta", "daughterb_gen_phi", "tDaughter1_gen_eta", "tDaughter1_gen_phi", "tDaughter1_gen_pdgId", "tDaughter2_gen_eta", "tDaughter2_gen_phi", "tDaughter2_gen_pdgId", "WDaughter1_gen_eta", "WDaughter1_gen_phi", "WDaughter1_gen_pdgId", "WDaughter2_gen_eta", "WDaughter2_gen_phi", "WDaughter2_gen_pdgId"})
   //   .Define("genFatJet_matching_bkg", FatJet_matching_bkg, {"goodcleanFatJets", "gcFatJet_eta", "gcFatJet_phi", "NFatJets", "FatJet_subJetIdx1", "nSubJet", "SubJet_hadronFlavour", "nGenPart", "GenPart_pdgId", "GenPart_phi", "GenPart_eta", "GenPart_genPartIdxMother", "t_bkg_idx", "W_bkg_idx"});
-
+  
   // // -------------------------------------------------
   // // 		Save Snapshot to file
   // // -------------------------------------------------
-
+  /*
+  TString outputFileNC = "RDF_" + sample + "_nocuts_" + testNum + ".root";                                                                                                                  
+  const char *stdOutputFileNC = outputFileNC;                                                                                                                                               
+  cout << "------------------------------------------------" << endl                                                                                                                       
+       << ">>> Saving original Snapshot..." << endl;                                                                                                                                        
+  CleanJets.Snapshot("Events", stdOutputFileNC);                                                                                                                                     
+  cout << "Output File: " << outputFileNC << endl                                                                                                                                           
+       << "-------------------------------------------------" << endl;
+  */
+  
   cout << "-------------------------------------------------" << endl
             << ">>> Saving " << sample << " Snapshot..." << endl;
   TString finalFile = "RDF_" + sample + "_finalsel_" + testNum + ".root";
   const char *stdfinalFile = finalFile;
-
+  
   auto colNames = CleanJets.GetColumnNames();
   vector<string> snapCol;
   int i = 0;
@@ -373,9 +390,19 @@ void rdf::analyzer_RDF(TString testNum)
   CleanJets.Snapshot("Events", stdfinalFile, snapCol);
   cout << "Output File: " << finalFile << endl
             << "-------------------------------------------------" << endl;
-
+  
   time.Stop();
   time.Print();
+
   cout << "Cut statistics:" << endl;
   CleanJets.Report()->Print();
+
+  cout << "Adding Counter tree to the file:" << endl;
+  auto rdf_runs = ROOT::RDataFrame("Runs", files); 
+  ROOT::RDF::RSnapshotOptions opts;
+  opts.fMode = "UPDATE";
+  rdf_runs.Snapshot("Runs", stdfinalFile, rdf_runs.GetColumnNames(), opts);
+
+  cout << "Done!" << endl;
+
 }

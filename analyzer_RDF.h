@@ -86,17 +86,13 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName)
   }
   cout << "Number of Entries: " << files.size() << endl;
 
-  // if parameter tree is not specified (or zero), connect the file
-  // used to generate this class and read the Tree.
   TString sampleName = file;
   cout << "Sample Name: " << sampleName << endl;
-
-  // if parameter tree is not specified (or zero), connect the file
-  // used to generate this class and read the Tree.
 
   psOutName = preselFileName;
   fsOutName = finalselFileName;
 
+  // Parse the incoming file names to assign labels
   isSig = (sampleName.Contains("Bprime"));
   isMadgraphBkg = (sampleName.Contains("QCD") || sampleName.Contains("madgraphMLM"));
   isTOP = (sampleName.Contains("Mtt") || sampleName.Contains("ST") || sampleName.Contains("ttZ") || sampleName.Contains("ttW") || sampleName.Contains("ttH") || sampleName.Contains("TTTo"));
@@ -106,31 +102,22 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName)
   isSM = sampleName.Contains("SingleMuon");
   isSE = (sampleName.Contains("SingleElectron") || sampleName.Contains("EGamma"));
 
-  isBUp = false; // these will now get changed in makeRdfDnn.C
+
+  TObjArray *tokens = sampleName.Tokenize("/");
+  sample = ((TObjString *)(tokens->At(5)))->String();
+  delete tokens;
+  cout << "Sample: " << sample << endl;
+
+  isBUp = false; // FIXME -- not using this yet, but we need to.
   isBDn = false;
   isLUp = false;
   isLDn = false;
   isNominal = true;
-  isTTincMtt0to700 = preselFileName.Contains("Mtt0to700");
+  isTTincMtt0to700 = preselFileName.Contains("Mtt0to700"); // FIXME -- not using this yet, but we need to for high-mass ttbar (or some more clever way to weight based on mass value).
   isTTincMtt0to1000 = preselFileName.Contains("Mtt0to1000");
   isTTincMtt700to1000 = preselFileName.Contains("Mtt700to1000");
   isTTincMtt1000toInf = preselFileName.Contains("Mtt1000toInf");
 
-  // Samples will be signal, ttbar (a background), and possibly others...
-  sample = "singletop";
-  if (isTT == true)
-  {
-    sample = "ttbar";
-  }
-  else if (isSig == true)
-  {
-    sample = "Bprime";
-  }
-  else if (isMadgraphBkg == true)
-  {
-    sample = "wjets";
-  }
-  cout << "Sample: " << sample << endl;
 }
 
 rdf::~rdf()
