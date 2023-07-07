@@ -34,5 +34,6 @@ Further selections of the charge asymmetry analysis:
 Ideas from boosted top xsec note: https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2016/174
 1. MET > 35 (muons) or > 50 (electrons)
 2. Electron channel: (DeltaPhi(electron, MET) - 1.5) < (1.5 * MET / 110). Idea is to draw MET-vs-DeltaPhi plots and find diagonal line
-3. Electron channel: (DeltaPhi(lead AK4, MET) - 1.5) < (1.5 * MET / 110)
+   * y = mx + b:    MET > (m/1.5)*DPhi - m.  Idea for the plot would be to vary "m" from 0 to 200? Need to check which 2D hist bins to sum up
+4. Electron channel: (DeltaPhi(lead AK4, MET) - 1.5) < (1.5 * MET / 110)
 
