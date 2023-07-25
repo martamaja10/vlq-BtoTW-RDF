@@ -10,7 +10,6 @@ class sample:
         self.year = year
         self.textlist = textlist
         self.samplename = samplename
-<<<<<<< HEAD
         #self.color = color
                         
 Bprime_M1000_20UL16 = sample("Bprime_M1000_20UL16", "20UL16", "Bprime_M1000_20UL16NanoList.txt", "/BprimeBtoTW_M-1000_NWALO_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v2/NANOAODSIM")
@@ -772,64 +771,6 @@ samples_WJets = {
 }
 
 samples_QCD = {
-=======
-            
-singleTb = sample("singleTb", "singleTbNanoList.txt", 
-                  "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8") 
-singleT = sample("singleT", "singleTNanoList.txt", 
-                  "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8") 
-ttbar = sample("ttbar", "ttbarNanoList.txt", 
-                  "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8") 
-ttjetsTb = sample("ttjetsTb", "ttjetsTbNanoList.txt", 
-                  "TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8") 
-ttjetsT = sample("ttjetsT", "ttjetsTNanoList.txt", 
-                  "TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8") 
-WJets200 = sample("WJets200", "WJets200NanoList.txt", 
-                  "WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8") 
-WJets400 = sample("WJets400", "WJets400NanoList.txt", 
-                  "WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8") 
-WJets600 = sample("WJets600", "WJets600NanoList.txt", 
-                  "WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8") 
-WJets800 = sample("WJets800", "WJets800NanoList.txt", 
-                  "WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8") 
-WJets1200 = sample("WJets1200", "WJets1200NanoList.txt", 
-                  "WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8") 
-WJets2500 = sample("WJets2500", "WJets2500NanoList.txt", 
-                  "WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8") 
-QCD200 = sample("QCD200", "QCD200NanoList.txt", 
-                "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8")
-QCD300 = sample("QCD300", "QCD300NanoList.txt", 
-                "QCD_HT300to500_TuneCP5_13TeV-madgraphMLM-pythia8")
-QCD500 = sample("QCD500", "QCD500NanoList.txt", 
-                "QCD_HT500to700_TuneCP5_13TeV-madgraphMLM-pythia8")
-QCD700 = sample("QCD700", "QCD700NanoList.txt", 
-                "QCD_HT700to1000_TuneCP5_13TeV-madgraphMLM-pythia8")
-QCD1000 = sample("QCD1000", "QCD1000NanoList.txt", 
-                "QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8")
-QCD1500 = sample("QCD1500", "QCD1500NanoList.txt", 
-                "QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8")
-QCD2000 = sample("QCD2000", "QCD2000NanoList.txt", 
-                "QCD_HT2000toInf_TuneCP5_13TeV-madgraphMLM-pythia8")
-Bprime800 = sample("Bprime800", "Bprime800NanoList.txt", 
-                "BprimeBToTW_M-800.txt")
-Bprime1400 = sample("Bprime1400", "Bprime1400NanoList.txt", 
-                "BprimeBToTW_M-1400.txt")
-Bprime2000 = sample("Bprime2000", "Bprime2000NanoList.txt", 
-                "BprimeBToTW_M-2000.txt")
-
-samples={
-    #"singleTb":singleTb,
-    #"singleT":singleT,
-    #"ttbar":ttbar,
-    #"ttjetsTb":ttjetsTb,
-    #"ttjetsT":ttjetsT,
-    #"WJets200":WJets200,
-    #"WJets400":WJets400,
-    #"WJets600":WJets600,
-    #"WJets800":WJets800,
-    #"WJets1200":WJets1200,
-    #"WJets2500":WJets2500,
->>>>>>> becca63a8b6c385fbdbc9267bf9faf41de37fe8c
     "QCD200":QCD200,
     "QCD300":QCD300,
     "QCD500":QCD500,
@@ -837,11 +778,4 @@ samples={
     "QCD1000":QCD1000,
     "QCD1500":QCD1500,
     "QCD2000":QCD2000,
-<<<<<<< HEAD
 }
-=======
-    "Bprime800":Bprime800,
-    "Bprime1400":Bprime1400,
-    "Bprime2000":Bprime2000,
-}
->>>>>>> becca63a8b6c385fbdbc9267bf9faf41de37fe8c

@@ -117,12 +117,8 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
   TObjArray *tokens = sampleName.Tokenize("/");
   sample = ((TObjString *)(tokens->At(5)))->String();
   delete tokens;
-<<<<<<< HEAD
 
   year = yearIn; // May need to change this line to get things to work
-=======
-  cout << "Sample: " << sample << endl;
->>>>>>> becca63a8b6c385fbdbc9267bf9faf41de37fe8c
 
   isBUp = false; // FIXME -- not using this yet, but we need to.
   isBDn = false;
