@@ -5,12 +5,16 @@ hostname
 # Take in Input Arguments
 infilename=${1}  # Filename is a really long string
 outputDir=${2}
-testnum=${3}
+testnum1=${3}
+testnum2=${4}
+year=${5}
 
 # Print out Input Arguments
 echo "filename: ${infilename}"
 echo "output dir: ${outputDir}"
-echo "testnum: ${testnum}"
+echo "testnum1: ${testnum1}"
+echo "testnum2: ${testnum2}"
+echo "year: ${year}"
 
 # Setup Environment
 scratch=${PWD}  
@@ -32,20 +36,20 @@ export PATH=$PATH:$macroDir
 
 # Run analyzer_RDF files through two C files
 echo "Running RDF:"
-root -l -b -q runRDF.C\(\"${testnum}\",\"${infilename}\"\) 
+#root -l -b -q runRDF.C\(\"testnum1\",\"testnum2\",\"infilename\",\"year\"\) 
+root -l -b -q runRDF.C\(\"${testnum1}\",\"${testnum2}\",\"${infilename}\",\"${year}\"\) 
 
 # Viewing ROOT Files
 echo "ROOT Files:"
-ls -l *${testnum}*.root
+ls -l *${testnum1}*.root
 
 # Remove our copy of the files to clean up
-echo "Removing presel files:"
-rm *preselTree*.root
+# echo "Removing presel files:"
+# rm *preselTree*.root
 
 # Copy Output to EOS
-
 echo "xrdcp output for condor"
-for FILE in *${testnum}*.root
+for FILE in *${testnum1}*.root
 do
   echo "xrdcp -f ${FILE} root://cmseos.fnal.gov/${outputDir}/${FILE}"
   xrdcp -f ${FILE} root://cmseos.fnal.gov/${outputDir}/${FILE} 2>&1

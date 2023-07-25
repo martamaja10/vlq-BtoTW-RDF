@@ -1,9 +1,10 @@
 // Methods in this file:
-// leptonicCheck(), Electron_cutBasedIdNoIso_tight(), genttbarMassCalc(C), fVectorConstructor(), lvConstructor(C)
+// leptonicCheck(), Electron_cutBasedIdNoIso_tight(), genttbarMassCalc(C), fVectorConstructor(), lvConstructor(C), DeltaR_VecAndFloat(), ptRel()
 // I put some of the methods in here becasue I didn't know where else to put them.
 
 using namespace std;
 using namespace ROOT::VecOps;
+
 
 // The following functions could probably all go to the plotting marco
 auto leptonicCheck(string sample, int trueLeptonicT, int trueLeptonicW)
@@ -149,3 +150,40 @@ TLorentzVector lvConstructor(float pt, float eta, float phi, float mass)
 	lv.SetPtEtaPhiM(pt,eta,phi,mass);
 	return lv;
 };
+
+auto getHighestPt(RVec<float> &VLepton_pt, RVec<float> &VLepton_eta, RVec<float> &VLepton_phi){
+  RVec<float> Lepton0_PtEtaPhi(3,-1);
+
+  if(VLepton_pt.size()==0){return Lepton0_PtEtaPhi;}
+
+  auto maxIdx = ArgMax(VLepton_pt);
+
+  Lepton0_PtEtaPhi[0] = VLepton_pt[maxIdx];
+  Lepton0_PtEtaPhi[1] = VLepton_eta[maxIdx];
+  Lepton0_PtEtaPhi[2] = VLepton_phi[maxIdx];
+
+  return Lepton0_PtEtaPhi;
+};
+
+// --------------------------------------------
+//               DR CALCULATOR
+// --------------------------------------------
+ROOT::VecOps::RVec<float> DeltaR_VecAndFloat(ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, float& lep_eta, float& lep_phi)
+{
+  ROOT::VecOps::RVec<float> DR (jet_eta.size(),999);
+  for(int i = 0; i < jet_eta.size(); i++) {DR[i] = DeltaR(jet_eta[i],lep_eta,jet_phi[i],lep_phi);}
+  return DR;
+};
+
+ROOT::VecOps::RVec<float> ptRel(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, float& lepton_pt, float& lepton_eta, float& lepton_phi, float& lepton_mass)
+{
+  ROOT::VecOps::RVec<float> ptrel (jet_pt.size(),-1);
+  TLorentzVector jet;
+  TLorentzVector lepton;
+  lepton.SetPtEtaPhiM(lepton_pt, lepton_eta, lepton_phi, lepton_mass);
+  for(int i = 0; i < jet_pt.size(); i++) {
+      jet.SetPtEtaPhiM(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]);
+      ptrel[i] = (jet.Vect().Cross(lepton.Vect())).Mag() / jet.P();
+  }
+  return ptrel;
+}

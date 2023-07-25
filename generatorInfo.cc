@@ -11,7 +11,7 @@ using namespace ROOT::VecOps;
 auto Bprime_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_mass, RVec<float> &GenPart_pt, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_status, RVec<int> &GenPart_statusFlags)
 {
   RVec<float> BPrimeInfo(6, -999);
-  if (sample != "Bprime")
+  if (sample.find("Bprime") == std::string::npos)
   {
     return BPrimeInfo;
   }
@@ -46,7 +46,7 @@ auto Bprime_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pd
 auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_mass, RVec<float> &GenPart_pt, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_status)
 {
   RVec<float> t_gen_info(30, -999);
-  if (sample != "Bprime")
+  if (sample.find("Bprime") == std::string::npos)
   {
     return t_gen_info;
   }
@@ -146,7 +146,7 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
         } // quark 2
         else
         {
-          cout << "error" << endl;
+          cout << "Error in t_gen_info: not  e/mu/tau, neutrino, or quark" << endl;
         }
 
         t_gen_info[17 + n] = GenPart_pt[jgen];
@@ -169,7 +169,7 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
 auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_mass, RVec<float> &GenPart_pt, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_status, int daughterW_gen_pdgId)
 {
   RVec<float> W_gen_info(19, -999);
-  if (sample != "Bprime")
+  if (sample.find("Bprime") == std::string::npos)
   {
     return W_gen_info;
   }
@@ -229,7 +229,7 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
     } // quark 2
     else
     {
-      cout << "error" << endl;
+      cout << "Error in W_gen_info: not  e/mu/tau, neutrino, or quark" << endl;
     }
 
     W_gen_info[6 + n] = GenPart_pt[i];
@@ -250,7 +250,7 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
 
 auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_statusFlags)
 {
-  if (sample == "Bprime")
+  if (sample.find("Bprime") != std::string::npos)
   {
     RVec<int> t_daughter_idx;
     return t_daughter_idx;
@@ -332,12 +332,12 @@ auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
 
 auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_statusFlags, RVec<int> &t_bkg_idx)
 {
-  if (sample == "Bprime")
+  if (sample.find("Bprime") != std::string::npos)
   {
     RVec<int> W_daughter_idx;
     return W_daughter_idx;
   }
-  cout << "Event" << endl;
+  //cout << "Event" << endl;
   RVec<int> W_idx;
   for (unsigned int i = 0; i < nGenPart; i++)
   {
@@ -399,7 +399,7 @@ auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
 auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, RVec<int> &GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId)
 {
   RVec<int> matched_GenPart(NFatJets, -9);
-  if (sample != "Bprime")
+  if (sample.find("Bprime") == std::string::npos)
   {
     return matched_GenPart;
   }
@@ -480,7 +480,7 @@ auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<floa
 auto FatJet_matching_bkg(string sample, RVec<float> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx)
 {
   RVec<int> matched_GenPart(NFatJets, -9);
-  if (sample == "Bprime")
+  if (sample.find("Bprime") != std::string::npos)
   {
     return matched_GenPart;
   }
