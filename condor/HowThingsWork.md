@@ -16,9 +16,12 @@ This corresponds to the first argument of runCondorJobs.py and the code inside t
 $ python2 runCondorJobs.py False True
 ```
 
-There are two things to change depending on what condor jobs you want to submit
-- filesPerJob (The number of files submitted with each job)
+There are three things to change depending on what condor jobs you want to submit:
 - sample_dic (The name of a dictionary from samples.py containing the samples you want to loop over to submit)
+- filesPerJob (The number of files submitted with each job)
+- jobsPerSample (Number of divisions per sample)
+
+Only one of filesPerJob and jobsPerSample will be used for each sample.  Currently, only TTToSemiLeptonic samples use jobsPerSample, and all the rest use filesPerJob.  This can be changed with an if statement on line 83.
 
 Condor jobs will only submit files together that come from the same sample.  You don't need to worry about filesPerJob including files from different samples in the same condor job.
 
@@ -37,7 +40,7 @@ $ condor_rm 2321568.0 -name lpcschedd4.fnal.gov
 The condor job will disappear when it is finished.  To see the output of the condor job, use the following command to access the eos area after replacing the part of the path after kjohnso with your path.  
 
 ```
-eosls /store/user/kjohnso/BtoTW_Jul2023/LeptonChecks
+eosls /store/user/...
 ```
 
 You can change the output path with outDir in runCondorJobs.py at the top.
@@ -50,13 +53,13 @@ Also refer to the .err and .out files in Outputs/Prefix to see if everything com
 If you want to run the analyzer without submitting a condor job, you can use the command below.
 
 ```
-$ root -l -b -q runRDF.C\(\"${condor/Rootfiles/QCD200.txt}\", " \"${store/user/kjohnso/BtoTW_Jul2023/LeptonChecks/QCD200}\", \"${1}\", \"${1}\",\"${2018}\"\)
+$ root -l -b -q runRDF.C\(\"0\",\"1\",\"condor/Rootfiles/SingleMuonRun2018D2018UL.txt\",\"2018\"\)
 ```
 
 The first argument is the list of files that will be read in in the contructor of the analyzer class.  For organizational purposes, they are stored in Rootfiles.  The second argument is the output location in the eos area.  The output can be viewed with the following command if you replace path starting with kjohnso to match the output you have.
 
 ```
-eosls /store/user/kjohnso/BtoTW_Jul2023/LeptonChecks
+eosls /store/user/...
 ```
 
 The third and fourth arguments are the range over which the analyzer will run.  In this example it will run over one file, which is the second one in the file becasue it is zero based.  The final argument is the year of the sample, which is used in the analyzer.
