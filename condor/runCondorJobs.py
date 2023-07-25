@@ -9,12 +9,12 @@ from samples import *
 execfile("/uscms_data/d3/kjohnso/EOSSafeUtils.py") # this is a python2 command, so ignore the error and run with python2
 start_time = time.time()
 
-# --- Size of Condor Job ---
-filesPerJob = 10 # Not used when jobsPerSample is used
-jobsPerSample = 10
-
 # --- Sample Dictionary ---
 sample_dic = samples_WJets # This is the name of the dictionary we want to run over (the yellow underline doesn't prevent it from runniing)
+
+# --- Size of Condor Job ---
+filesPerJob = 999
+jobsPerSample = 10 # This is only used for the TTToSemiLeptonic samples
 
 # Take in Arguments from the command line
 makelists = False
@@ -82,8 +82,6 @@ if runanalyzer:
     
         if "TTToSemiLeptonic" in prefix: 
             filesPerJob = int(max(1,round(num/jobsPerSample)))
-        else:
-            filesPerJob = 999
         
         os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
         os.system('mkdir -p '+condorDir+'/'+prefix)
