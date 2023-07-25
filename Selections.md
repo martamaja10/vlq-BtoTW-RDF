@@ -53,7 +53,7 @@ Ideas from boosted top xsec note: https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo
 We went with BTagging.
 We also removed WbJet as a category, and instead included it in Untag lep. W.
 
-![BTag](plotting/Btag.png)
+![BTag](plotting/BTag.png)
 ![minMlj](plotting/minMlj.png)
 
 **BTagging Modification:** gcJet_DeepFlav > 0.0490 (from M to L)
