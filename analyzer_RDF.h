@@ -56,32 +56,43 @@ private:
   Bool_t isLDn;
 
   string sample;
+  string year;
 
   // Fixed size dimensions of array or collections stored in the TTree if any.
 public:
   // Main Methods
-  rdf(string inputFileName, TString preselFileName, TString finalselFileName);
+  rdf(string inputFileName, TString preselFileName, TString finalselFileName, string testNum1, string testNum2, string yearIn);
   virtual ~rdf();
-  virtual void analyzer_RDF(TString testNum);
+  virtual void analyzer_RDF(TString testNum1);
 };
 
 #endif
 
 #ifdef rdf_cxx
 
-rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName) : inputTree(0), inputFile(0)
+rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName, string testNum1, string testNum2, string yearIn) : inputTree(0), inputFile(0)
 {
   // Make the vector with the text file listed in the input
   cout << "Input File Path: " << inputFileName << endl;
   ifstream listFiles;
   listFiles.open(inputFileName);
 
-  string file;
+  string file = "";
+  int i = 0;
+  int start = atoi(testNum1.c_str());
+  int end = atoi(testNum2.c_str());
+  cout << "TestNum 1: " << start << " and TestNum 2: " << end << endl;
+
   if (listFiles.is_open())
   {
     while (listFiles >> file)
     {
-      files.push_back(file);
+      if (i >= start && i <= end) {
+        files.push_back(file);
+        cout << "files: " << file << endl;
+
+      }
+      i++;
     }
   }
   cout << "Number of Entries: " << files.size() << endl;
@@ -106,7 +117,8 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName)
   TObjArray *tokens = sampleName.Tokenize("/");
   sample = ((TObjString *)(tokens->At(5)))->String();
   delete tokens;
-  cout << "Sample: " << sample << endl;
+
+  year = yearIn; // May need to change this line to get things to work
 
   isBUp = false; // FIXME -- not using this yet, but we need to.
   isBDn = false;

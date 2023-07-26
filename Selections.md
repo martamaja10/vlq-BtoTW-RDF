@@ -37,3 +37,58 @@ Ideas from boosted top xsec note: https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo
    * y = mx + b:    MET > (m/1.5)*DPhi - m.  Idea for the plot would be to vary "m" from 0 to 200? Need to check which 2D hist bins to sum up
 4. Electron channel: (DeltaPhi(lead AK4, MET) - 1.5) < (1.5 * MET / 110)
 
+#### Selection Decisions: July 2023
+
+**Lepton Selection**
+
+*VetoMu:* abs(Muon_eta)<2.4 && (Muon_highPtId\==2) && Muon_miniIsoId>=3 && (Muon_pt>25)
+
+*VetoEl:* abs(Muon_eta)<2.4 && (Muon_highPtId\==2) && Muon_miniIsoId>=3 && (Electron_pt>25)
+
+*SignalIsoMu:* abs(Muon_eta)<2.4 && (Muon_highPtId\==2) && Muon_miniIsoId>=3 && (Muon_pt>=55)
+
+*SignalIsoEl:* abs(Muon_eta)<2.4 && (Muon_highPtId\==2) && Muon_miniIsoId>=3 && (Electron_pt>=80)
+
+**BTagging vs minMlj:**
+
+We went with BTagging.
+We also removed WbJet as a category, and instead included it in Untag lep. W.
+
+![BTag](plotting/BTag.png)
+![minMlj](plotting/minMlj.png)
+
+**BTagging Modification:** gcJet_DeepFlav > 0.0490 (from M to L)
+
+Helpful Plots for gcJet_DeepFlav decision
+![1600_0.0490](plotting/decaymodes_1600_0.0490.png)
+![1600_0.2783](plotting/decaymodes_1600_0.2783.png)
+![800_0.0490](plotting/decaymodes_800_0.0490.png)
+![800_0.2783](plotting/decaymodes_800_0.2783.png)
+
+**Required** Opposite side Fat Jet
+
+**Triangle Cut**:
+MET Filters: MET > 60 and MET = 130/1.5 * x - 130
+
+Max Index Bp1400: 189
+Max Index 95% Bp1400: 145
+Max Index Bp2000: 210
+Max Index 95% Bp2000: 145
+
+130:
+eff_Bp800: 0.9772758764029376
+eff_Bp1400: 0.9843587970964397
+eff_Bp2000: 0.9876127848294847
+eff_bkg: 0.7211231503061203
+
+145:
+eff_Bp800: 0.9725647776084245
+eff_Bp1400: 0.9815935015554788
+eff_Bp2000: 0.985318856094204
+eff_bkg: 0.7074972200519056
+
+Helpful Plots for Triangle Cut decision
+![efficiency](plotting/efficiency.png)
+![significance](plotting/significance.png)
+![PhiPt_histo_BPrime800_130_145](plotting/PhiPt_histo_BPrime800_130_145.png)
+![PhiPt_histo_QCD_130_145](plotting/PhiPt_histo_QCD_130_145.png)

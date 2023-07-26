@@ -1,5 +1,5 @@
 // Methods in this file:
-// BPrime_rec(C), BPrime_reco_alt(C)
+// BPrime_reco_new(), BPrime_rec(), BPrime_reco_alt()
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Fxn to return any and all float TPrime and BPrime variables needed for plotting
@@ -8,7 +8,143 @@
 using namespace std;
 using namespace ROOT::VecOps;
 
-// Commented Method Only
+RVec<float> BPrime_reco_new(TLorentzVector top_lv, TLorentzVector W_lv, string sample, int min_M_lep_Jet, int min_M_lep_JetID, int NOSJets_central, int NOSJets_DeepFlavM, int NSSJets_central, int NSSJets_DeepFlavM, RVec<int> gcSSJet_DeepFlavM, RVec<int> gcOSJet_DeepFlavM, RVec<double> gcOSFatJet_pt, RVec<double> gcOSFatJet_eta, RVec<double> gcOSFatJet_phi, RVec<double> gcOSFatJet_mass, RVec<double> gcOSFatJet_tag, RVec<float> gcOSJet_pt, RVec<float> gcOSJet_eta, RVec<float> gcOSJet_phi, RVec<float> gcOSJet_mass, RVec<float> gcSSJet_pt, RVec<float> gcSSJet_eta, RVec<float> gcSSJet_phi, RVec<float> gcSSJet_mass)
+{
+  // Initialize variables for the two canidates.  These are added together towards the end of the method
+  
+  TLorentzVector Tcand_lv, Wcand_lv;
+
+  // Flags to know which case was found and if a case was found at all
+  // taggedTjet = 1, taggedWjet = 2, untaggedTlep = 3, untaggedWlep = 4
+  float Bdecay_obs = 0;
+
+  // Set up b tagged jet booleans
+  bool SSbJet = false, OSbJet = false, SSmljJet = false;
+  TLorentzVector BjetOS_lv, BjetSS_lv, W_jet_lv, fatJet;
+  int value = 0, i = 0;
+
+  // Find out whether the highest pt other side AK8 (fat jet) is t-tagged
+  // If so, find where it is and make it into a TLorentzVector
+  int HighestPt = ArgMax(gcOSFatJet_pt);
+  bool ttag = false, wtag = false;
+  if (gcOSFatJet_tag[HighestPt] == 1) {
+    ttag = true;
+  } else if (gcOSFatJet_tag[HighestPt] == 2) {
+    wtag = true;
+  }
+  fatJet.SetPtEtaPhiM(gcOSFatJet_pt[HighestPt], gcOSFatJet_eta[HighestPt], gcOSFatJet_phi[HighestPt], gcOSFatJet_mass[HighestPt]);
+  
+
+  // --- SS BJets Method --- If true, use the BTagging method, if false, use the minMlj method
+  bool BTag = true;
+
+  // BTagging Method: Now we check whether there are any same side b-tagged jets
+  if (NSSJets_DeepFlavM > 0 && BTag == true) {
+    SSbJet = true;
+    for (i = 0; value != 0; i++) {
+      value = gcSSJet_DeepFlavM[i];
+    }
+    BjetSS_lv.SetPtEtaPhiM(gcSSJet_pt[i], gcSSJet_eta[i], gcSSJet_phi[i], gcSSJet_mass[i]);
+  }
+
+  // minMlj Method: Save whether minMlj is less than 173
+  if (min_M_lep_Jet < 173 && BTag == false) {
+    SSmljJet = true;
+  }
+
+  // Now we check whether there are any other side b-tagged jets
+  // If so, find where it is and make it into a TLorentzVector
+  if (NOSJets_DeepFlavM > 0) {
+    OSbJet = true;
+    value = 0;
+    for (i = 0; value != 0; i++) {
+      value = gcOSJet_DeepFlavM[i];
+      if (value != 0) {
+        BjetOS_lv.SetPtEtaPhiM(gcOSJet_pt[i], gcOSJet_eta[i], gcOSJet_phi[i], gcOSJet_mass[i]);
+        double dr = fatJet.DeltaR(BjetOS_lv);
+        if (dr < 0.8) {
+          value = 0;
+        }
+      }
+    }
+  }
+
+
+  // --- 5 Cases --- This is where we split into the four different cases and make our canidates
+  if (ttag && !SSbJet) 
+  {
+    // Checking Case 1: requires highest-pt other side t-tagged AK8 (fat jet), and requires no same side b-tagged AK4 (jet)
+    Wcand_lv = W_lv;
+    Tcand_lv = fatJet;
+    Bdecay_obs = 1;
+  }
+  else if (wtag && SSbJet)
+  {
+    // Checking Case 2: requires highest-pt other side w-tagged AK8 (fat jet), requires a good same side b-tagged jet or min_M_lep_Jet < 173
+    Wcand_lv = fatJet;
+    if (BTag == true) {
+      Tcand_lv = W_lv + BjetSS_lv; // Bjet should be set above in the B jet if statement
+    } else { //BTag == false
+      Tcand_lv = top_lv;
+    }
+    Bdecay_obs = 2;
+  }
+  
+  // else if (wtag && OSbJet)
+  // {
+  //   //Checking Case 3: requires highest-pt other side w-tagged AK8 (fat jet), requires other side b-tagged jet to make a top quark
+  //   Wcand_lv = W_lv;
+  //   Tcand_lv = fatJet + BjetOS_lv;
+  //   Bdecay_obs = 3;
+  // }
+  else
+  {
+    //The event doesn't match any of the three cases
+    //First check if there is a b-tagged same side jet
+    //Question: do I set validBDecay equal to something in here?
+    if (SSbJet) {
+      Wcand_lv = fatJet;
+      Tcand_lv = W_lv + BjetSS_lv;
+      Bdecay_obs = 3;
+    } else {
+      if (!OSbJet) {
+        Tcand_lv = fatJet;
+      } else {
+        Tcand_lv = fatJet + BjetOS_lv;
+      }
+      Wcand_lv = W_lv;
+      Bdecay_obs = 4;
+    }
+  }
+
+  // Setting the value of Bdecay_true depending on inputs to this method if it is a BPrime sample
+  // W_gen_pt > 200: 1, W_gen_pt <= 200: 2, t_gen_pt > 400: 3, t_gen_pt <= 400: 4
+
+  // Using the canidates from above, make a BPrime and store various attributes of it
+  TLorentzVector Bprime_lv = Wcand_lv + Tcand_lv;
+  float Bprime_mass = Bprime_lv.M();
+  float Bprime_pt = Bprime_lv.Pt();
+  float Bprime_eta = Bprime_lv.Eta();
+  float Bprime_phi = Bprime_lv.Phi();
+  float Bprime_DR = Wcand_lv.DeltaR(Tcand_lv);
+  float Bprime_ptbal = Wcand_lv.Pt() / Tcand_lv.Pt();
+  float Bprime_chi2 = pow(Tcand_lv.M() - 172.6, 2) / (19.1 * 19.1) + pow(Wcand_lv.M() - 85.5, 2) / (8.7 * 8.7) + pow(Bprime_DR - TMath::Pi(), 2) / (0.2 * 0.2) + pow(Bprime_ptbal - 1, 2) / (0.8 * 0.8); // leptonic t, hadronic W chi2 with values from 2016 B2G-17-018
+
+  // // Make a vector with the stored values and return it
+  RVec<float> BPrimeVec = {Bprime_mass, Bprime_pt, Bprime_eta, Bprime_phi, Bprime_DR, Bprime_ptbal, Bprime_chi2, Bdecay_obs};
+  return BPrimeVec;
+}
+
+
+
+
+
+
+
+
+
+
+
 RVec<float> BPrime_reco(TLorentzVector top_lv, TLorentzVector Wlv, int leptonicParticle, RVec<float> &ak8_pt, RVec<float> &ak8_eta, RVec<float> &ak8_phi, RVec<float> &ak8_mass, RVec<int> &dpak8_tag, RVec<float> &ak8_sdmass)
 {
   RVec<int> validBTagged(2, 0);
@@ -198,10 +334,24 @@ RVec<float> BPrime_reco(TLorentzVector top_lv, TLorentzVector Wlv, int leptonicP
   return BPrimeVec;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////
 //    Alternative    //
 ///////////////////////
-// Commented Method Only
 RVec<float> BPrime_reco_alt(TLorentzVector lepton_lv, TLorentzVector top_lv, TLorentzVector Wlv, int leptonicParticle, RVec<float> &ak8_pt, RVec<float> &ak8_eta, RVec<float> &ak8_phi, RVec<float> &ak8_mass, RVec<int> &dpak8_tag, RVec<float> &ak8_sdmass)
 {
   RVec<int> validBTagged(2, 0);
