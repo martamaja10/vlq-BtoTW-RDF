@@ -69,7 +69,7 @@ samples={
     "QCD1000":QCD1000,
     "QCD1500":QCD1500,
     "QCD2000":QCD2000,
-    "Bprime800":Bprime800,
-    "Bprime1400":Bprime1400,
-    "Bprime2000":Bprime2000,
+    #"Bprime800":Bprime800,
+    #"Bprime1400":Bprime1400,
+    #"Bprime2000":Bprime2000,
 }
