@@ -2,6 +2,7 @@
 #include "BPrime.cc"
 #include "cleanJet.cc"
 #include "cut_ptrel.cc"
+#include "dnnPrep.cc"
 #include "generatorInfo.cc"
 #include "utilities.cc"
 #include "W_t_reco.cc"
@@ -13,8 +14,8 @@
 #include <stdlib.h>
 using namespace std;
 
-void runRDF(TString testNum, string inputFile)
+void runRDF(string testNum1, string testNum2, string inputFile, string year)
 {
-	rdf t(inputFile, "preselTree_" + testNum, "finalselTree_" + testNum); // names get set to class members, should be known w/o passing
-	t.analyzer_RDF(testNum);
+	rdf t(inputFile, "preselTree_" + testNum1, "finalselTree_" + testNum1, testNum1, testNum2, year); // names get set to class members, should be known w/o passing
+	t.analyzer_RDF(testNum1);
 };

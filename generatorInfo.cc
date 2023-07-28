@@ -146,7 +146,7 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
         } // quark 2
         else
         {
-          cout << "error" << endl;
+          cout << "Error in t_gen_info: not  e/mu/tau, neutrino, or quark" << endl;
         }
 
         t_gen_info[17 + n] = GenPart_pt[jgen];
@@ -229,7 +229,7 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
     } // quark 2
     else
     {
-      cout << "error" << endl;
+      cout << "Error in W_gen_info: not  e/mu/tau, neutrino, or quark" << endl;
     }
 
     W_gen_info[6 + n] = GenPart_pt[i];
