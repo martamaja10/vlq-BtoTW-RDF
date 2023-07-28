@@ -375,13 +375,15 @@ void rdf::analyzer_RDF(TString testNum)
   const char *stdfinalFile = finalFile;
   
   auto colNames = CleanJets.GetColumnNames();
-  vector<string> snapCol;
+  vector<std::string> snapCol;
   int i = 0;
-  for (auto &&colName : colNames)
+  for (auto &&ColName : colNames)
   {
-    if (colName != "VMuon_P4" && colName != "VElectron_P4" && colName != "Jet_P4" && colName != "cleanJets")
+    TString colName = ColName;
+    if ((colName != "VMuon_P4" && colName != "VElectron_P4" && colName != "Jet_P4" && colName != "cleanJets" && !colName.BeginsWith("L1") && !colName.BeginsWith("Gen") && !colName.BeginsWith("Soft") && !colName.BeginsWith("fixed") && !colName.BeginsWith("Sub") && !colName.BeginsWith("LHE") && !colName.BeginsWith("Raw") && !colName.BeginsWith("Calo") && !colName.BeginsWith("Chs") && !colName.BeginsWith("Corr") && !colName.BeginsWith("Fsr") && !colName.BeginsWith("Iso") && !colName.BeginsWith("Tau") && !colName.BeginsWith("SV") && !colName.BeginsWith("Puppi") && !colName.BeginsWith("Jet_") && !colName.BeginsWith("FatJet_") && !colName.BeginsWith("Photon") && !colName.BeginsWith("Low") && !colName.BeginsWith("HLT")) || colName == "HLT_Ele115_CaloIdVT_GsfTrkIdT" || colName == "HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165" || colName == "HLT_Mu50")
     {
-      snapCol.push_back(colName);
+      std::string name = colName.Data();
+      snapCol.push_back(name);
       i++;
     }
   }
