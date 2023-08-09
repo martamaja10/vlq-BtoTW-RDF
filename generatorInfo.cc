@@ -110,16 +110,16 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
         {
           continue;
         } // look for W daughters
-        int j_id = GenPart_pdgId[j];
+        int j_id = GenPart_pdgId[j]; // ex: 11 for el
 
-        int jgen = j;
+        int jgen = j; // save index of the electron
         for (unsigned int k = j; k < nGenPart; k++)
         {
-          if (GenPart_pdgId[k] != j_id)
+          if (GenPart_pdgId[k] != j_id) // look for other electrons later
           {
             continue;
           }
-          if (GenPart_genPartIdxMother[k] != j_id)
+          if (GenPart_genPartIdxMother[k] != jgen) // whose mother
           {
             continue;
           }
@@ -146,7 +146,7 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
         } // quark 2
         else
         {
-          cout << "Error in t_gen_info: not  e/mu/tau, neutrino, or quark" << endl;
+          cout << "Error in t_gen_info: didn't match a W daughter case. j_id = " << j_id << endl;
         }
 
         t_gen_info[17 + n] = GenPart_pt[jgen];
@@ -175,12 +175,15 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
   }
   int trueLeptonicW = -1;
 
+  std::vector<int> WdaughterIDs;
+  std::vector<int> WdaughterIdx;
+
   for (unsigned int i = 0; i < nGenPart; i++)
   {
     int id = GenPart_pdgId[i];
     int motherIdx = GenPart_genPartIdxMother[i];
 
-    if (abs(id) > 17 || GenPart_pdgId[motherIdx] != (-daughterW_gen_pdgId))
+    if (abs(id) > 17 || GenPart_pdgId[motherIdx] != (-daughterW_gen_pdgId)) // id of this W has to be opposite id of top decay W...
     {
       continue;
     } // look for daughters of W
@@ -209,36 +212,104 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
       igen = j; // take the last copy of W daughter
     }
 
-    int n = 0;
-    if (abs(id) == 11 || abs(id) == 13 || abs(id) == 15)
-    {
-      trueLeptonicW = 1;
-    } // store e/mu/tau first
-    else if (abs(id) == 12 || abs(id) == 14 || abs(id) == 16)
-    {
-      trueLeptonicW = 1;
-      n = 6;
-    } // then neutrinos
-    else if (trueLeptonicW == -1)
-    {
-      trueLeptonicW = 0;
-    } // quark 1
-    else if (trueLeptonicW == 0)
-    {
-      n = 6;
-    } // quark 2
-    else
-    {
-      cout << "Error in W_gen_info: not  e/mu/tau, neutrino, or quark" << endl;
+    WdaughterIDs.push_back(id);
+    WdaughterIdx.push_back(igen);
+  }
+
+  if(WdaughterIDs.size() < 2){
+    std::cout << "Didn't find 2 W daughters!" << WdaughterIDs.size() << std::endl;
+    return W_gen_info;
+  }
+
+  if(abs(WdaughterIDs.at(0)) > 10 && abs(WdaughterIDs.at(0)) < 17){ // lepton
+    if(abs(WdaughterIDs.at(0)) == abs(WdaughterIDs.at(1))){
+      //std::cout << "Pair production! " << WdaughterIDs.at(0) << ", " << WdaughterIDs.at(1) << std::endl;
+      WdaughterIDs.erase(WdaughterIDs.begin()+1);
+      WdaughterIDs.erase(WdaughterIDs.begin());
+      WdaughterIdx.erase(WdaughterIdx.begin()+1);
+      WdaughterIdx.erase(WdaughterIdx.begin());
+      //std::cout << "Removed pair production, resulting daughter size = " << WdaughterIDs.size() << std::endl;
     }
 
-    W_gen_info[6 + n] = GenPart_pt[i];
-    W_gen_info[7 + n] = GenPart_eta[i];
-    W_gen_info[8 + n] = GenPart_phi[i];
-    W_gen_info[9 + n] = GenPart_mass[i];
-    W_gen_info[10 + n] = GenPart_pdgId[i];
-    W_gen_info[11 + n] = GenPart_status[i];
+    if(abs(abs(WdaughterIDs.at(0)) - abs(WdaughterIDs.at(1))) != 1){ 
+      std::cout << "Lepton daughters not 1 ID apart! Check me: " << WdaughterIDs.at(0) << ", " << WdaughterIDs.at(1) << std::endl;
+    }
+    else{
+
+      trueLeptonicW = 1;
+      int n = 0;
+      W_gen_info[6 + n] = GenPart_pt[WdaughterIdx.at(0)];
+      W_gen_info[7 + n] = GenPart_eta[WdaughterIdx.at(0)];
+      W_gen_info[8 + n] = GenPart_phi[WdaughterIdx.at(0)];
+      W_gen_info[9 + n] = GenPart_mass[WdaughterIdx.at(0)];
+      W_gen_info[10 + n] = GenPart_pdgId[WdaughterIdx.at(0)];
+      W_gen_info[11 + n] = GenPart_status[WdaughterIdx.at(0)];
+      n = 6;
+      W_gen_info[6 + n] = GenPart_pt[WdaughterIdx.at(1)];
+      W_gen_info[7 + n] = GenPart_eta[WdaughterIdx.at(1)];
+      W_gen_info[8 + n] = GenPart_phi[WdaughterIdx.at(1)];
+      W_gen_info[9 + n] = GenPart_mass[WdaughterIdx.at(1)];
+      W_gen_info[10 + n] = GenPart_pdgId[WdaughterIdx.at(1)];
+      W_gen_info[11 + n] = GenPart_status[WdaughterIdx.at(1)];
+    }
   }
+
+  if(abs(WdaughterIDs.at(0)) < 6 && abs(WdaughterIDs.at(1)) < 6){ // quarks
+    
+    trueLeptonicW = 0;
+    int n = 0;
+    W_gen_info[6 + n] = GenPart_pt[WdaughterIdx.at(0)];
+    W_gen_info[7 + n] = GenPart_eta[WdaughterIdx.at(0)];
+    W_gen_info[8 + n] = GenPart_phi[WdaughterIdx.at(0)];
+    W_gen_info[9 + n] = GenPart_mass[WdaughterIdx.at(0)];
+    W_gen_info[10 + n] = GenPart_pdgId[WdaughterIdx.at(0)];
+    W_gen_info[11 + n] = GenPart_status[WdaughterIdx.at(0)];
+    n = 6;
+    W_gen_info[6 + n] = GenPart_pt[WdaughterIdx.at(1)];
+    W_gen_info[7 + n] = GenPart_eta[WdaughterIdx.at(1)];
+    W_gen_info[8 + n] = GenPart_phi[WdaughterIdx.at(1)];
+    W_gen_info[9 + n] = GenPart_mass[WdaughterIdx.at(1)];
+    W_gen_info[10 + n] = GenPart_pdgId[WdaughterIdx.at(1)];
+    W_gen_info[11 + n] = GenPart_status[WdaughterIdx.at(1)];
+  }
+
+  if(trueLeptonicW == -1){
+    std::cout << "Didn't identify W decay. Daughters are: " << std::endl;
+    for(unsigned int idau = 0; idau < WdaughterIDs.size(); idau++){
+      cout << WdaughterIDs.at(idau) << ", " << endl;
+    }
+  }
+    // int n = 0;
+    // if (abs(id) == 11 || abs(id) == 13 || abs(id) == 15)
+    // {
+    //   trueLeptonicW = 1;
+    // } // store e/mu/tau first
+    // else if (abs(id) == 12 || abs(id) == 14 || abs(id) == 16)
+    // {
+    //   trueLeptonicW = 1;
+    //   n = 6;
+    // } // then neutrinos
+    // else if (trueLeptonicW == -1)
+    // {
+    //   trueLeptonicW = 0;
+    // } // quark 1
+    // else if (trueLeptonicW == 0)
+    // {
+    //   n = 6;
+    // } // quark 2
+    // else
+    // {
+    //   cout << "Error in W_gen_info: didn't match a case. id = " << id << ", trueLeptonicW = " << trueLeptonicW << endl;
+    //   cout << "W daughter ID list = " << endl;
+    // }
+
+    // W_gen_info[6 + n] = GenPart_pt[i];
+    // W_gen_info[7 + n] = GenPart_eta[i];
+    // W_gen_info[8 + n] = GenPart_phi[i];
+    // W_gen_info[9 + n] = GenPart_mass[i];
+    // W_gen_info[10 + n] = GenPart_pdgId[i];
+    // W_gen_info[11 + n] = GenPart_status[i];
+  // }
   W_gen_info[18] = trueLeptonicW;
 
   return W_gen_info;
@@ -622,4 +693,76 @@ auto FatJet_matching_bkg(string sample, RVec<float> &goodcleanFatJets, RVec<floa
     }
   }
   return matched_GenPart;
+};
+
+// ----------------------------------------------------
+//   		ttbar background mass CALCULATOR:
+// ----------------------------------------------------
+
+// Commented Method Only
+auto genttbarMassCalc(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_mass, RVec<float> &GenPart_pt, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_status)
+{
+    int returnVar = 0;
+    if (sample.find("TTTo") != std::string::npos || sample.find("Mtt") != std::string::npos)
+      {
+        int genTTbarMass = -999;
+        double topPtWeight = 1.0;
+        TLorentzVector top, antitop;
+        bool gottop = false;
+        bool gotantitop = false;
+        bool gottoppt = false;
+        bool gotantitoppt = false;
+        float toppt, antitoppt;
+        for (unsigned int p = 0; p < nGenPart; p++)
+        {
+            int id = GenPart_pdgId[p];
+            if (abs(id) != 6)
+            {
+                continue;
+            }
+            if (GenPart_mass[p] < 10)
+            {
+                continue;
+            }
+            int motherid = GenPart_pdgId[GenPart_genPartIdxMother[p]];
+            if (abs(motherid) != 6)
+            {
+                if (!gottop && id == 6)
+                {
+                    top.SetPtEtaPhiM(GenPart_pt[p], GenPart_eta[p], GenPart_phi[p], GenPart_mass[p]);
+                    gottop = true;
+                }
+                if (!gotantitop && id == -6)
+                {
+                    antitop.SetPtEtaPhiM(GenPart_pt[p], GenPart_eta[p], GenPart_phi[p], GenPart_mass[p]);
+                    gotantitop = true;
+                }
+            }
+            if (GenPart_status[p] == 62)
+            {
+                if (!gottoppt && id == 6)
+                {
+                    toppt = GenPart_pt[p];
+                    gottoppt = true;
+                }
+                if (!gotantitoppt && id == -6)
+                {
+                    antitoppt = GenPart_pt[p];
+                    gotantitoppt = true;
+                }
+            }
+        }
+        if (gottop && gotantitop)
+        {
+            genTTbarMass = (top + antitop).M();
+        }
+        if (gottoppt && gotantitoppt)
+        {
+            float SFtop = TMath::Exp(0.0615 - 0.0005 * toppt);
+            float SFantitop = TMath::Exp(0.0615 - 0.0005 * antitoppt);
+            topPtWeight = TMath::Sqrt(SFtop * SFantitop);
+        }
+        returnVar = genTTbarMass;
+    }
+    return returnVar;
 };
