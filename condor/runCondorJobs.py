@@ -3,14 +3,14 @@
 # The second argument is True or False depending on whether you want to submit a condor job with the sample specified in the thrid argument
 # The third argument is the prefix of the sample you want to use when you submit a condor job
 
-import os,sys,shutil,datetime,time
+import os,sys,shutil,datetime,time, subprocess
 from samples import *
 
 execfile("/uscms_data/d3/kjohnso/EOSSafeUtils.py") # this is a python2 command, so ignore the error and run with python2
 start_time = time.time()
 
 # --- Sample Dictionary ---
-sample_dic = samples_WJets # This is the name of the dictionary we want to run over (the yellow underline doesn't prevent it from runniing)
+sample_dic = samples_2018UL # This is the name of the list (using list of class objects to keep ordering)
 
 # --- Size of Condor Job ---
 filesPerJob = 999
@@ -25,10 +25,10 @@ if len(sys.argv) >= 4:
     prefix = sys.argv[3] # 'singleTb'
     textlist = prefix + "NanoList.txt"
     
-relbase = '/uscms/home/kjohnso/nobackup/BtoTW/CMSSW_11_0_0/'
-outDir='/store/user/kjohnso/BtoTW_Jul2023/WJets_MergeTest/'
-condorDir='/uscms/home/kjohnso/nobackup/BtoTW/CMSSW_11_0_0/src/vlq-BtoTW-RDF/condor_2/' # recommend this be outside git area!
-tarfile = '/uscms/home/kjohnso/nobackup/rdfjobs.tar' # outside the CMSSW
+relbase = '/uscms/home/jmanagan/nobackup/BtoTW/CMSSW_11_0_0/'
+outDir='/store/user/jmanagan/BtoTW_Aug2023_2018/'
+condorDir='/uscms/home/jmanagan/nobackup/BtoTW/rdfjobs_2018/' # recommend this be outside git area!
+tarfile = '/uscms/home/jmanagan/nobackup/rdfjobs.tar' # outside the CMSSW
 
 runDir=os.getcwd()
 cTime=datetime.datetime.now()
@@ -44,8 +44,10 @@ if makelists:
     os.system("mkdir NanoList")
     
     # Loops through all the samples listed in samples.py
-    for k,v in samples.items():
+    print ('--- DAS queries ---')
+    for k,v in sample_dic.items():
         query = queryStatement + v.samplename + "\" > " + "NanoList/" + v.textlist
+        print ('\t'+v.textlist)
         os.system(query)
         
 # --- Submit Condor Jobs ---
@@ -59,15 +61,33 @@ if runanalyzer:
     print ('--- Making tar ---')
     if os.path.exists(tarfile): print ('*********** tar already exists! I ASSUME YOU WANT TO MAKE A NEW ONE! *************')
     os.chdir(relbase)
-    print ('tar --exclude="src/.git" --exclude="tmp/" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude="src/vlq-BtoTW-RDF/*.root" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
-    os.system('tar --exclude="src/.git" --exclude="tmp/" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude="src/vlq-BtoTW-RDF/*.root" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
+    print ('tar --exclude="src/.git" --exclude="src/*/.git" --exclude="tmp/" --exclude="src/vlq-BtoTW-SLA" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude="src/vlq-BtoTW-RDF/*.root" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
+    os.system('tar --exclude="src/.git" --exclude="src/*/.git" --exclude="tmp/" --exclude="src/vlq-BtoTW-SLA" --exclude="src/VLQRDF" --exclude="src/vlq-singleProd-RDF" --exclude="src/vlq-BtoTW-RDF/*.root" --exclude=".SCRAM" -zcf '+tarfile+' ./*')
     os.chdir(runDir)
 
     for k,v in sample_dic.items(): # This is fine.  It is a dictionary that exists in samples.py that gets imported at runtime
         
-        prefix = v.prefix;
-        textlist = "NanoList/" + v.textlist;
-        year = v.year;
+        prefix = v[0].prefix;
+        textlist = "NanoList/" + v[0].textlist;
+        year = v[0].year;
+
+        # --- Check sample size and aim for <= 50GB per job
+        command = '/cvmfs/cms.cern.ch/common/dasgoclient --query="dataset dataset=/QCD_HT700to1000_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM | grep dataset.size" '
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        (out, err) = proc.communicate()
+        try: 
+            samplesize = int(out.split('\n')[0])
+        except:    
+            try: 
+                samplesize = int(out.split('\n')[1])
+            except:
+                try: 
+                    samplesize = int(out.split('\n')[2])
+                except: 
+                    print 'need more than 2 levels to get sample size'
+                    exit(1)
+
+        jobsPerSample = max(1,round(samplesize/50000000000.))
         
         rootfiles = ''
         num = count = newNum = j = 0
@@ -80,10 +100,10 @@ if runanalyzer:
             rootfiles = rootfiles[:-1]
         print ('Number of Rootfiles: ' + str(num))
     
-        if "TTToSemiLeptonic" in prefix: 
-            filesPerJob = int(max(1,round(num/jobsPerSample)))
+        #if "TTToSemiLeptonic" in prefix: 
+        filesPerJob = int(max(1,round(num/jobsPerSample)))
         
-        os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/'+prefix)
+        os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outDir+'/')
         os.system('mkdir -p '+condorDir+'/'+prefix)
         
         # --- Write rootfiles to a textfile --- Read in analyzer_RDF.h in the constructor
@@ -102,7 +122,7 @@ if runanalyzer:
             newNum = i
             print("Num test: " + str(oldNum) + " -> " + str(newNum))
             
-            dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir+prefix, 'TARBALL':tarfile, 'TESTNUM1':oldNum, 'TESTNUM2':newNum-1, 'PREFIX':prefix, 'FILENAME':fileName, 'YEAR':year}
+            dict={'RUNDIR':runDir, 'CONDORDIR':condorDir+'/'+prefix, 'CMSSWBASE':relbase, 'OUTPUTDIR':outDir, 'TARBALL':tarfile, 'TESTNUM1':oldNum, 'TESTNUM2':newNum-1, 'PREFIX':prefix, 'FILENAME':fileName, 'YEAR':year}
             jdfName=condorDir+prefix+'/%(PREFIX)s_%(TESTNUM1)s.job'%dict
             print ("jdfname: ",jdfName)
             jdf=open(jdfName,'w')
