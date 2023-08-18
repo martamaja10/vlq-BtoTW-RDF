@@ -257,8 +257,8 @@ void rdf::analyzer_RDF(TString testNum)
      // 	  HT Calculation and Final Preselection Cut
      // ---------------------------------------------------------
 
-     auto HT_calc = CleanJets.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])") \
-                          .Filter("Jet_HT > 250","Pass HT > 250")						\
+     auto HT_calc = CleanJets.Define("gcJet_HT","Sum(Jet_pt[goodcleanJets == true])") \
+                          .Filter("gcJet_HT > 250","Pass HT > 250")						\
                           .Filter("NFatJets > 0","Pass N good central AK8 > 0")
                           .Filter("NOS_gcFatJets > 0","Pass N good central other side AK8 > 0");
 
@@ -278,7 +278,7 @@ void rdf::analyzer_RDF(TString testNum)
 
 
      auto postPresel = genttbar.Define("lepton_lv", "lvConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)")
-                           .Define("Jet_ST", "Jet_HT + lepton_pt + MET_pt")
+                           .Define("gcJet_ST", "gcJet_HT + lepton_pt + MET_pt")
                            .Define("FatJet_pt_1", "FatJet_pt[0]")
                            .Define("FatJet_pt_2", "FatJet_pt[1]") 
                            .Define("FatJet_sdMass", "FatJet_msoftdrop[goodcleanFatJets == true]")
