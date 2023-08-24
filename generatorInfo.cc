@@ -67,12 +67,14 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
     }
 
     // store t info
-    t_gen_info[0] = GenPart_pt[motherIdx];
-    t_gen_info[1] = GenPart_eta[motherIdx];
-    t_gen_info[2] = GenPart_phi[motherIdx];
-    t_gen_info[3] = GenPart_mass[motherIdx];
-    t_gen_info[4] = GenPart_pdgId[motherIdx];
-    t_gen_info[5] = GenPart_status[motherIdx];
+    if(t_gen_info[0] == -999){
+      t_gen_info[0] = GenPart_pt[motherIdx];
+      t_gen_info[1] = GenPart_eta[motherIdx];
+      t_gen_info[2] = GenPart_phi[motherIdx];
+      t_gen_info[3] = GenPart_mass[motherIdx];
+      t_gen_info[4] = GenPart_pdgId[motherIdx];
+      t_gen_info[5] = GenPart_status[motherIdx];
+    }
 
     int igen = i;
     for (unsigned int j = i; j < nGenPart; j++)
@@ -188,7 +190,7 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
       continue;
     } // look for daughters of W
 
-    if (trueLeptonicW == -1)
+    if (W_gen_info[0] == -999)
     {
       W_gen_info[0] = GenPart_pt[motherIdx];
       W_gen_info[1] = GenPart_eta[motherIdx];
@@ -222,12 +224,19 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
   }
 
   if(abs(WdaughterIDs.at(0)) > 10 && abs(WdaughterIDs.at(0)) < 17){ // lepton
-    if(abs(WdaughterIDs.at(0)) == abs(WdaughterIDs.at(1))){
+    if(abs(WdaughterIDs.at(0)) == abs (WdaughterIDs.at(1))){
       //std::cout << "Pair production! " << WdaughterIDs.at(0) << ", " << WdaughterIDs.at(1) << std::endl;
       WdaughterIDs.erase(WdaughterIDs.begin()+1);
       WdaughterIDs.erase(WdaughterIDs.begin());
       WdaughterIdx.erase(WdaughterIdx.begin()+1);
       WdaughterIdx.erase(WdaughterIdx.begin());
+      if(WdaughterIDs.size() >= 4 && (abs(WdaughterIDs.at(0)) == abs (WdaughterIDs.at(1)))){
+	std::cout << "Found a double pair production!" << std::endl;
+	WdaughterIDs.erase(WdaughterIDs.begin()+1);
+	WdaughterIDs.erase(WdaughterIDs.begin());
+	WdaughterIdx.erase(WdaughterIdx.begin()+1);
+	WdaughterIdx.erase(WdaughterIdx.begin());
+      }
       //std::cout << "Removed pair production, resulting daughter size = " << WdaughterIDs.size() << std::endl;
     }
 
@@ -321,11 +330,11 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
 
 auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_statusFlags)
 {
-  if (sample.find("Bprime") != std::string::npos)
-  {
-    RVec<int> t_daughter_idx;
-    return t_daughter_idx;
-  }
+  // if (sample.find("Bprime") != std::string::npos)
+  // {
+  //   RVec<int> t_daughter_idx;
+  //   return t_daughter_idx;
+  // }
 
   RVec<int> t_idx;
   for (unsigned int i = 0; i < nGenPart; i++)
@@ -403,11 +412,11 @@ auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
 
 auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<int> &GenPart_genPartIdxMother, RVec<int> &GenPart_statusFlags, RVec<int> &t_bkg_idx)
 {
-  if (sample.find("Bprime") != std::string::npos)
-  {
-    RVec<int> W_daughter_idx;
-    return W_daughter_idx;
-  }
+  // if (sample.find("Bprime") != std::string::npos)
+  // {
+  //   RVec<int> W_daughter_idx;
+  //   return W_daughter_idx;
+  // }
   //cout << "Event" << endl;
   RVec<int> W_idx;
   for (unsigned int i = 0; i < nGenPart; i++)
@@ -548,150 +557,150 @@ auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<floa
 };
 
 // Commented Method Only
-auto FatJet_matching_bkg(string sample, RVec<float> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx)
+auto FatJet_matching_bkg(string sample, RVec<int> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx)
 {
   RVec<int> matched_GenPart(NFatJets, -9);
-  if (sample.find("Bprime") != std::string::npos)
-  {
-    return matched_GenPart;
-  }
-
+  // if (sample.find("Bprime") != std::string::npos)
+  // {
+  //   return matched_GenPart;
+  // }
+  
   RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
-
+  
   int ntD = t_bkg_idx.size();
   int nWD = W_bkg_idx.size();
-
+  
   RVec<double> t_eta(ntD, -9);
   RVec<double> t_phi(ntD, -9);
   RVec<double> W_eta(nWD, -9);
   RVec<double> W_phi(nWD, -9);
-
+  
   if (ntD != 0)
-  {
-    for (unsigned int i = 0; i < ntD; i++)
     {
-      int igen = t_bkg_idx[i];
-      int id = GenPart_pdgId[igen];
-      for (unsigned int j = igen; j < nGenPart; j++)
-      {
-        if (GenPart_pdgId[j] != id)
-        {
-          continue;
-        }
-        if (GenPart_genPartIdxMother[j] != igen)
-        {
-          continue;
-        }
-        igen = j; // take the last copy of t daughter
-      }
-      t_eta[i] = GenPart_eta[igen];
-      t_phi[i] = GenPart_phi[igen];
+      for (unsigned int i = 0; i < ntD; i++)
+	{
+	  int igen = t_bkg_idx[i];
+	  int id = GenPart_pdgId[igen];
+	  for (unsigned int j = igen; j < nGenPart; j++)
+	    {
+	      if (GenPart_pdgId[j] != id)
+		{
+		  continue;
+		}
+	      if (GenPart_genPartIdxMother[j] != igen)
+		{
+		  continue;
+		}
+	      igen = j; // take the last copy of t daughter
+	    }
+	  t_eta[i] = GenPart_eta[igen];
+	  t_phi[i] = GenPart_phi[igen];
+	}
     }
-  }
-
+  
   if (nWD != 0)
-  {
-    for (unsigned int i = 0; i < nWD; i++)
     {
-      int igen = W_bkg_idx[i];
-      int id = GenPart_pdgId[igen];
-      for (unsigned int j = igen; j < nGenPart; j++)
-      {
-        if (GenPart_pdgId[j] != id)
-        {
-          continue;
-        }
-        if (GenPart_genPartIdxMother[j] != igen)
-        {
-          continue;
-        }
-        igen = j; // take the last copy of W daughter
-      }
-      W_eta[i] = GenPart_eta[igen];
-      W_phi[i] = GenPart_phi[igen];
+      for (unsigned int i = 0; i < nWD; i++)
+	{
+	  int igen = W_bkg_idx[i];
+	  int id = GenPart_pdgId[igen];
+	  for (unsigned int j = igen; j < nGenPart; j++)
+	    {
+	      if (GenPart_pdgId[j] != id)
+		{
+		  continue;
+		}
+	      if (GenPart_genPartIdxMother[j] != igen)
+		{
+		  continue;
+		}
+	      igen = j; // take the last copy of W daughter
+	    }
+	  W_eta[i] = GenPart_eta[igen];
+	  W_phi[i] = GenPart_phi[igen];
+	}
     }
-  }
-
+  
   for (unsigned int i = 0; i < NFatJets; i++)
-  {
-    double fatjet_eta = gcFatJet_eta[i];
-    double fatjet_phi = gcFatJet_phi[i];
-
-    for (unsigned int j = 0; j < t_bkg_idx.size() / 3; j++)
     {
-      double dR_b = DeltaR(fatjet_eta, t_eta[j * 3], fatjet_phi, t_phi[j * 3]);
-      double dR_q1 = DeltaR(fatjet_eta, t_eta[j * 3 + 1], fatjet_phi, t_phi[j * 3 + 1]);
-      double dR_q2 = DeltaR(fatjet_eta, t_eta[j * 3 + 2], fatjet_phi, t_phi[j * 3 + 2]);
-
-      if (dR_b < 0.8 && dR_q1 < 0.8 && dR_q2 < 0.8)
-      {
-        if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
-        {
-          matched_GenPart[i] = 6;
-          break;
-        } // pos stands for hadronic t
-        else
-        {
-          matched_GenPart[i] = -6;
-          break;
-        } // neg stands for leptonic t
-      }
-      else if (dR_q1 < 0.8 && dR_q2 < 0.8)
-      {
-        if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
-        {
-          matched_GenPart[i] = 24;
-          break;
-        }
-        else
-        {
-          matched_GenPart[i] = -24;
-          break;
-        }
-      }
+      double fatjet_eta = gcFatJet_eta[i];
+      double fatjet_phi = gcFatJet_phi[i];
+      
+      for (unsigned int j = 0; j < t_bkg_idx.size() / 3; j++)
+	{
+	  double dR_b = DeltaR(fatjet_eta, t_eta[j * 3], fatjet_phi, t_phi[j * 3]);
+	  double dR_q1 = DeltaR(fatjet_eta, t_eta[j * 3 + 1], fatjet_phi, t_phi[j * 3 + 1]);
+	  double dR_q2 = DeltaR(fatjet_eta, t_eta[j * 3 + 2], fatjet_phi, t_phi[j * 3 + 2]);
+	  
+	  if (dR_b < 0.8 && dR_q1 < 0.8 && dR_q2 < 0.8)
+	    {
+	      if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
+		{
+		  matched_GenPart[i] = 6;
+		  break;
+		} // pos stands for hadronic t
+	      else
+		{
+		  matched_GenPart[i] = -6;
+		  break;
+		} // neg stands for leptonic t
+	    }
+	  else if (dR_q1 < 0.8 && dR_q2 < 0.8)
+	    {
+	      if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
+		{
+		  matched_GenPart[i] = 24;
+		  break;
+		}
+	      else
+		{
+		  matched_GenPart[i] = -24;
+		  break;
+		}
+	    }
+	}
+      
+      if (matched_GenPart[i] != -9)
+	{
+	  continue;
+	}
+      for (unsigned int j = 0; j < W_bkg_idx.size() / 2; j++)
+	{
+	  double dR_q1 = DeltaR(fatjet_eta, W_eta[j * 2], fatjet_phi, W_phi[j * 2]);
+	  double dR_q2 = DeltaR(fatjet_eta, W_eta[j * 2 + 1], fatjet_phi, W_phi[j * 2 + 1]);
+	  
+	  if (dR_q1 < 0.8 && dR_q2 < 0.8)
+	    {
+	      if (abs(GenPart_pdgId[j * 2]) < 6)
+		{
+		  matched_GenPart[i] = 24;
+		  break;
+		}
+	      else
+		{
+		  matched_GenPart[i] = -24;
+		  break;
+		}
+	    }
+	}
+      
+      if (matched_GenPart[i] != -9)
+	{
+	  continue;
+	}
+      int firstsub = FatJet_subJetIdx1[i];
+      for (int isub = firstsub; isub < nSubJet; isub++)
+	{
+	  if (SubJet_hadronFlavour[isub] != 0)
+	    {
+	      matched_GenPart[i] = SubJet_hadronFlavour[isub];
+	    }
+	  else
+	    {
+	      matched_GenPart[i] = 0;
+	    }
+	}
     }
-
-    if (matched_GenPart[i] != -9)
-    {
-      continue;
-    }
-    for (unsigned int j = 0; j < W_bkg_idx.size() / 2; j++)
-    {
-      double dR_q1 = DeltaR(fatjet_eta, W_eta[j * 2], fatjet_phi, W_phi[j * 2]);
-      double dR_q2 = DeltaR(fatjet_eta, W_eta[j * 2 + 1], fatjet_phi, W_phi[j * 2 + 1]);
-
-      if (dR_q1 < 0.8 && dR_q2 < 0.8)
-      {
-        if (abs(GenPart_pdgId[j * 2]) < 6)
-        {
-          matched_GenPart[i] = 24;
-          break;
-        }
-        else
-        {
-          matched_GenPart[i] = -24;
-          break;
-        }
-      }
-    }
-
-    if (matched_GenPart[i] != -9)
-    {
-      continue;
-    }
-    int firstsub = FatJet_subJetIdx1[i];
-    for (int isub = firstsub; isub < nSubJet; isub++)
-    {
-      if (SubJet_hadronFlavour[isub] != 0)
-      {
-        matched_GenPart[i] = SubJet_hadronFlavour[isub];
-      }
-      else
-      {
-        matched_GenPart[i] = 0;
-      }
-    }
-  }
   return matched_GenPart;
 };
 

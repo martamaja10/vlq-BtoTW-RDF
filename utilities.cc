@@ -9,31 +9,31 @@ using namespace ROOT::VecOps;
 // The following functions could probably all go to the plotting marco
 auto leptonicCheck(string sample, int trueLeptonicT, int trueLeptonicW)
 {
-    if (sample != "Bprime")
+  if (sample.find("Bprime") == std::string::npos)
     {
-        return -9;
+      return -9;
     } // not sure if this line is needed. check.
 
-    int trueLeptonicMode = -9;
+  int trueLeptonicMode = -9;
 
-    if ((trueLeptonicT != 1) && (trueLeptonicW == 1))
+  if ((trueLeptonicT != 1) && (trueLeptonicW == 1))
     {
-        trueLeptonicMode = 0;
+      trueLeptonicMode = 0;
     } // leptonic W
-    else if ((trueLeptonicT == 1) && (trueLeptonicW != 1))
+  else if ((trueLeptonicT == 1) && (trueLeptonicW != 1))
     {
-        trueLeptonicMode = 1;
+      trueLeptonicMode = 1;
     } // leptonic T
-    else if ((trueLeptonicT == 1) && (trueLeptonicW == 1))
+  else if ((trueLeptonicT == 1) && (trueLeptonicW == 1))
     {
-        trueLeptonicMode = 2;
+      trueLeptonicMode = 2;
     } // dileptonic
-    else if ((trueLeptonicT == 0) && (trueLeptonicW == 0))
+  else if ((trueLeptonicT == 0) && (trueLeptonicW == 0))
     {
-        trueLeptonicMode = -1;
+      trueLeptonicMode = -1;
     } // hadronic
-
-    return trueLeptonicMode;
+  
+  return trueLeptonicMode;
 };
 
 auto Electron_cutBasedIdNoIso_tight(string sample, unsigned int nElectron, RVec<int> &Electron_vidNestedWPBitmap)

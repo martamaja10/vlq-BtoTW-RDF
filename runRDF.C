@@ -1,3 +1,4 @@
+#include "lumiMask.cc"
 #include "analyzer_RDF.cc"
 #include "BPrime.cc"
 #include "cleanJet.cc"

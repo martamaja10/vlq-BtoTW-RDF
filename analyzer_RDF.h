@@ -109,7 +109,7 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
   isTOP = (sampleName.Contains("Mtt") || sampleName.Contains("ST") || sampleName.Contains("ttZ") || sampleName.Contains("ttW") || sampleName.Contains("ttH") || sampleName.Contains("TTTo"));
   isTT = (sampleName.Contains("TT_Tune") || sampleName.Contains("Mtt") || sampleName.Contains("TTTo"));
   isVV = (sampleName.Contains("WW_") || sampleName.Contains("WZ_") || sampleName.Contains("ZZ_"));
-  isMC = !(sampleName.Contains("Single") || sampleName.Contains("Data18"));
+  isMC = !(sampleName.Contains("Single") || sampleName.Contains("Data18") || sampleName.Contains("EGamma"));
   isSM = sampleName.Contains("SingleMuon");
   isSE = (sampleName.Contains("SingleElectron") || sampleName.Contains("EGamma"));
 
