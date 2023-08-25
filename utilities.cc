@@ -97,14 +97,14 @@ auto getHighestPt(RVec<float> &VLepton_pt, RVec<float> &VLepton_eta, RVec<float>
 // --------------------------------------------
 //               DR CALCULATOR
 // --------------------------------------------
-ROOT::VecOps::RVec<float> DeltaR_VecAndFloat(ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, float& lep_eta, float& lep_phi)
+ROOT::VecOps::RVec<float> DeltaR_VecAndFloat(ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, const float& lep_eta, const float& lep_phi)
 {
   ROOT::VecOps::RVec<float> DR (jet_eta.size(),999);
   for(int i = 0; i < jet_eta.size(); i++) {DR[i] = DeltaR(jet_eta[i],lep_eta,jet_phi[i],lep_phi);}
   return DR;
 };
 
-ROOT::VecOps::RVec<float> ptRel(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, float& lepton_pt, float& lepton_eta, float& lepton_phi, float& lepton_mass)
+ROOT::VecOps::RVec<float> ptRel(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, ROOT::VecOps::RVec<float>& jet_mass, const float& lepton_pt, const float& lepton_eta, const float& lepton_phi, const float& lepton_mass)
 {
   ROOT::VecOps::RVec<float> ptrel (jet_pt.size(),-1);
   TLorentzVector jet;

@@ -27,9 +27,11 @@
 #include <TRandom3.h>
 #include <sstream>
 #include <chrono> // for high_resolution_clock
+#include "../correctionlib/include/correction.h"
 
 using namespace std;
 using namespace ROOT::VecOps;
+using correction::CorrectionSet;
 
 void rdf::analyzer_RDF(TString testNum)
 {
@@ -44,29 +46,133 @@ void rdf::analyzer_RDF(TString testNum)
   cout << "Year in cc: " << year << endl;
   cout << "isMC? " << isMC << endl;
   
+  // -------------------------------------------------------
+  //               Golden JSON
+  // -------------------------------------------------------
   std::string jsonfile;
-  if(year == "2016UL" or year == "2016APVUL") jsonfile = "Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt";
-  else if(year == "2017UL") jsonfile = "Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt";
-  else if(year == "2018UL") jsonfile = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt";
-  else std::cout << "ERROR: Can't parse the year to assign a golden json file. Expected 2016UL, 2016APVUL, 2017UL, or 2018UL. Got: " << year << std::endl;
+  if(year == "2016" or year == "2016APV") jsonfile = "Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt";
+  else if(year == "2017") jsonfile = "Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt";
+  else if(year == "2018") jsonfile = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt";
+  else std::cout << "ERROR: Can't parse the year to assign a golden json file. Expected 2016, 2016APV, 2017, or 2018. Got: " << year << std::endl;
   const auto myLumiMask = lumiMask::fromJSON(jsonfile);
   //  std::cout << "Testing the JSON! Known good run/lumi returns: " << myLumiMask.accept(315257, 10) << ", and known bad run returns: " << myLumiMask.accept(315257, 90) << std::endl;
   auto goldenjson = [myLumiMask](unsigned int &run, unsigned int &luminosityBlock){return myLumiMask.accept(run, luminosityBlock);};
+  
+  // -------------------------------------------------------
+  //               Self-derived corrections
+  // -------------------------------------------------------
+  
+  // polynomials defined in the .h
+  TF1 *poly2 = this->poly2;
+  TF1 *poly2U = this->poly2U;
+  TF1 *poly2D = this->poly2D;
+  TF1 *polyHT = this->polyHT;
+  TF1 *polyHTU = this->polyHTU;
+  TF1 *polyHTD = this->polyHTD;
+  auto wjetHTpoly = [poly2,poly2U,poly2D](float &LHE_HT){RVec<double> sf = {poly2->Eval(LHE_HT),poly2U->Eval(LHE_HT),poly2D->Eval(LHE_HT)}; return sf;};
+  auto topHTpoly = [polyHT,polyHTU,polyHTD](float &AK4HT){RVec<double> sf = {polyHT->Eval(AK4HT),polyHTU->Eval(AK4HT),polyHTD->Eval(AK4HT)}; return sf;};
+  
+  // -------------------------------------------------------
+  //               correctionLib corrections
+  // -------------------------------------------------------
+  
+  std::string yrstr; std::string yr;
+  if(year == "2016") {yrstr = "2016preVFP_UL"; yr = "16";}
+  else if(year == "2016APV") {yrstr = "2016postVFP_UL"; yr = "16";}
+  else if(year == "2017") {yrstr = "2017_UL"; yr = "17";}
+  else if(year == "2018") {yrstr = "2018_UL"; yr = "18";}
+  else std::cout << "ERROR: Can't parse the year to assign correctionLib json files. Expected 2016, 2016APV, 2017, or 2018. Got: " << year << std::endl;
+  
+  auto pileupcorrset = CorrectionSet::from_file("jsonpog-integration/POG/LUM/"+yrstr+"/puWeights.json");
+  auto electroncorrset = CorrectionSet::from_file("jsonpog-integration/POG/EGM/"+yrstr+"/electron.json");
+  auto muoncorrset = CorrectionSet::from_file("jsonpog-integration/POG/MUO/"+yrstr+"/muon_Z.json");
+  //  auto btagcorrset = CorrectionSet::from_file("jsonpog-integration/POG/BTV/"+yrstr+"/btagging.json");
+  //  auto ak4corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/jet_jerc.json");
+  //  auto ak8corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/fatjet_jerc.json");
+  auto metcorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/met.json");
+  auto jetvetocorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/jetvetomaps.json");
+  //  auto jmarcorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/jmar.json");
+
+  auto pileupcorr = pileupcorrset->at("Collisions"+yr+"_UltraLegacy_goldenJSON");
+  std::cout << "loaded pileup" << std::endl;
+  auto electroncorr = electroncorrset->at("UL-Electron-ID-SF");
+  auto muoncorr = muoncorrset->at("NUM_HighPtID_DEN_genTracks");
+  std::cout << "loaded leptons" << std::endl;
+  //  auto btagcorr = btagcorrset->at("deepJet_shape");
+  //  auto ak4corr = ak4corrset->at("");
+  //  auto ak8corr = ak8corrset->at("");
+  auto metcorr_ptdata = metcorrset->at("pt_metphicorr_pfmet_data");
+  auto metcorr_phidata = metcorrset->at("phi_metphicorr_pfmet_data");
+  auto metcorr_ptmc = metcorrset->at("pt_metphicorr_pfmet_mc");
+  auto metcorr_phimc = metcorrset->at("phi_metphicorr_pfmet_mc");
+  std::cout << "loaded met" << std::endl;
+  auto jetvetocorr = jetvetocorrset->at("Summer19UL"+yr+"_V1");
+  std::cout << "loaded jetveto" << std::endl;
+  //  auto jmarcorr = jmarcorrset->at("");
+  
+  auto pufunc = [pileupcorr](const float &numTrueInt){
+    RVec<double> pu = {pileupcorr->evaluate({numTrueInt, "nominal"}), pileupcorr->evaluate({numTrueInt, "up"}), pileupcorr->evaluate({numTrueInt, "down"})};
+    return pu;
+  };
+  auto elfunc = [electroncorr, year](const float &pt, const float &eta, const bool &isEl){
+    if(isEl == 0) {
+      RVec<double> mu = {1.0, 1.0, 1.0}; return mu;
+    }
+    else{
+      double test = electroncorr->evaluate({year,"sf","RecoAbove20",eta,pt});
+      RVec<double> el = {electroncorr->evaluate({year,"sf","RecoAbove20",eta,pt}), electroncorr->evaluate({year,"sfup","RecoAbove20",eta,pt}), 
+      			 electroncorr->evaluate({year,"sfdown","RecoAbove20",eta,pt})};
+      return el;
+    }
+  }; 
+  auto idfunc = [muoncorr,electroncorr,yrstr](const float &pt, const float &eta, const bool &isEl){
+    RVec<double> id = {1.0, 1.0, 1.0};
+    if(isEl > 0) return id; // FIXME: get the "TightNoIso" SFs from TOP paper, calculate for UL.
+    else{
+      id = {muoncorr->evaluate({yrstr,abs(eta),pt,"sf"}), muoncorr->evaluate({yrstr,abs(eta),pt,"systup"}), 
+	    muoncorr->evaluate({yrstr,abs(eta),pt,"systdown"})};
+      return id;
+    }
+  }; 
+  // FIXME: get the "MiniIso" SFs from TOP paper, calculate for UL. Put in an "isofunc"
+  // FIXME: copy the btagging from CROWN link
+  auto metfunc = [metcorr_ptdata,metcorr_ptmc](const float &met, const float &metphi, const float &npv, const float &run){
+    if(run > 100000) return metcorr_ptdata->evaluate({met, metphi, npv, run});
+    else return metcorr_ptmc->evaluate({met, metphi, npv, run});
+  };
+  auto metphifunc = [metcorr_phidata,metcorr_phimc](const float &met, const float &metphi, const float &npv, const float &run){
+    if(run > 100000) return metcorr_phidata->evaluate({met, metphi, npv, run});
+    else return metcorr_phimc->evaluate({met, metphi, npv, run});
+  };
+  auto jetvetofunc = [jetvetocorr](const RVec<float> &eta, const RVec<float> &phi){
+    RVec<double> map;
+    for(unsigned int ijet = 0; ijet < eta.size(); ijet++){
+      map.push_back(jetvetocorr->evaluate({"jetvetomap",eta.at(ijet),phi.at(ijet)}));
+    }
+    return map;
+  };
+  
+  // FIXME: figure out the JERC...
 
   // -------------------------------------------------------
-  //               Flags and First Filter
+  //               Open Dataframe + MET Filters
   // -------------------------------------------------------
-  // Twiki with reccommended ultralegacy values
+
   auto rdf_input = ROOT::RDataFrame("Events", files); // Initial data
   
   auto METgeneralFilters = rdf_input.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 && Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 && Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 && Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters")
     .Filter("nJet > 0 && nFatJet > 0", "Event has > 1 AK4 and > 1 AK8");
   auto truth = METgeneralFilters;
-    
+  
+  // --------------------------------------------------------
+  // 	       Golden JSON (Data) || GEN Info (MC)
+  // --------------------------------------------------------
+  
   if(!isMC){ // apply golden json to data
     truth = METgeneralFilters.Define("passesJSON", goldenjson, {"run","luminosityBlock"})
       .Filter("passesJSON == 1", "Data passes Golden JSON");
   }
+  
   else{ // calculate some gen-level stuff
     auto BprimeGen = METgeneralFilters.Define("Bprime_gen_info", Form("Bprime_gen_info(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status, GenPart_statusFlags)", sample.c_str()))
       .Define("Bprime_gen_pt", "Bprime_gen_info[0]")
@@ -132,7 +238,10 @@ void rdf::analyzer_RDF(TString testNum)
       .Define("trueLeptonicW", "(int) W_gen_info[18]")
       .Define("trueLeptonicMode", Form("leptonicCheck(\"%s\", trueLeptonicT, trueLeptonicW)", sample.c_str()))
       .Define("t_bkg_idx", Form("t_bkg_idx(\"%s\", nGenPart, GenPart_pdgId, GenPart_genPartIdxMother, GenPart_statusFlags)", sample.c_str()))
-      .Define("W_bkg_idx", Form("W_bkg_idx(\"%s\", nGenPart, GenPart_pdgId, GenPart_genPartIdxMother, GenPart_statusFlags, t_bkg_idx)", sample.c_str()));
+      .Define("W_bkg_idx", Form("W_bkg_idx(\"%s\", nGenPart, GenPart_pdgId, GenPart_genPartIdxMother, GenPart_statusFlags, t_bkg_idx)", sample.c_str()))
+      .Define("HTCorr_WjetLHE", wjetHTpoly, {"LHE_HT"})
+      .Define("PileupWeights", pufunc, {"Pileup_nTrueInt"});
+
   }
   
   // ---------------------------------------------------------
@@ -143,7 +252,7 @@ void rdf::analyzer_RDF(TString testNum)
   auto METptFilters = truth.Filter("MET_pt > 60", "Pass MET > 60");
   
   // ---------------------------------------------------------
-  //                    Lepton Filters
+  //                    LEPTON Definitions
   // ---------------------------------------------------------
   
   auto LepDefs = METptFilters.Define("Electron_cutBasedIdNoIso_tight", Form("Electron_cutBasedIdNoIso_tight(\"%s\", nElectron, Electron_vidNestedWPBitmap)", sample.c_str()))
@@ -171,6 +280,10 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("VetoIsoMu", "(VMuon_pt<55)")
     .Define("VetoIsoEl", "(VElectron_pt<80)")
     .Define("nVetoIsoLep", "(int) (Sum(VetoIsoMu)+Sum(VetoIsoEl))");
+
+  // --------------------------------------------------------
+  // 		      LEPTON SELECTION
+  // --------------------------------------------------------
   
   auto LepSelect = LepDefs.Define("isMu", "(nMuon>0) && HLT_Mu50 && (nSignalIsoMu==1) && (nVetoIsoLep==0) && (nElectron == 0 || nSignalIsoEl == 0)")
     .Define("isEl", "(nElectron>0) && (HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165) && (nSignalIsoEl==1) && (nVetoIsoLep==0) && (nMuon == 0 || nSignalIsoMu == 0)")
@@ -203,6 +316,7 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("gcJet_eta", "cleanJet_eta[goodcleanJets == true]")
     .Define("gcJet_phi", "cleanJet_phi[goodcleanJets == true]")
     .Define("gcJet_mass", "cleanJet_mass[goodcleanJets == true]")
+    .Define("gcJet_vetomap", jetvetofunc, {"gcJet_eta","gcJet_phi"})
     .Define("gcJet_DeepFlav", "Jet_btagDeepFlavB[goodcleanJets == true]")
     .Define("gcJet_DeepFlavL", "gcJet_DeepFlav > 0.0490") //0.2783
     .Define("NJets_DeepFlavL", "(int) Sum(gcJet_DeepFlavL)")
@@ -225,6 +339,7 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("gcFatJet_phi", "FatJet_phi[goodcleanFatJets == true]")
     .Define("gcFatJet_mass", "FatJet_mass[goodcleanFatJets == true]")
     .Define("gcFatJet_sdmass", "FatJet_msoftdrop[goodcleanFatJets == true]")
+    .Define("gcFatJet_vetomap", jetvetofunc, {"gcFatJet_eta","gcFatJet_phi"})
     .Define("DR_gcJets_central","DeltaR_VecAndFloat(gcJet_eta,gcJet_phi,lepton_eta,lepton_phi)")
     .Define("DR_gcJets_DeepFlavL","DeltaR_VecAndFloat(gcJet_DeepFlavL_eta,gcJet_DeepFlavL_phi,lepton_eta,lepton_phi)")
     .Define("DR_gcFatJets","DeltaR_VecAndFloat(gcFatJet_eta,gcFatJet_phi,lepton_eta,lepton_phi)")
@@ -233,11 +348,13 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("OS_gcJets_DeepFlavL","DR_gcJets_DeepFlavL > TMath::Pi()/2")
     .Define("SS_gcJets_DeepFlavL","DR_gcJets_DeepFlavL <= TMath::Pi()/2")
     .Define("OS_gcFatJets","DR_gcFatJets > TMath::Pi()/2")
+    .Define("SS_gcFatJets","DR_gcFatJets <= TMath::Pi()/2")
     .Define("NOS_gcJets_central","(int) Sum(OS_gcJets)")
     .Define("NSS_gcJets_central","(int) Sum(SS_gcJets)")
     .Define("NOS_gcJets_DeepFlavL","(int) Sum(OS_gcJets_DeepFlavL)")
     .Define("NSS_gcJets_DeepFlavL","(int) Sum(SS_gcJets_DeepFlavL)")
     .Define("NOS_gcFatJets","(int) Sum(OS_gcFatJets)")
+    .Define("NSS_gcFatJets","(int) Sum(SS_gcFatJets)")
     .Define("gcOSFatJet_pt","gcFatJet_pt[OS_gcFatJets == true]")
     .Define("gcOSFatJet_eta","gcFatJet_eta[OS_gcFatJets == true]")
     .Define("gcOSFatJet_phi","gcFatJet_phi[OS_gcFatJets == true]")
@@ -252,27 +369,30 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("gcSSJet_mass","gcJet_mass[SS_gcJets == true]");
   
   // ---------------------------------------------------------
-  // 	  HT Calculation and Final Preselection Cut
+  // 	  HT Calculation and initial Cuts
   // ---------------------------------------------------------
   
-  auto HT_calc = CleanJets.Define("Jet_HT","Sum(Jet_pt[goodcleanJets == true])") \
-    .Filter("Jet_HT > 250","Pass HT > 250")				\
+  auto HT_calc = CleanJets.Define("gcJet_HT","Sum(Jet_pt[goodcleanJets == true])") \
+    .Filter("gcJet_HT > 250","Pass HT > 250")				\
+    .Define("HTCorr_top", topHTpoly, {"gcJet_HT"})
     .Filter("NFatJets > 0","Pass N good central AK8 > 0")
     .Filter("NOS_gcFatJets > 0","Pass N good central other side AK8 > 0");
   
   
   // ---------------------------------------------------------
-  // 		Post Preselection Analysis
+  // 		JET Tagging and RECONSTRUCTION
   // ---------------------------------------------------------
   auto genttbarJets = HT_calc;
   
-  if (!isSE && !isSM) {
+  if (isMC) {
     genttbarJets = HT_calc.Define("genttbarMass", Form("genttbarMassCalc(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status)",sample.c_str()))
-      .Define("gcFatJet_genmatch", Form("FatJet_matching_bkg(\"%s\", goodcleanFatJets, gcFatJet_eta, gcFatJet_phi, NFatJets, FatJet_subJetIdx1, nSubJet, SubJet_hadronFlavour, nGenPart, GenPart_pdgId, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, t_bkg_idx, W_bkg_idx)",sample.c_str()));
+      .Define("gcFatJet_genmatch", Form("FatJet_matching_bkg(\"%s\", goodcleanFatJets, gcFatJet_eta, gcFatJet_phi, NFatJets, FatJet_subJetIdx1, nSubJet, SubJet_hadronFlavour, nGenPart, GenPart_pdgId, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, t_bkg_idx, W_bkg_idx)",sample.c_str()))
+      .Define("elRecoSF", elfunc, {"lepton_pt","lepton_eta","isEl"});
+      //.Define("leptonIDSF", idfunc, {"lepton_pt","lepton_eta","isEl"});
+    // FIXME add iso and btagging, etc, here probably
   }
- 
   auto postPresel = genttbarJets.Define("lepton_lv", "lvConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)")
-    .Define("Jet_ST", "Jet_HT + lepton_pt + MET_pt")
+    .Define("gcJet_ST", "gcJet_HT + lepton_pt + MET_pt")
     .Define("FatJet_pt_1", "FatJet_pt[0]")
     .Define("FatJet_pt_2", "FatJet_pt[1]") 
     .Define("FatJet_sdMass", "FatJet_msoftdrop[goodcleanFatJets == true]")
@@ -362,7 +482,7 @@ void rdf::analyzer_RDF(TString testNum)
   
   cout << "-------------------------------------------------" << endl
        << ">>> Saving " << sample << " Snapshot..." << endl;
-  TString finalFile = "RDF_" + sample + "_finalsel_" + testNum + ".root";
+  TString finalFile = "RDF_" + sample + "_finalsel_" + testNum.Data() + ".root";
   const char *stdfinalFile = finalFile;
   
   auto ColNames = postPresel.GetColumnNames();
@@ -413,6 +533,9 @@ void rdf::analyzer_RDF(TString testNum)
   ROOT::RDF::RSnapshotOptions opts;
   opts.fMode = "UPDATE";
   rdf_runs.Snapshot("Runs", stdfinalFile, rdf_runs.GetColumnNames(), opts);
+
+  delete poly2; delete poly2U; delete poly2D;
+  delete polyHT; delete polyHTU; delete polyHTD;
   
   cout << "Done!" << endl;
 }

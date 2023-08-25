@@ -15,6 +15,7 @@
 #include <TChain.h>
 #include <TFile.h>
 #include "TH1.h"
+#include "TF1.h"
 
 // Header file for the classes stored in the TTree if any.
 #include "vector"
@@ -36,6 +37,15 @@ private:
   TString psOutName, fsOutName;
   Int_t fCurrent; //! current Tree number in a TChain
   vector<string> files;
+
+  // Polynominals for LHE-based WJets HT scaling
+  TF1 *poly2 = new TF1("poly2","max(0.402806,0.998174 + (8.40861e-05)*x + (-6.63274e-07)*x*x + (4.09272e-10)*x*x*x + (-9.50233e-14)*x*x*x*x + (7.59648e-18)*x*x*x*x*x)",100,5000);  
+  TF1 *poly2U = new TF1("poly2U","max([6],[0] + [1]*x + [2]*x*x + [3]*x*x*x + [4]*x*x*x*x + [5]*x*x*x*x*x)",100,5000);   
+  TF1 *poly2D = new TF1("poly2D","max([6],[0] + [1]*x + [2]*x*x + [3]*x*x*x + [4]*x*x*x*x + [5]*x*x*x*x*x)",100,5000);
+  // Polynomials for data-derived TOP HT scaling
+  TF1 *polyHT = new TF1("polyHT","min(1.0,max([0] + [1]*x,[2]))",700,5000);
+  TF1 *polyHTU = new TF1("polyHTU","min(1.0,max([0] + [1]*x + sqrt([3] + 2*x*[4] + x*x*[5]),[2] + [6]))",700,5000);
+  TF1 *polyHTD = new TF1("polyHTD","min(1.0,max([0] + [1]*x - sqrt([3] + 2*x*[4] + x*x*[5]),[2] - [6]))",700,5000);
 
   Bool_t isSig;
   Bool_t isTOP;
@@ -129,6 +139,39 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
   isTTincMtt0to1000 = preselFileName.Contains("Mtt0to1000");
   isTTincMtt700to1000 = preselFileName.Contains("Mtt700to1000");
   isTTincMtt1000toInf = preselFileName.Contains("Mtt1000toInf");
+
+  // Build polynomials for corrections
+  poly2U->SetParameter(0,    0.998164);  
+  poly2U->SetParameter(1, 8.51652e-05); 
+  poly2U->SetParameter(2,-6.62919e-07);
+  poly2U->SetParameter(3,  4.1205e-10); 
+  poly2U->SetParameter(4,-9.57795e-14); 
+  poly2U->SetParameter(5, 7.67371e-18); 
+  poly2U->SetParameter(6,0.454456);
+  poly2D->SetParameter(0,    0.998183);  
+  poly2D->SetParameter(1, 8.30069e-05); 
+  poly2D->SetParameter(2,-6.63629e-07);
+  poly2D->SetParameter(3, 4.06495e-10); 
+  poly2D->SetParameter(4,-9.42671e-14); 
+  poly2D->SetParameter(5, 7.51924e-18); 
+  poly2D->SetParameter(6,0.351156);
+  polyHT->SetParameter(0,     1.09245);
+  polyHT->SetParameter(1,-0.000220375);
+  polyHT->SetParameter(2,    0.607311);
+  polyHTU->SetParameter(0,     1.09245);
+  polyHTU->SetParameter(1,-0.000220375);
+  polyHTU->SetParameter(2,    0.607311);
+  polyHTU->SetParameter(3, 0.000531602);
+  polyHTU->SetParameter(4,-3.99715e-07);
+  polyHTU->SetParameter(5, 3.19837e-10);
+  polyHTU->SetParameter(6, 0.000541832);
+  polyHTD->SetParameter(0,     1.09245);
+  polyHTD->SetParameter(1,-0.000220375);
+  polyHTD->SetParameter(2,    0.607311);
+  polyHTD->SetParameter(3, 0.000531602);
+  polyHTD->SetParameter(4,-3.99715e-07);
+  polyHTD->SetParameter(5, 3.19837e-10);
+  polyHTD->SetParameter(6, 0.000541832);
 
 }
 
