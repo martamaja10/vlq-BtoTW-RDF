@@ -38,7 +38,6 @@ void rdf::analyzer_RDF(TString testNum)
   ROOT::EnableImplicitMT();
   TStopwatch time;
   time.Start();
-  bool isNominal = this->isNominal;
   string sample = this->sample;
   string year = this->year;
   
@@ -86,7 +85,7 @@ void rdf::analyzer_RDF(TString testNum)
   auto pileupcorrset = CorrectionSet::from_file("jsonpog-integration/POG/LUM/"+yrstr+"/puWeights.json");
   auto electroncorrset = CorrectionSet::from_file("jsonpog-integration/POG/EGM/"+yrstr+"/electron.json");
   auto muoncorrset = CorrectionSet::from_file("jsonpog-integration/POG/MUO/"+yrstr+"/muon_Z.json");
-  //  auto btagcorrset = CorrectionSet::from_file("jsonpog-integration/POG/BTV/"+yrstr+"/btagging.json");
+  auto btagcorrset = CorrectionSet::from_file("jsonpog-integration/POG/BTV/"+yrstr+"/btagging.json");
   //  auto ak4corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/jet_jerc.json");
   //  auto ak8corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/fatjet_jerc.json");
   auto metcorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"/met.json");
@@ -98,7 +97,7 @@ void rdf::analyzer_RDF(TString testNum)
   auto electroncorr = electroncorrset->at("UL-Electron-ID-SF");
   auto muoncorr = muoncorrset->at("NUM_HighPtID_DEN_genTracks");
   std::cout << "loaded leptons" << std::endl;
-  //  auto btagcorr = btagcorrset->at("deepJet_shape");
+  auto btagcorr = btagcorrset->at("deepJet_shape");
   //  auto ak4corr = ak4corrset->at("");
   //  auto ak8corr = ak8corrset->at("");
   auto metcorr_ptdata = metcorrset->at("pt_metphicorr_pfmet_data");
@@ -115,12 +114,10 @@ void rdf::analyzer_RDF(TString testNum)
     return pu;
   };
   auto elfunc = [electroncorr, year](const float &pt, const float &eta, const bool &isEl){
-    if(isEl == 0) {
-      RVec<double> mu = {1.0, 1.0, 1.0}; return mu;
-    }
+    if(isEl == 0) { RVec<double> mu = {1.0, 1.0, 1.0}; return mu; }
     else{
-      double test = electroncorr->evaluate({year,"sf","RecoAbove20",eta,pt});
-      RVec<double> el = {electroncorr->evaluate({year,"sf","RecoAbove20",eta,pt}), electroncorr->evaluate({year,"sfup","RecoAbove20",eta,pt}), 
+      RVec<double> el = {electroncorr->evaluate({year,"sf","RecoAbove20",eta,pt}), 
+			 electroncorr->evaluate({year,"sfup","RecoAbove20",eta,pt}), 
       			 electroncorr->evaluate({year,"sfdown","RecoAbove20",eta,pt})};
       return el;
     }
@@ -129,7 +126,8 @@ void rdf::analyzer_RDF(TString testNum)
     RVec<double> id = {1.0, 1.0, 1.0};
     if(isEl > 0) return id; // FIXME: get the "TightNoIso" SFs from TOP paper, calculate for UL.
     else{
-      id = {muoncorr->evaluate({yrstr,abs(eta),pt,"sf"}), muoncorr->evaluate({yrstr,abs(eta),pt,"systup"}), 
+      id = {muoncorr->evaluate({yrstr,abs(eta),pt,"sf"}), 
+	    muoncorr->evaluate({yrstr,abs(eta),pt,"systup"}), 
 	    muoncorr->evaluate({yrstr,abs(eta),pt,"systdown"})};
       return id;
     }
@@ -150,6 +148,37 @@ void rdf::analyzer_RDF(TString testNum)
       map.push_back(jetvetocorr->evaluate({"jetvetomap",eta.at(ijet),phi.at(ijet)}));
     }
     return map;
+  };
+  
+  std::string nominal = "central";
+  if(jesvar == "JECup") nominal = "up_jes";
+  else if (jesvar == "JECdn") nominal = "down_jes";
+  auto btagshapefunc = [btagcorr,nominal](const RVec<float> &pt, const RVec<float> &eta, const RVec<float> &disc, const RVec<int> &flav){
+    RVec<float> weights(17, 1.0); // collect product of SFs over jets
+    for(unsigned int ijet = 0; ijet < eta.size(); ijet++){
+      weights[0] *= btagcorr->evaluate({nominal, flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+      if(flav.at(ijet) != 4){
+	weights[1] *= btagcorr->evaluate({"up_hf", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[2] *= btagcorr->evaluate({"down_hf", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[3] *= btagcorr->evaluate({"up_lf", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[4] *= btagcorr->evaluate({"down_lf", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[5] *= btagcorr->evaluate({"up_hfstats1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[6] *= btagcorr->evaluate({"down_hfstats1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[7] *= btagcorr->evaluate({"up_hfstats2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[8] *= btagcorr->evaluate({"down_hfstats2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[9] *= btagcorr->evaluate({"up_lfstats1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[10] *= btagcorr->evaluate({"down_lfstats1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[11] *= btagcorr->evaluate({"up_lfstats2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[12] *= btagcorr->evaluate({"down_lfstats2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+      }
+      else{
+	weights[13] *= btagcorr->evaluate({"up_cferr1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[14] *= btagcorr->evaluate({"down_cferr1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[15] *= btagcorr->evaluate({"up_cferr2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+	weights[16] *= btagcorr->evaluate({"down_cferr2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+      }
+    }
+    return weights;      
   };
   
   // FIXME: figure out the JERC...
@@ -310,7 +339,7 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("cleanJet_rawFactor", "cleanJets[4]")
     .Define("DR_lepJets","DeltaR_VecAndFloat(cleanJet_eta,cleanJet_phi,lepton_eta,lepton_phi)")
     .Define("ptrel_lepJets","ptRel(cleanJet_pt,cleanJet_eta,cleanJet_phi,cleanJet_mass,lepton_pt,lepton_eta,lepton_phi,lepton_mass)")
-    .Define("goodcleanJets", "cleanJet_pt > 30 && abs(cleanJet_eta) < 2.4 && Jet_jetId > 1 && (DR_lepJets > 0.4 || ptrel_lepJets > 20)")
+    .Define("goodcleanJets", "cleanJet_pt > 30 && abs(cleanJet_eta) < 2.5 && Jet_jetId > 1 && (DR_lepJets > 0.4 || ptrel_lepJets > 20)")
     .Define("NJets_central", "(int) Sum(goodcleanJets)")
     .Define("gcJet_pt", "cleanJet_pt[goodcleanJets == true]")
     .Define("gcJet_eta", "cleanJet_eta[goodcleanJets == true]")
@@ -318,13 +347,14 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("gcJet_mass", "cleanJet_mass[goodcleanJets == true]")
     .Define("gcJet_vetomap", jetvetofunc, {"gcJet_eta","gcJet_phi"})
     .Define("gcJet_DeepFlav", "Jet_btagDeepFlavB[goodcleanJets == true]")
+    .Define("gcJet_hflav","Jet_hadronFlavour[goodcleanJets == true]")
     .Define("gcJet_DeepFlavL", "gcJet_DeepFlav > 0.0490") //0.2783
     .Define("NJets_DeepFlavL", "(int) Sum(gcJet_DeepFlavL)")
     .Define("gcJet_DeepFlavL_pt", "gcJet_pt[gcJet_DeepFlavL == true]")
     .Define("gcJet_DeepFlavL_eta", "gcJet_eta[gcJet_DeepFlavL == true]")
     .Define("gcJet_DeepFlavL_phi", "gcJet_phi[gcJet_DeepFlavL == true]")
     .Define("gcJet_DeepFlavL_mass", "gcJet_mass[gcJet_DeepFlavL == true]")
-    .Define("goodcleanForwardJets", "cleanJet_pt > 30 && abs(cleanJet_eta) >= 2.4 && Jet_jetId > 1")
+    .Define("goodcleanForwardJets", "cleanJet_pt > 30 && abs(cleanJet_eta) >= 2.5 && Jet_jetId > 1")
     .Define("NJets_forward", "(int) Sum(goodcleanForwardJets)")
     .Define("gcforwJet_pt", "cleanJet_pt[goodcleanForwardJets == true]")
     .Define("gcforwJet_eta", "cleanJet_eta[goodcleanForwardJets == true]")
@@ -387,8 +417,9 @@ void rdf::analyzer_RDF(TString testNum)
   if (isMC) {
     genttbarJets = HT_calc.Define("genttbarMass", Form("genttbarMassCalc(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status)",sample.c_str()))
       .Define("gcFatJet_genmatch", Form("FatJet_matching_bkg(\"%s\", goodcleanFatJets, gcFatJet_eta, gcFatJet_phi, NFatJets, FatJet_subJetIdx1, nSubJet, SubJet_hadronFlavour, nGenPart, GenPart_pdgId, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, t_bkg_idx, W_bkg_idx)",sample.c_str()))
-      .Define("elRecoSF", elfunc, {"lepton_pt","lepton_eta","isEl"});
+      .Define("elRecoSF", elfunc, {"lepton_pt","lepton_eta","isEl"})
       //.Define("leptonIDSF", idfunc, {"lepton_pt","lepton_eta","isEl"});
+      .Define("btagWeights",btagshapefunc, {"gcJet_pt", "gcJet_eta", "gcJet_DeepFlav", "gcJet_hflav"});
     // FIXME add iso and btagging, etc, here probably
   }
   auto postPresel = genttbarJets.Define("lepton_lv", "lvConstructor(lepton_pt,lepton_eta,lepton_phi,lepton_mass)")
@@ -454,7 +485,7 @@ void rdf::analyzer_RDF(TString testNum)
     .Define("W_phi", "W_lv.Phi()")
     .Define("W_mass", "W_lv.M()")
     .Define("W_MT", "sqrt(2*lepton_pt*MET_pt*(1-cos(lepton_phi - MET_phi)))")
-    .Define("minMlj_output", Form("minM_lep_jet_calc(\"%s\", gcJet_pt, gcJet_eta, gcJet_phi, gcJet_mass, lepton_lv)",sample.c_str()))
+    .Define("minMlj_output", "minM_lep_jet_calc(gcJet_pt, gcJet_eta, gcJet_phi, gcJet_mass, lepton_lv)")
     .Define("DR_W_lep", "dR_Wt_Calc(W_lv,lepton_lv)")
     .Define("minM_lep_Jet", "minMlj_output[0]")
     .Define("minM_lep_Jet_jetID", "(int) minMlj_output[1]")

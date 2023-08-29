@@ -59,12 +59,7 @@ private:
   Bool_t isTTincMtt0to700;
   Bool_t isTTincMtt700to1000;
   Bool_t isTTincMtt1000toInf;
-  Bool_t isNominal;
-  Bool_t isBUp;
-  Bool_t isBDn;
-  Bool_t isLUp;
-  Bool_t isLDn;
-
+  string jesvar;
   string sample;
   string year;
 
@@ -113,6 +108,8 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
   psOutName = preselFileName;
   fsOutName = finalselFileName;
 
+  jesvar = "Nominal"; // FIXME, swap Nominal, JECup, JECdn, JERup, JERdn somewhere;
+
   // Parse the incoming file names to assign labels
   isSig = (sampleName.Contains("Bprime"));
   isMadgraphBkg = (sampleName.Contains("QCD") || sampleName.Contains("madgraphMLM"));
@@ -130,11 +127,6 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
 
   year = yearIn; // May need to change this line to get things to work
 
-  isBUp = false; // FIXME -- not using this yet, but we need to.
-  isBDn = false;
-  isLUp = false;
-  isLDn = false;
-  isNominal = true;
   isTTincMtt0to700 = preselFileName.Contains("Mtt0to700"); // FIXME -- not using this yet, but we need to for high-mass ttbar (or some more clever way to weight based on mass value).
   isTTincMtt0to1000 = preselFileName.Contains("Mtt0to1000");
   isTTincMtt700to1000 = preselFileName.Contains("Mtt700to1000");

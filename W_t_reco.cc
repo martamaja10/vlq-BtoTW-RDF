@@ -133,7 +133,7 @@ RVec<float> t_reco(int isLeptonic, RVec<float>& jet_pt, RVec<float>& jet_eta, RV
 // ----------------------------------------------------
 
 // Commented Method Only
-auto minM_lep_jet_calc(bool isNominal, RVec<float> &jet_pt, RVec<float> &jet_eta, RVec<float> &jet_phi, RVec<float> &jet_mass, TLorentzVector lepton_lv)
+auto minM_lep_jet_calc(RVec<float> &jet_pt, RVec<float> &jet_eta, RVec<float> &jet_phi, RVec<float> &jet_mass, TLorentzVector lepton_lv)
 {
     float ind_MinMlj = -1; // This gets changed into int in .Define()
     float minMleppJet = 1e8;
