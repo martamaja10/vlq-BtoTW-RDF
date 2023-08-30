@@ -62,6 +62,7 @@ private:
   string jesvar;
   string sample;
   string year;
+  string era;
 
   // Fixed size dimensions of array or collections stored in the TTree if any.
 public:
@@ -110,7 +111,7 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
 
   jesvar = "Nominal"; // FIXME, swap Nominal, JECup, JECdn, JERup, JERdn somewhere;
 
-  // Parse the incoming file names to assign labels
+  // Parse the incoming file names to assign labels  
   isSig = (sampleName.Contains("Bprime"));
   isMadgraphBkg = (sampleName.Contains("QCD") || sampleName.Contains("madgraphMLM"));
   isTOP = (sampleName.Contains("Mtt") || sampleName.Contains("ST") || sampleName.Contains("ttZ") || sampleName.Contains("ttW") || sampleName.Contains("ttH") || sampleName.Contains("TTTo"));
@@ -120,9 +121,12 @@ rdf::rdf(string inputFileName, TString preselFileName, TString finalselFileName,
   isSM = sampleName.Contains("SingleMuon");
   isSE = (sampleName.Contains("SingleElectron") || sampleName.Contains("EGamma"));
 
-
   TObjArray *tokens = sampleName.Tokenize("/");
   sample = ((TObjString *)(tokens->At(5)))->String();
+  if(!isMC){ 
+    string runera = (((TObjString *)(tokens->At(4)))->String()).Data();
+    era = runera.back();
+  }
   delete tokens;
 
   year = yearIn; // May need to change this line to get things to work
