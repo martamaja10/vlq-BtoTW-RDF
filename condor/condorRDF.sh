@@ -1,6 +1,8 @@
 #!/bin/bash
 
 hostname
+export SCRAM_ARCH=slc7_amd64_gcc10
+echo $SCRAM_ARCH
 
 # Take in Input Arguments
 infilename=${1}  # Filename is a really long string
@@ -20,8 +22,8 @@ echo "year: ${year}"
 scratch=${PWD}  
 macroDir=${PWD}
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-scramv1 project CMSSW CMSSW_11_0_0
-cd CMSSW_11_0_0
+scramv1 project CMSSW CMSSW_12_4_8
+cd CMSSW_12_4_8
 cmsenv
 
 # Unpack the tar file
