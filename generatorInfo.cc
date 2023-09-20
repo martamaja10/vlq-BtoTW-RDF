@@ -540,7 +540,7 @@ auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<floa
       continue;
     }
 
-    int firstsub = FatJet_subJetIdx1[i];
+    int firstsub = gcFatJet_subJetIdx1[i];
     for (int isub = firstsub; isub < nSubJet; isub++)
     {
       if (SubJet_hadronFlavour[isub] != 0)
@@ -557,7 +557,7 @@ auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<floa
 };
 
 // Commented Method Only
-auto FatJet_matching_bkg(string sample, RVec<int> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx)
+auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &gcFatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx)
 {
   RVec<int> matched_GenPart(NFatJets, -9);
   // if (sample.find("Bprime") != std::string::npos)
@@ -565,7 +565,7 @@ auto FatJet_matching_bkg(string sample, RVec<int> &goodcleanFatJets, RVec<float>
   //   return matched_GenPart;
   // }
   
-  RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
+  //  RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets]; //done in the analyzer now for pt ordering
   
   int ntD = t_bkg_idx.size();
   int nWD = W_bkg_idx.size();
@@ -688,7 +688,7 @@ auto FatJet_matching_bkg(string sample, RVec<int> &goodcleanFatJets, RVec<float>
 	{
 	  continue;
 	}
-      int firstsub = FatJet_subJetIdx1[i];
+      int firstsub = gcFatJet_subJetIdx1[i];
       for (int isub = firstsub; isub < nSubJet; isub++)
 	{
 	  if (SubJet_hadronFlavour[isub] != 0)

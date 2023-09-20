@@ -5,6 +5,17 @@
 using namespace std;
 using namespace ROOT::VecOps;
 
+// -------------------------------------------------------
+//               Sorting
+// -------------------------------------------------------
+template<typename T>
+RVec<T> reorder(const RVec<T> &v, const RVec<int> &idx){
+  RVec<T> vnew(v.size());
+  for(unsigned int i = 0; i < idx.size(); i++){
+    vnew[i] = v[idx[i]];
+  }
+  return vnew;
+}
 
 // The following functions could probably all go to the plotting marco
 auto leptonicCheck(string sample, int trueLeptonicT, int trueLeptonicW)
@@ -36,7 +47,7 @@ auto leptonicCheck(string sample, int trueLeptonicT, int trueLeptonicW)
   return trueLeptonicMode;
 };
 
-auto Electron_cutBasedIdNoIso_tight(string sample, unsigned int nElectron, RVec<int> &Electron_vidNestedWPBitmap)
+auto Electron_cutBasedIdNoIso_tight(unsigned int nElectron, RVec<int> &Electron_vidNestedWPBitmap)
 {
     RVec<int> noIso_tight(nElectron, 0);
     for (unsigned int i = 0; i < nElectron; i++)
@@ -95,12 +106,12 @@ auto getHighestPt(RVec<float> &VLepton_pt, RVec<float> &VLepton_eta, RVec<float>
 };
 
 // --------------------------------------------
-//               DR CALCULATOR
+//               DR CALCULATORS
 // --------------------------------------------
 ROOT::VecOps::RVec<float> DeltaR_VecAndFloat(ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi, const float& lep_eta, const float& lep_phi)
 {
   ROOT::VecOps::RVec<float> DR (jet_eta.size(),999);
-  for(int i = 0; i < jet_eta.size(); i++) {DR[i] = DeltaR(jet_eta[i],lep_eta,jet_phi[i],lep_phi);}
+  for(int i = 0; i < jet_eta.size(); i++) { DR[i] = DeltaR(jet_eta[i],lep_eta,jet_phi[i],lep_phi); }
   return DR;
 };
 
@@ -116,3 +127,26 @@ ROOT::VecOps::RVec<float> ptRel(ROOT::VecOps::RVec<float>& jet_pt, ROOT::VecOps:
   }
   return ptrel;
 }
+
+float minDR_leadJetOtherJet_calc(ROOT::VecOps::RVec<float>& jet_eta, ROOT::VecOps::RVec<float>& jet_phi)
+{
+  if(jet_eta.size() < 2) return 6.5;
+  else{
+    ROOT::VecOps::RVec<float> nonlead_eta = jet_eta;
+    nonlead_eta.erase(nonlead_eta.begin());
+    ROOT::VecOps::RVec<float> nonlead_phi = jet_phi;
+    nonlead_phi.erase(nonlead_phi.begin());
+    ROOT::VecOps::RVec<float> drs = DeltaR_VecAndFloat(nonlead_eta, nonlead_phi, jet_eta.at(0), jet_phi.at(0));
+    float mindr = ROOT::VecOps::Min(drs);
+    return mindr;
+  }
+};
+
+ROOT::VecOps::RVec<float> floorfunc(ROOT::VecOps::RVec<float> items)
+{
+  ROOT::VecOps::RVec<float> floored;
+  for(unsigned int i = 0; i < items.size(); i++){
+    floored.push_back(std::floor(items.at(i)/0.5));
+  }
+  return floored;
+};
