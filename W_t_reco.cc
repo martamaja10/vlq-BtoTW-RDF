@@ -84,48 +84,59 @@ bool isLeptonic_X(float minMleppJet)
 // 	  HOMEMADE TLORENTZVECTOR CONSTRUCTOR
 // -----------------------------------------------------
 // Commented Method Only
-RVec<float> t_reco(int isLeptonic, RVec<float>& jet_pt, RVec<float>& jet_eta, RVec<float>& jet_phi, RVec<float>& jet_mass, TLorentzVector Wlv, float minMleppJet, int ind_MinMlj)
+RVec<float> t_reco(int isLeptonic, RVec<int>& isB, RVec<float>& jet_pt, RVec<float>& jet_eta, RVec<float>& jet_phi, RVec<float>& jet_mass, TLorentzVector Wlv, int ind_MinMlj, int NSSB, RVec<int>& isSSb, RVec<float>& SSpt, RVec<float>& SSeta, RVec<float>& SSphi, RVec<float>& SSmass)
 {
-	float t_mass = -999;
-	float t_pt = -999;
-	float t_eta = -999;
-	float t_phi = -999;
-	float t_dRWb = -999;
-	float deltaRbW = 999;
-	int bIndex = 999;
-	TLorentzVector jet_lv, top_lv;
-	for(unsigned int ijet=0; ijet < jet_pt.size(); ijet++)
-	{
-		jet_lv.SetPtEtaPhiM(jet_pt.at(ijet),jet_eta.at(ijet),jet_phi.at(ijet),jet_mass.at(ijet));
-		if(jet_lv.DeltaR(Wlv) < deltaRbW)
-		{
-			deltaRbW = jet_lv.DeltaR(Wlv);
-			bIndex = ijet;
-		}
-	}
-	
-	// Form a leptonic top candidate if the b is close enough
-	if(isLeptonic == 1)
-	{
-		if(deltaRbW > 0.8) {bIndex = ind_MinMlj;} // use a close b unless it doesn't exist
-		TLorentzVector bottom_lv;
-		bottom_lv.SetPtEtaPhiM(jet_pt.at(bIndex),jet_eta.at(bIndex),jet_phi.at(bIndex),jet_mass.at(bIndex));
-		top_lv = bottom_lv + Wlv;
-		t_mass = top_lv.M();
-		t_pt = top_lv.Pt();
-		t_eta = top_lv.Eta();
-		t_phi = top_lv.Phi();
-		t_dRWb = bottom_lv.DeltaR(Wlv);
-	}
-	else
-	{
-		t_pt = 9999;
-		t_eta = 9;
-		t_phi = 9;
-		t_mass = -999;
-	}
-	RVec<float> t_FiveVec = {t_pt,t_eta,t_phi,t_mass,t_dRWb};
-	return t_FiveVec;
+  float t_mass = -999;
+  float t_pt = -999;
+  float t_eta = -999;
+  float t_phi = -999;
+  float t_dRWb = -999;
+  float tSS_mass = -999;
+  float tSS_pt = -999;
+  float tSS_eta = -999;
+  float tSS_phi = -999;
+  float tSS_dRWb = -999;
+  float minDR_Wb = 999;
+  int bIndex = 999;
+  TLorentzVector bottom_lv, top_lv;
+
+  // Form a leptonic top candidate if the b is close enough
+  if(isLeptonic == 1){
+    RVec<float> Bpts = jet_pt[isB == 1];
+    RVec<float> Betas = jet_eta[isB == 1];
+    RVec<float> Bphis = jet_phi[isB == 1];
+    RVec<float> Bmass = jet_mass[isB == 1];
+    if(Sum(isB) > 0){
+      minDR_Wb = Min(DeltaR_VecAndFloat(Betas, Bphis, Wlv.Eta(), Wlv.Phi()));  
+      bIndex = ArgMin(DeltaR_VecAndFloat(Betas, Bphis, Wlv.Eta(), Wlv.Phi()));
+    }
+    if(minDR_Wb <= 0.8) bottom_lv.SetPtEtaPhiM(Bpts.at(bIndex),Betas.at(bIndex),Bphis.at(bIndex),Bmass.at(bIndex));
+    else bottom_lv.SetPtEtaPhiM(jet_pt.at(ind_MinMlj),jet_eta.at(ind_MinMlj),jet_phi.at(ind_MinMlj),jet_mass.at(ind_MinMlj));      
+    top_lv = bottom_lv + Wlv;
+    t_mass = top_lv.M();
+    t_pt = top_lv.Pt();
+    t_eta = top_lv.Eta();
+    t_phi = top_lv.Phi();
+    t_dRWb = bottom_lv.DeltaR(Wlv);
+  }
+
+  // BTagging Method: Now we check whether there are any same side b-tagged jets
+  if (NSSB > 0) {
+    float SSBpt = SSpt[isSSb == 1].at(0);
+    float SSBeta = SSeta[isSSb == 1].at(0);
+    float SSBphi = SSphi[isSSb == 1].at(0);
+    float SSBmass = SSmass[isSSb == 1].at(0);
+    bottom_lv.SetPtEtaPhiM(SSBpt, SSBeta, SSBphi, SSBmass);
+    top_lv = bottom_lv + Wlv;
+    tSS_mass = top_lv.M();
+    tSS_pt = top_lv.Pt();
+    tSS_eta = top_lv.Eta();
+    tSS_phi = top_lv.Phi();
+    tSS_dRWb = bottom_lv.DeltaR(Wlv);
+  }
+
+  RVec<float> t_FiveVec = {t_pt,t_eta,t_phi,t_mass,t_dRWb,tSS_pt,tSS_eta,tSS_phi,tSS_mass,tSS_dRWb};
+  return t_FiveVec;
 };
 
 // ----------------------------------------------------
