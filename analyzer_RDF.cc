@@ -1,3 +1,4 @@
+
 // --------------------------------------------------------------------------------------- //
 // Implimentation of RDataFrame in C++.					                   //
 // Comments on creating a singly produced VLQ search			                   //
@@ -48,7 +49,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   cout << "Sample in cc: " << sample << endl;
   cout << "Year in cc: " << year << endl;
   cout << "isMC? " << isMC << ", jesvar = " << jesvar << endl;
-  if(!isMC) cout << "Data era = " << era << endl;
+  if(!isMC) cout << "Data era = " << era << ", for jec " << jecera << endl;
 
   // -------------------------------------------------------
   //               Golden JSON
@@ -92,6 +93,10 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   std::vector<float> elhlt_pts = {50,60,70,80,100,200,300,99999}; // from top charge asym paper, EOY
   std::vector<float> elhlt_etas = {0,0.8,1.442,1.566,2.0,2.5};
   float muonisosfunc = 0.002;
+
+  // DeepJet Loose efficiencies
+  std::vector<float> btagpts = this->btagpts;
+  std::vector<std::vector<float>> btageffs = this->btageffs;
   
   // -------------------------------------------------------
   //               correctionLib corrections
@@ -118,19 +123,21 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   auto muonidcorr = muoncorrset->at("NUM_MediumID_DEN_TrackerMuons"); std::cout << "\t loaded muon id" << std::endl;
   auto muonhltcorr = muoncorrset->at("NUM_Mu50_or_"+mutrig+"_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose"); std::cout << "\t loaded muon trig" << std::endl; // REDO ME 
   auto btagcorr = btagcorrset->at("deepJet_shape"); std::cout << "\t loaded btags" << std::endl;
+  auto btagwpbccorr = btagcorrset->at("deepJet_comb"); std::cout << "\t loaded btags" << std::endl;
+  auto btagwplcorr = btagcorrset->at("deepJet_incl"); std::cout << "\t loaded btags" << std::endl;
   auto jetvetocorr = jetvetocorrset->at("Summer19UL"+yr+"_V1"); std::cout << "\t loaded jet veto" << std::endl;
 
   auto ak4corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/jet_jerc.json"); 
   auto ak8corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/fatJet_jerc.json"); 
   auto ak4corr = ak4corrset->compound().at("Summer19"+jecyr+"_"+jecver+"_MC_L1L2L3Res_AK4PFchs"); std::cout << "\t loaded jerc MC" << std::endl;
   auto ak4corrL1 = ak4corrset->at("Summer19"+jecyr+"_"+jecver+"_MC_L1FastJet_AK4PFchs"); std::cout << "\t loaded jerc L1" << std::endl;
-  if(!isMC){ ak4corr = ak4corrset->compound().at("Summer19"+jecyr+"_Run"+era+"_"+jecver+"_DATA_L1L2L3Res_AK4PFchs"); std::cout << "\t loaded jerc data" << std::endl;}
+  if(!isMC){ ak4corr = ak4corrset->compound().at("Summer19"+jecyr+"_Run"+jecera+"_"+jecver+"_DATA_L1L2L3Res_AK4PFchs"); std::cout << "\t loaded jerc data" << std::endl;}
   auto ak4corrUnc = ak4corrset->at("Summer19"+jecyr+"_"+jecver+"_MC_Total_AK4PFchs"); std::cout << "\t loaded jec unc" << std::endl;
 
   auto ak4ptres = ak4corrset->at(jeryr+"_MC_PtResolution_AK4PFchs"); std::cout << "\t loaded pt res" << std::endl;
   auto ak4jer = ak4corrset->at(jeryr+"_MC_ScaleFactor_AK4PFchs"); std::cout << "\t loaded jer" << std::endl;
   auto ak8corr = ak8corrset->compound().at("Summer19"+jecyr+"_"+jecver+"_MC_L1L2L3Res_AK8PFPuppi"); std::cout << "\t loaded fat jerc MC" << std::endl;
-  if(!isMC){ ak8corr = ak8corrset->compound().at("Summer19"+jecyr+"_Run"+era+"_"+jecver+"_DATA_L1L2L3Res_AK8PFPuppi"); std::cout << "\t loaded fat jerc data" << std::endl;}
+  if(!isMC){ ak8corr = ak8corrset->compound().at("Summer19"+jecyr+"_Run"+jecera+"_"+jecver+"_DATA_L1L2L3Res_AK8PFPuppi"); std::cout << "\t loaded fat jerc data" << std::endl;}
   auto ak8corrUnc = ak8corrset->at("Summer19"+jecyr+"_"+jecver+"_MC_Total_AK8PFPuppi"); std::cout << "\t loaded fat jec unc" << std::endl;
   
   auto pufunc = [pileupcorr](const float &numTrueInt){
@@ -171,7 +178,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
       iso = {elecisosfs[ptbin][etabin], elecisosfunc};      
     }else{
       int ptbin = (std::upper_bound(muiso_pts.begin(), muiso_pts.end(), pt) - muiso_pts.begin())-1;
-      int etabin = (std::upper_bound(muiso_etas.begin(), muiso_etas.end(), eta) - muiso_etas.begin())-1;
+      int etabin = (std::upper_bound(muiso_etas.begin(), muiso_etas.end(), abs(eta)) - muiso_etas.begin())-1;
       iso = {muonisosfs[ptbin][etabin], muonisosfunc};      
     }
     return iso;
@@ -180,7 +187,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     RVec<double> hlt;
     if(isEl > 0){
       int ptbin = (std::upper_bound(elhlt_pts.begin(), elhlt_pts.end(), pt) - elhlt_pts.begin())-1;
-      int etabin = (std::upper_bound(elhlt_etas.begin(), elhlt_etas.end(), eta) - elhlt_etas.begin())-1;
+      int etabin = (std::upper_bound(elhlt_etas.begin(), elhlt_etas.end(), abs(eta)) - elhlt_etas.begin())-1;
       hlt = {elechltsfs[ptbin][etabin], elechltuncs[ptbin][etabin]};      
     }else{
       hlt = {muonhltcorr->evaluate({yrstr+"_UL",abs(eta),pt,"sf"}), 
@@ -203,9 +210,17 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   std::string nominal = "central";
   if(jesvar == "JECup") nominal = "up_jes";
   else if (jesvar == "JECdn") nominal = "down_jes";
-  auto btagshapefunc = [btagcorr,nominal](const RVec<float> &pt, const RVec<float> &eta, const RVec<float> &disc, const RVec<int> &flav){
-    RVec<float> weights(17, 1.0); // collect product of SFs over jets
+  auto btagshapefunc = [btagcorr,btagwpbccorr,btagwplcorr,btagpts,btageffs,nominal,deepjetL](const RVec<float> &pt, const RVec<float> &eta, const RVec<float> &disc, const RVec<int> &flav){
+    RVec<float> weights(26, 1.0); // collect product of SFs over jets
     for(unsigned int ijet = 0; ijet < eta.size(); ijet++){
+      int ptbin = (std::upper_bound(btagpts.begin(), btagpts.end(), pt.at(ijet)) - btagpts.begin())-1;
+      correction::Correction::Ref wpcorr;
+      float eff;
+      std::vector<int> shift = {0,4};
+      if(flav.at(ijet) < 4){wpcorr = btagwplcorr; eff = btageffs[ptbin][2]; shift = {4,0};}
+      else if(flav.at(ijet) == 4){wpcorr = btagwpbccorr; eff = btageffs[ptbin][1];}
+      else{wpcorr = btagwpbccorr; eff = btageffs[ptbin][0];}
+
       if(flav.at(ijet) != 4){
 	weights[0] *= btagcorr->evaluate({nominal, flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[1] *= btagcorr->evaluate({"up_hf", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
@@ -220,13 +235,34 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
 	weights[10] *= btagcorr->evaluate({"down_lfstats1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[11] *= btagcorr->evaluate({"up_lfstats2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[12] *= btagcorr->evaluate({"down_lfstats2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
-      }
-      else{
+      }else{
 	weights[0] *= btagcorr->evaluate({"central", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[13] *= btagcorr->evaluate({"up_cferr1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[14] *= btagcorr->evaluate({"down_cferr1", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[15] *= btagcorr->evaluate({"up_cferr2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
 	weights[16] *= btagcorr->evaluate({"down_cferr2", flav.at(ijet), abs(eta.at(ijet)), pt.at(ijet), disc.at(ijet)});
+      }
+
+      if(disc.at(ijet) > deepjetL){
+	weights[17] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[18+shift[0]] *= wpcorr->evaluate({"up_correlated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}); 
+	weights[19+shift[0]] *= wpcorr->evaluate({"down_correlated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[20+shift[0]] *= wpcorr->evaluate({"up_uncorrelated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[21+shift[0]] *= wpcorr->evaluate({"down_uncorrelated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[18+shift[1]] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[19+shift[1]] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[20+shift[1]] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[21+shift[1]] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+      }else{
+	weights[17] *= (1.0-eff*wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[18+shift[0]] *= (1.0-eff*wpcorr->evaluate({"up_correlated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[19+shift[0]] *= (1.0-eff*wpcorr->evaluate({"down_correlated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[20+shift[0]] *= (1.0-eff*wpcorr->evaluate({"up_uncorrelated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[21+shift[0]] *= (1.0-eff*wpcorr->evaluate({"down_uncorrelated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[18+shift[1]] *= (1.0-eff*wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[19+shift[1]] *= (1.0-eff*wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[20+shift[1]] *= (1.0-eff*wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
+	weights[21+shift[1]] *= (1.0-eff*wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}))/(1.0-eff);
       }
     }
     return weights;      
@@ -449,6 +485,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   string eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon200";
   if(year == "2017" && era == "B"){ tkmutrig = ""; eltrig = "HLT_Ele35_WPTight_Gsf || HLT_Photon200";}
   if(year == "2016" or year == "2016APV"){ tkmutrig = " || HLT_TkMu50"; eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon175";}
+  if(year == "2016APV" and (era == "A" || era == "B")){ tkmutrig = ""; eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon175";}
   auto LepSelect = LepDefs.Define("isMu", Form("(nMuon>0) && (HLT_Mu50%s) && (nSignalIsoMu==1) && (nVetoIsoLep==0) && (nElectron == 0 || nSignalIsoEl == 0)",tkmutrig.c_str()))
     .Define("isEl", Form("(nElectron>0) && (%s) && (nSignalIsoEl==1) && (nVetoIsoLep==0) && (nMuon == 0 || nSignalIsoMu == 0)",eltrig.c_str()))
     .Filter("isMu || isEl", "Event is either muon or electron");
@@ -644,7 +681,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("W_eta", "W_lv.Eta()")
     .Define("W_phi", "W_lv.Phi()")
     .Define("W_mass", "W_lv.M()")
-    .Define("W_MT", "sqrt(2*lepton_pt*MET_pt*(1-cos(lepton_phi - MET_phi)))")
+    .Define("W_MT", "sqrt(2*lepton_pt*corrMET_pt*(1-cos(lepton_phi - corrMET_phi)))")
     .Define("minMlj_output", "minM_lep_jet_calc(gcJet_pt, gcJet_eta, gcJet_phi, gcJet_mass, lepton_lv)")
     .Define("DR_W_lep", "W_lv.DeltaR(lepton_lv)")
     .Define("minM_lep_Jet", "minMlj_output[0]")
@@ -678,6 +715,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   cout << "-------------------------------------------------" << endl
        << ">>> Saving " << sample << " Snapshot..." << endl;
   TString finalFile = "RDF_" + sample + "_" + year + "_" + testNum.Data() + ".root";
+  if(!isMC) finalFile = "RDF_" + sample + era + "_" + year + "_" + testNum.Data() + ".root";
   const char *stdfinalFile = finalFile;
   
   auto ColNames = Reconstruction.GetColumnNames();
@@ -687,7 +725,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     {
       TString colName = ColName;
       if(colName.Contains("P4") || colName.Contains("cleanJets") || colName.Contains("cleanFatJets") || colName.Contains("cleanMets") || colName.Contains("Dummy")) continue;
-      if(colName.Contains("LHE") && !colName.Contains("Weight") && colName != "LHE_HT" && colName != "LHE_Vpt") continue;
+      if(colName.Contains("LHE") && !colName.Contains("Weight") && colName != "LHE_HT" && colName != "LHE_Vpt" && colName != "gcHTCorr_WjetLHE") continue;
       if(colName.BeginsWith("Muon") && !colName.Contains("_tightId") && !colName.Contains("_isPF") && !colName.Contains("tunep") && !colName.Contains("genPartFlav")) continue;
       if(colName.BeginsWith("Electron") && !colName.Contains("genPartFlav")) continue;
       if(colName.BeginsWith("Jet") && !colName.Contains("rawFactor")) continue;
