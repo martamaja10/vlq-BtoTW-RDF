@@ -219,7 +219,7 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
   }
 
   if(WdaughterIDs.size() < 2){
-    std::cout << "Didn't find 2 W daughters!" << WdaughterIDs.size() << std::endl;
+    std::cout << "Didn't find 2 W daughters! " << WdaughterIDs.size() << std::endl;
     return W_gen_info;
   }
 
@@ -367,6 +367,7 @@ auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
       int id = GenPart_pdgId[j];
       if (abs(id) != 5 && abs(id) != 24)
       {
+	std::cout << "Weird top daughter: " << id << std::endl;
         continue;
       } // pick out daughter b, W
 
@@ -377,21 +378,22 @@ auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
       else
       {
         int jgen = j;
-        for (unsigned int k = j; k < nGenPart; k++)
+        for (unsigned int k = j; k < nGenPart; k++) // look later than this daughter in the list
         {
-          if (GenPart_pdgId[k] != id)
+          if (GenPart_pdgId[k] != id) // skip particles not identical to this W
           {
             continue;
           }
-          if (GenPart_genPartIdxMother[k] != jgen)
+          if (GenPart_genPartIdxMother[k] != jgen) // skip new W's whose mother is not this W
           {
             continue;
           }
-          jgen = k; // take the last copy of W
+          jgen = k; // found W -> W, update to the new W
         }
+	// now have the last W
 
         int n = 1;
-        for (unsigned int k = j; k < nGenPart; k++)
+        for (unsigned int k = j; k < nGenPart; k++) // look after final W in the list
         {
           if (GenPart_genPartIdxMother[k] != jgen)
           {
@@ -399,6 +401,7 @@ auto t_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
           } // pick out daughters of W
           if (abs(GenPart_pdgId[k]) > 17)
           {
+	    std::cout << "Weird W daughter: " << GenPart_pdgId[k] << std::endl;
             continue;
           }                              // to exclude 24->22,24
           t_daughter_idx[i * 3 + n] = k; // record the first copy of W daughter
@@ -435,7 +438,7 @@ auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
     bool exclude = false;
     for (unsigned int j = 0; j < t_bkg_idx.size(); j += 3)
     {
-      if (i == GenPart_genPartIdxMother[t_bkg_idx[j + 1]])
+      if (i == GenPart_genPartIdxMother[t_bkg_idx[j + 1]]) // if W index matches the top-W-daughter's mother, the W was from a t. Boost of t considered later
       {
         exclude = true;
         break;
@@ -463,6 +466,7 @@ auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
       } // pick out daughters of W
       if (abs(GenPart_pdgId[j]) > 17)
       {
+	std::cout << "Weird W daughter: " << GenPart_pdgId[j] << std::endl;
         continue;
       } // to exclude 24->22,24
 
@@ -567,7 +571,7 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
   
   //  RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets]; //done in the analyzer now for pt ordering
   
-  int ntD = t_bkg_idx.size();
+  int ntD = t_bkg_idx.size(); // really the daughters of t and W
   int nWD = W_bkg_idx.size();
   
   RVec<double> t_eta(ntD, -9);
@@ -581,17 +585,17 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
 	{
 	  int igen = t_bkg_idx[i];
 	  int id = GenPart_pdgId[igen];
-	  for (unsigned int j = igen; j < nGenPart; j++)
+	  for (unsigned int j = igen; j < nGenPart; j++) // look at genParts later in the list
 	    {
-	      if (GenPart_pdgId[j] != id)
+	      if (GenPart_pdgId[j] != id) // skip any that don't match this daughter
 		{
 		  continue;
 		}
-	      if (GenPart_genPartIdxMother[j] != igen)
+	      if (GenPart_genPartIdxMother[j] != igen) // skip any matches that point to a different mother
 		{
 		  continue;
 		}
-	      igen = j; // take the last copy of t daughter
+	      igen = j; // update to the copy, ultimately to the last copy
 	    }
 	  t_eta[i] = GenPart_eta[igen];
 	  t_phi[i] = GenPart_phi[igen];
@@ -641,6 +645,7 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
 		} // pos stands for hadronic t
 	      else
 		{
+		  //		  std::cout << "Check 661, t daughter is a lepton: " << GenPart_pdgId[t_bkg_idx[j * 3 + 1]] << std::endl;
 		  matched_GenPart[i] = -6;
 		  break;
 		} // neg stands for leptonic t
@@ -654,6 +659,7 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
 		}
 	      else
 		{
+		  //		  std::cout << "Check 661, W daughter is a lepton: " << GenPart_pdgId[t_bkg_idx[j * 3 + 1]] << std::endl;
 		  matched_GenPart[i] = -24;
 		  break;
 		}
@@ -664,20 +670,21 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
 	{
 	  continue;
 	}
-      for (unsigned int j = 0; j < W_bkg_idx.size() / 2; j++)
+      for (unsigned int j = 0; j < W_bkg_idx.size() / 2; j++) // check tops first, then W's on remaining -9s
 	{
 	  double dR_q1 = DeltaR(fatjet_eta, W_eta[j * 2], fatjet_phi, W_phi[j * 2]);
 	  double dR_q2 = DeltaR(fatjet_eta, W_eta[j * 2 + 1], fatjet_phi, W_phi[j * 2 + 1]);
 	  
 	  if (dR_q1 < 0.8 && dR_q2 < 0.8)
 	    {
-	      if (abs(GenPart_pdgId[j * 2]) < 6)
+	      if (abs(GenPart_pdgId[W_bkg_idx[j * 2]]) < 6)
 		{
 		  matched_GenPart[i] = 24;
 		  break;
 		}
 	      else
 		{
+		  //		  std::cout << "Check 686, W daughter is a lepton: " << GenPart_pdgId[W_bkg_idx[j * 2]] << std::endl;
 		  matched_GenPart[i] = -24;
 		  break;
 		}

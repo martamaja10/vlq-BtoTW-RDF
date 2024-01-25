@@ -50,6 +50,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   cout << "Year in cc: " << year << endl;
   cout << "isMC? " << isMC << ", jesvar = " << jesvar << endl;
   if(!isMC) cout << "Data era = " << era << ", for jec " << jecera << endl;
+  else cout << "MC extension tag (blank or ext) = " << era << endl;
 
   // -------------------------------------------------------
   //               Golden JSON
@@ -140,6 +141,20 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   if(!isMC){ ak8corr = ak8corrset->compound().at("Summer19"+jecyr+"_Run"+jecera+"_"+jecver+"_DATA_L1L2L3Res_AK8PFPuppi"); std::cout << "\t loaded fat jerc data" << std::endl;}
   auto ak8corrUnc = ak8corrset->at("Summer19"+jecyr+"_"+jecver+"_MC_Total_AK8PFPuppi"); std::cout << "\t loaded fat jec unc" << std::endl;
   
+  auto pnetWPs = [year](const RVec<float> &dnnT, const RVec<float> &dnnW){
+    if(year == "2016APV"){wpT = 0.490; wpW = 0.677;}
+    else if(year == "2016"){wpT = 0.495; wpW = 0.668;}
+    else if(year == "2017"){wpT = 0.581; wpW = 0.709;}
+    else{wpT = 0.580; wpW = 0.700;}
+    RVec<int> tag;
+    for(int i=0; i<dnnT.size(); i++){
+      if(dnnT[i] > wpT) tag.push_back(1);
+      else if(dnnW[i] > wpW) tag.push_back(2);
+      else tag.push_back(0);
+    }
+    return tag
+  };
+
   auto pufunc = [pileupcorr](const float &numTrueInt){
     RVec<double> pu = {pileupcorr->evaluate({numTrueInt, "nominal"}), pileupcorr->evaluate({numTrueInt, "up"}), pileupcorr->evaluate({numTrueInt, "down"})};
     return pu;
@@ -657,7 +672,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("gcOSFatJet_pNetT", "gcFatJet_pNetT[OS_gcFatJets == true]")
     .Define("gcOSFatJet_pNetW", "gcFatJet_pNetW[OS_gcFatJets == true]")
     .Define("gcFatJet_pNetTag", "maxFxn(gcFatJet_pNetJ,gcFatJet_pNetT,gcFatJet_pNetW)")
-    .Define("gcFatJet_pNetTag_alt", "JetDiscriminator(gcFatJet_pNetTvsQCD, gcFatJet_pNetWvsQCD)")
+    .Define("gcFatJet_pNetTag_alt", pnetWPs, {"gcFatJet_pNetTvsQCD", "gcFatJet_pNetWvsQCD"})
     .Define("gcOSFatJet_pNetTag", "gcFatJet_pNetTag[OS_gcFatJets==true]")
     .Define("gcOSFatJet_pNetTag_alt", "gcFatJet_pNetTag_alt[OS_gcFatJets==true]")
     .Define("gcFatJet_nJ", "Sum(gcFatJet_pNetTag == 0)")
@@ -699,14 +714,18 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("t_mass_SSb", "t_output[8]")
     .Define("DR_W_b_SSb", "t_output[9]")
     .Define("Bprime_output", "BPrime_reco_new(W_lv,NOS_gcJets_DeepFlavL,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcOSJet_DeepFlavL,gcOSFatJet_pt,gcOSFatJet_eta,gcOSFatJet_phi,gcOSFatJet_mass,gcOSFatJet_pNetTag,gcOSJet_pt,gcOSJet_eta,gcOSJet_phi,gcOSJet_mass,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")
+    .Define("Bprime_output_alt", "BPrime_reco_new(W_lv,NOS_gcJets_DeepFlavL,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcOSJet_DeepFlavL,gcOSFatJet_pt,gcOSFatJet_eta,gcOSFatJet_phi,gcOSFatJet_mass,gcOSFatJet_pNetTag_alt,gcOSJet_pt,gcOSJet_eta,gcOSJet_phi,gcOSJet_mass,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")
     .Define("Bprime_mass", "Bprime_output[0]")
+    .Define("Bprime_mass_alt", "Bprime_output_alt[0]")
     .Define("Bprime_pt", "Bprime_output[1]")
     .Define("Bprime_eta", "Bprime_output[2]")
     .Define("Bprime_phi", "Bprime_output[3]")
     .Define("Bprime_DR", "Bprime_output[4]")
     .Define("Bprime_ptbal", "Bprime_output[5]")
     .Define("Bprime_chi2", "Bprime_output[6]")
-    .Define("Bdecay_obs", "Bprime_output[7]");
+    .Define("Bprime_chi2_alt", "Bprime_output_alt[6]")
+    .Define("Bdecay_obs", "Bprime_output[7]")
+    .Define("Bdecay_obs_alt", "Bprime_output_alt[7]");
   
   // -------------------------------------------------
   // 		Save Snapshot to file
@@ -714,8 +733,8 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   
   cout << "-------------------------------------------------" << endl
        << ">>> Saving " << sample << " Snapshot..." << endl;
-  TString finalFile = "RDF_" + sample + "_" + year + "_" + testNum.Data() + ".root";
-  if(!isMC) finalFile = "RDF_" + sample + era + "_" + year + "_" + testNum.Data() + ".root";
+  //TString finalFile = "RDF_" + sample + "_" + year + "_" + testNum.Data() + ".root";
+  TString finalFile = "RDF_" + sample + era + "_" + year + "_" + testNum.Data() + ".root";
   const char *stdfinalFile = finalFile;
   
   auto ColNames = Reconstruction.GetColumnNames();

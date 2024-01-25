@@ -98,7 +98,7 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
     Bdecay_obs = 1;
     if(debug) std::cout << "Finished case 1" << std::endl;
   }
-  else if (wtag && SSbJet){
+  else if ((wtag || ttag) && SSbJet){
     if(debug) std::cout << "Building case 2" << std::endl;
     // Checking Case 2: requires highest-pt other side w-tagged AK8 (fat jet), requires a good same side b-tagged jet or min_M_lep_Jet < 173
     Wcand_lv = fatJet;

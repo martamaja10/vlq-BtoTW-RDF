@@ -139,7 +139,7 @@ rdf::rdf(string inputFileName, string testNum1, string testNum2, string yearIn) 
     string process = (((TObjString *)(tokens->At(7)))->String()).Data();
     era = runera.back();
     if(year == "2016APV" && era == "B" && process.find("ver1") != std::string::npos) era = "A";
-  }
+  } 
   delete tokens;
 
   jecera = era;
@@ -147,6 +147,12 @@ rdf::rdf(string inputFileName, string testNum1, string testNum2, string yearIn) 
   if(year == "2016APV" && !isMC){
     if(era == "A" or era == "B" or era == "C" or era == "D") jecera = "BCD";
     else jecera = "EF";
+  }
+
+  if(isMC){
+    if(sampleName.Contains("_ext1")) era = "ext1";
+    if(sampleName.Contains("_ext2")) era = "ext2";
+    if(sampleName.Contains("_ext3")) era = "ext3";
   }
 
   btagpts = {15.0, 20.0, 30.0, 50.0, 70.0, 100.0, 150.0, 200.0, 300.0, 400.0, 500.0, 600.0, 800.0, 1000.0, 1200.0, 99999.0};

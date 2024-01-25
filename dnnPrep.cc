@@ -21,17 +21,17 @@ ROOT::VecOps::RVec<int> maxFxn(ROOT::VecOps::RVec<float>& dnnJ, ROOT::VecOps::RV
 };
 
 // Commented fxn
-ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW){
-  int nJets = dnnT.size();
-  ROOT::VecOps::RVec<int> tag (nJets, -1);
+// ROOT::VecOps::RVec<int> JetDiscriminator(ROOT::VecOps::RVec<float>& dnnT, ROOT::VecOps::RVec<float>& dnnW){
+//   int nJets = dnnT.size();
+//   ROOT::VecOps::RVec<int> tag (nJets, -1);
   
-  for(int i=0; i<nJets; i++){
-    if(dnnT[i] > 0.58){tag[i] = 1;} // 1% bkg ala https://twiki.cern.ch/twiki/bin/view/CMS/ParticleNetSFs
-    else if(dnnW[i] > 0.70){tag[i] = 2;} // TOO TIGHT at 0.94 1%, reducing to the 0.70 5% bkgd
-    else{tag[i] = 0;}
-  }
-  return tag;
-};
+//   for(int i=0; i<nJets; i++){
+//     if(dnnT[i] > 0.58){tag[i] = 1;} // trying 0.5% to recover W tags, 1% bkg ala https://twiki.cern.ch/twiki/bin/view/CMS/ParticleNetSFs
+//     else if(dnnW[i] > 0.70){tag[i] = 2;} // TOO TIGHT at 0.94 1%, reducing to the 0.70 5% bkgd
+//     else{tag[i] = 0;}
+//   }
+//   return tag;
+// };
 
 // --------------------------------------------
 // 		 DR CALCULATOR
