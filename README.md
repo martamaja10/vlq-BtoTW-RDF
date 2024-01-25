@@ -22,12 +22,24 @@ Additonal files used for plotting both the output of the analysis files and the 
 
 In order to run the code, the user must have access to cmslpc-sl7.fnal.gov and the appropriate setup that comes with that (as described in [this tutorial](https://fnallpc.github.io/cms-das-pre-exercises/01-CMSDataAnalysisSchoolPreExerciseFirstSet/index.html)).
 
-Use CMSSW_11_0_0 as the version of a CMSSW release area.  This will ensure there are no version issues.  
+Use CMSSW_12_4_8 as the version of a CMSSW release area.  This will ensure there are no version issues.  
+
+Within the `src/` directory of CMSSW_12_4_8, install [correctionLib](https://cms-nanoaod.github.io/correctionlib/install.html). Julie did this by cloning the correctionLib github repository and compiling with cmake.
+
+Clone this repository into the `src/` folder, and copy or softlink the `correctionLib` files from cvmfs:
+```
+$ git clone https://github.com/jmhogan/vlq-BtoTW-RDF/
+$ cd vlq-BtoTW-RDF
+$ mkdir jsonpog-integration
+$ cp /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/...stuff... # or make symlinks
+```
 
 Once access is set up and the user has the github repository configured along with a working GRID certificate, the program should be runnable.
 
 To actually run the analysis, use the following command:
-`$ root -l -b -q runRDF.C\(\"testNum1\",\"testNum2\",\"inputfile"\,\"year"\)`
+```
+$ root -l -b -q runRDF.C\(\"testNum1\",\"testNum2\",\"inputfile"\,\"year"\)`
+```
 
 - `testNum1` = An integer that states the number of the first file that will be included in the job
 - `testNum2` = An integer that states the number of the last file that will be included in the job
@@ -38,11 +50,15 @@ It's important to note that every parenthesis and quotation must be escaped for 
 
 To run the analysis as a condor job, use the following command to first make a list of the root files.  
 
-`$ python2 runCondorJobs.py True False`
+```
+$ python2 runCondorJobs.py True False`
+```
 
 Once this command has completed, switch the True and False as shown below to submit a condor job for the sample specified within runCondorJobs.py.  The list of all samples and lists of combinations of samples can be found in samples.py.  Remember to change to the output directories to include your username and path.
 
-`$ python2 runCondorJobs.py False True`
+```
+$ python2 runCondorJobs.py False True`
+```
 
 After you have submitted the condor job, you can use the following command to to check their status, runtime, and location.
 
