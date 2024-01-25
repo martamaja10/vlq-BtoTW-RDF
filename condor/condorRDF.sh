@@ -64,4 +64,4 @@ do
   rm ${FILE}
 done
 
-echo "done"
+echo "fully done through copying"

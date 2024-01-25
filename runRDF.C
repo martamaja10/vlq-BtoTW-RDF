@@ -32,8 +32,10 @@ void runRDF(string testNum1, string testNum2, string inputFile, string year)
       cout << "\nRunning shift " << shifts[i] << endl;
 
       t.analyzer_RDF(testNum1,shifts[i]);
+
+      cout << "\nFinished shift " << shifts[i] << endl;
     }
   }
-
+  cout << "\nFinished all analyzing" << endl;
 
 };

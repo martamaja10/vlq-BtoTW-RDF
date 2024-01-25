@@ -119,11 +119,13 @@ QCDHT3002017UL      = sample("QCDHT3002017UL", "2017", "QCDHT3002017ULNanoList.t
 QCDHT3002018UL      = sample("QCDHT3002018UL", "2018", "QCDHT3002018ULNanoList.txt", "/QCD_HT300to500_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
 QCDHT5002016APVUL   = sample("QCDHT5002016APVUL", "2016APV", "QCDHT5002016APVULNanoList.txt", "/QCD_HT500to700_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 QCDHT5002016UL      = sample("QCDHT5002016UL", "2016", "QCDHT5002016ULNanoList.txt", "/QCD_HT500to700_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
+QCDHT5002017UL      = sample("QCDHT5002017UL", "2017", "QCDHT5002017ULNanoList.txt", "/QCD_HT500to700_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
 QCDHT5002018UL      = sample("QCDHT5002018UL", "2018", "QCDHT5002018ULNanoList.txt", "/QCD_HT500to700_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
 QCDHT7002016APVUL   = sample("QCDHT7002016APVUL", "2016APV", "QCDHT7002016APVULNanoList.txt", "/QCD_HT700to1000_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 QCDHT7002016UL      = sample("QCDHT7002016UL", "2016", "QCDHT7002016ULNanoList.txt", "/QCD_HT700to1000_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 QCDHT7002017UL      = sample("QCDHT7002017UL", "2017", "QCDHT7002017ULNanoList.txt", "/QCD_HT700to1000_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
 QCDHT7002018UL      = sample("QCDHT7002018UL", "2018", "QCDHT7002018ULNanoList.txt", "/QCD_HT700to1000_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM")
+SingleElecRun2016APVA = sample("SingleElecRun2016APVA", "2016APV", "SingleElecRun2016APVA2016APVULNanoList.txt", "/SingleElectron/Run2016B-ver1_HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleElecRun2016APVB = sample("SingleElecRun2016APVB", "2016APV", "SingleElecRun2016APVB2016APVULNanoList.txt", "/SingleElectron/Run2016B-ver2_HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleElecRun2016APVC = sample("SingleElecRun2016APVC", "2016APV", "SingleElecRun2016APVC2016APVULNanoList.txt", "/SingleElectron/Run2016C-HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleElecRun2016APVD = sample("SingleElecRun2016APVD", "2016APV", "SingleElecRun2016APVD2016APVULNanoList.txt", "/SingleElectron/Run2016D-HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
@@ -141,6 +143,7 @@ SingleElecRun2018A  = sample("SingleElecRun2018A", "2018", "SingleElecRun2018A20
 SingleElecRun2018B  = sample("SingleElecRun2018B", "2018", "SingleElecRun2018B2018ULNanoList.txt", "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
 SingleElecRun2018C  = sample("SingleElecRun2018C", "2018", "SingleElecRun2018C2018ULNanoList.txt", "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
 SingleElecRun2018D  = sample("SingleElecRun2018D", "2018", "SingleElecRun2018D2018ULNanoList.txt", "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
+SingleMuonRun2016APVA = sample("SingleMuonRun2016APVA", "2016APV", "SingleMuonRun2016APVA2016APVULNanoList.txt", "/SingleMuon/Run2016B-ver1_HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleMuonRun2016APVB = sample("SingleMuonRun2016APVB", "2016APV", "SingleMuonRun2016APVB2016APVULNanoList.txt", "/SingleMuon/Run2016B-ver2_HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleMuonRun2016APVC = sample("SingleMuonRun2016APVC", "2016APV", "SingleMuonRun2016APVC2016APVULNanoList.txt", "/SingleMuon/Run2016C-HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleMuonRun2016APVD = sample("SingleMuonRun2016APVD", "2016APV", "SingleMuonRun2016APVD2016APVULNanoList.txt", "/SingleMuon/Run2016D-HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
@@ -186,7 +189,7 @@ TTHnonB2016APVUL = sample("TTHnonB2016APVUL", "2016APV", "TTHnonB2016APVULNanoLi
 TTHnonB2016UL = sample("TTHnonB2016UL", "2016", "TTHnonB2016ULNanoList.txt", "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v2/NANOAODSIM")
 TTHnonB2017UL = sample("TTHnonB2017UL", "2017", "TTHnonB2017ULNanoList.txt", "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v2/NANOAODSIM")
 TTHnonB2018UL = sample("TTHnonB2018UL", "2018", "TTHnonB2018ULNanoList.txt", "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM")
-TTMT10002016APVUL = sample("TTMT10002016APVUL", "2016APV", "TTMT10002016APVULNanoList.txt", "/TT_Mtt-700to1000_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
+TTMT10002016APVUL = sample("TTMT10002016APVUL", "2016APV", "TTMT10002016APVULNanoList.txt", "/TT_Mtt-1000toInf_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 TTMT10002016UL = sample("TTMT10002016UL", "2016", "TTMT10002016ULNanoList.txt", "/TT_Mtt-1000toInf_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 TTMT10002017UL = sample("TTMT10002017UL", "2017", "TTMT10002017ULNanoList.txt", "/TT_Mtt-1000toInf_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v2/NANOAODSIM")
 TTMT10002018UL = sample("TTMT10002018UL", "2018", "TTMT10002018ULNanoList.txt", "/TT_Mtt-1000toInf_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
@@ -226,6 +229,7 @@ WJetsHT12002016APVUL = sample("WJetsHT12002016APVUL", "2016APV", "WJetsHT1200201
 WJetsHT12002016UL = sample("WJetsHT12002016UL", "2016", "WJetsHT12002016ULNanoList.txt", "/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 WJetsHT12002017UL = sample("WJetsHT12002017UL", "2017", "WJetsHT12002017ULNanoList.txt", "/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
 WJetsHT12002018UL = sample("WJetsHT12002018UL", "2018", "WJetsHT12002018ULNanoList.txt", "/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
+WJetsHT1200ext2018UL = sample("WJetsHT1200ext2018UL", "2018", "WJetsHT1200ext2018ULNanoList.txt", "/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1_ext1-v2/NANOAODSIM")
 WJetsHT2002016APVUL = sample("WJetsHT2002016APVUL", "2016APV", "WJetsHT2002016APVULNanoList.txt", "/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 WJetsHT2002016UL = sample("WJetsHT2002016UL", "2016", "WJetsHT2002016ULNanoList.txt", "/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 WJetsHT2002017UL = sample("WJetsHT2002017UL", "2017", "WJetsHT2002017ULNanoList.txt", "/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
@@ -238,14 +242,17 @@ WJetsHT4002016APVUL = sample("WJetsHT4002016APVUL", "2016APV", "WJetsHT4002016AP
 WJetsHT4002016UL = sample("WJetsHT4002016UL", "2016", "WJetsHT4002016ULNanoList.txt", "/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 WJetsHT4002017UL = sample("WJetsHT4002017UL", "2017", "WJetsHT4002017ULNanoList.txt", "/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
 WJetsHT4002018UL = sample("WJetsHT4002018UL", "2018", "WJetsHT4002018ULNanoList.txt", "/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
+WJetsHT400ext2018UL = sample("WJetsHT400ext2018UL", "2018", "WJetsHT400ext2018ULNanoList.txt", "/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1_ext1-v2/NANOAODSIM")
 WJetsHT6002016APVUL = sample("WJetsHT6002016APVUL", "2016APV", "WJetsHT6002016APVULNanoList.txt", "/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 WJetsHT6002016UL = sample("WJetsHT6002016UL", "2016", "WJetsHT6002016ULNanoList.txt", "/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 WJetsHT6002017UL = sample("WJetsHT6002017UL", "2017", "WJetsHT6002017ULNanoList.txt", "/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
 WJetsHT6002018UL = sample("WJetsHT6002018UL", "2018", "WJetsHT6002018ULNanoList.txt", "/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
+WJetsHT600ext2018UL = sample("WJetsHT600ext2018UL", "2018", "WJetsHT600ext2018ULNanoList.txt", "/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1_ext1-v2/NANOAODSIM")
 WJetsHT8002016APVUL = sample("WJetsHT8002016APVUL", "2016APV", "WJetsHT8002016APVULNanoList.txt", "/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 WJetsHT8002016UL = sample("WJetsHT8002016UL", "2016", "WJetsHT8002016ULNanoList.txt", "/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
-WJetsHT8002017UL = sample("WJetsHT8002017UL", "2017", "WJetsHT8002017ULNanoList.txt", "/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
+WJetsHT8002017UL = sample("WJetsHT8002017UL", "2017", "WJetsHT8002017ULNanoList.txt", "/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v3/NANOAODSIM")
 WJetsHT8002018UL = sample("WJetsHT8002018UL", "2018", "WJetsHT8002018ULNanoList.txt", "/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
+WJetsHT800ext2018UL = sample("WJetsHT800ext2018UL", "2018", "WJetsHT800ext2018ULNanoList.txt", "/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1_ext1-v2/NANOAODSIM")
 WW2016APVUL = sample("WW2016APVUL", "2016APV", "WW2016APVULNanoList.txt", "/WW_TuneCP5_13TeV-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 WW2016UL = sample("WW2016UL", "2016", "WW2016ULNanoList.txt", "/WW_TuneCP5_13TeV-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 WW2017UL = sample("WW2017UL", "2017", "WW2017ULNanoList.txt", "/WW_TuneCP5_13TeV-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
@@ -258,6 +265,43 @@ ZZ2016APVUL = sample("ZZ2016APVUL", "2016APV", "ZZ2016APVULNanoList.txt", "/ZZ_T
 ZZ2016UL = sample("ZZ2016UL", "2016", "ZZ2016ULNanoList.txt", "/ZZ_TuneCP5_13TeV-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 ZZ2017UL = sample("ZZ2017UL", "2017", "ZZ2017ULNanoList.txt", "/ZZ_TuneCP5_13TeV-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
 ZZ2018UL = sample("ZZ2018UL", "2018", "ZZ2018ULNanoList.txt", "/ZZ_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")
+
+samples_data = {
+    "SingleElecRun2016APVB":SingleElecRun2016APVB,
+    "SingleElecRun2016APVC":SingleElecRun2016APVC,
+    "SingleElecRun2016APVD":SingleElecRun2016APVD,
+    "SingleElecRun2016APVE":SingleElecRun2016APVE,
+    "SingleElecRun2016APVF":SingleElecRun2016APVF,
+    "SingleElecRun2016F":SingleElecRun2016F,
+    "SingleElecRun2016G":SingleElecRun2016G,
+    "SingleElecRun2016H":SingleElecRun2016H,
+    "SingleElecRun2017B":SingleElecRun2017B,
+    "SingleElecRun2017C":SingleElecRun2017C,
+    "SingleElecRun2017D":SingleElecRun2017D,
+    "SingleElecRun2017E":SingleElecRun2017E,
+    "SingleElecRun2017F":SingleElecRun2017F,
+    "SingleElecRun2018A":SingleElecRun2018A,
+    "SingleElecRun2018B":SingleElecRun2018B,
+    "SingleElecRun2018C":SingleElecRun2018C,
+    "SingleElecRun2018D":SingleElecRun2018D,
+    "SingleMuonRun2016APVB":SingleMuonRun2016APVB,
+    "SingleMuonRun2016APVC":SingleMuonRun2016APVC,
+    "SingleMuonRun2016APVD":SingleMuonRun2016APVD,
+    "SingleMuonRun2016APVE":SingleMuonRun2016APVE,
+    "SingleMuonRun2016APVF":SingleMuonRun2016APVF,
+    "SingleMuonRun2016F":SingleMuonRun2016F,
+    "SingleMuonRun2016G":SingleMuonRun2016G,
+    "SingleMuonRun2016H":SingleMuonRun2016H,
+    "SingleMuonRun2017B":SingleMuonRun2017B,
+    "SingleMuonRun2017C":SingleMuonRun2017C,
+    "SingleMuonRun2017D":SingleMuonRun2017D,
+    "SingleMuonRun2017E":SingleMuonRun2017E,
+    "SingleMuonRun2017F":SingleMuonRun2017F,
+    "SingleMuonRun2018A":SingleMuonRun2018A,
+    "SingleMuonRun2018B":SingleMuonRun2018B,
+    "SingleMuonRun2018C":SingleMuonRun2018C,
+    "SingleMuonRun2018D":SingleMuonRun2018D,
+}
 
 samples={
     "Bprime_M1000_2016APVUL":Bprime_M1000_2016APVUL,
@@ -367,45 +411,46 @@ samples={
     "QCDHT3002018UL":QCDHT3002018UL,
     "QCDHT5002016APVUL":QCDHT5002016APVUL,
     "QCDHT5002016UL":QCDHT5002016UL,
+    "QCDHT5002017UL":QCDHT5002017UL,
     "QCDHT5002018UL":QCDHT5002018UL,
     "QCDHT7002016APVUL":QCDHT7002016APVUL,
     "QCDHT7002016UL":QCDHT7002016UL,
     "QCDHT7002017UL":QCDHT7002017UL,
     "QCDHT7002018UL":QCDHT7002018UL,
-    "SingleElecRun2016APVB":SingleElecRun2016APVB,
-    "SingleElecRun2016APVC":SingleElecRun2016APVC,
-    "SingleElecRun2016APVD":SingleElecRun2016APVD,
-    "SingleElecRun2016APVE":SingleElecRun2016APVE,
-    "SingleElecRun2016APVF":SingleElecRun2016APVF,
-    "SingleElecRun2016F":SingleElecRun2016F,
-    "SingleElecRun2016G":SingleElecRun2016G,
-    "SingleElecRun2016H":SingleElecRun2016H,
-    "SingleElecRun2017B":SingleElecRun2017B,
-    "SingleElecRun2017C":SingleElecRun2017C,
-    "SingleElecRun2017D":SingleElecRun2017D,
-    "SingleElecRun2017E":SingleElecRun2017E,
-    "SingleElecRun2017F":SingleElecRun2017F,
-    "SingleElecRun2018A":SingleElecRun2018A,
-    "SingleElecRun2018B":SingleElecRun2018B,
-    "SingleElecRun2018C":SingleElecRun2018C,
-    "SingleElecRun2018D":SingleElecRun2018D,
-    "SingleMuonRun2016APVB":SingleMuonRun2016APVB,
-    "SingleMuonRun2016APVC":SingleMuonRun2016APVC,
-    "SingleMuonRun2016APVD":SingleMuonRun2016APVD,
-    "SingleMuonRun2016APVE":SingleMuonRun2016APVE,
-    "SingleMuonRun2016APVF":SingleMuonRun2016APVF,
-    "SingleMuonRun2016F":SingleMuonRun2016F,
-    "SingleMuonRun2016G":SingleMuonRun2016G,
-    "SingleMuonRun2016H":SingleMuonRun2016H,
-    "SingleMuonRun2017B":SingleMuonRun2017B,
-    "SingleMuonRun2017C":SingleMuonRun2017C,
-    "SingleMuonRun2017D":SingleMuonRun2017D,
-    "SingleMuonRun2017E":SingleMuonRun2017E,
-    "SingleMuonRun2017F":SingleMuonRun2017F,
-    "SingleMuonRun2018A":SingleMuonRun2018A,
-    "SingleMuonRun2018B":SingleMuonRun2018B,
-    "SingleMuonRun2018C":SingleMuonRun2018C,
-    "SingleMuonRun2018D":SingleMuonRun2018D,
+    # "SingleElecRun2016APVB":SingleElecRun2016APVB,
+    # "SingleElecRun2016APVC":SingleElecRun2016APVC,
+    # "SingleElecRun2016APVD":SingleElecRun2016APVD,
+    # "SingleElecRun2016APVE":SingleElecRun2016APVE,
+    # "SingleElecRun2016APVF":SingleElecRun2016APVF,
+    # "SingleElecRun2016F":SingleElecRun2016F,
+    # "SingleElecRun2016G":SingleElecRun2016G,
+    # "SingleElecRun2016H":SingleElecRun2016H,
+    # "SingleElecRun2017B":SingleElecRun2017B,
+    # "SingleElecRun2017C":SingleElecRun2017C,
+    # "SingleElecRun2017D":SingleElecRun2017D,
+    # "SingleElecRun2017E":SingleElecRun2017E,
+    # "SingleElecRun2017F":SingleElecRun2017F,
+    # "SingleElecRun2018A":SingleElecRun2018A,
+    # "SingleElecRun2018B":SingleElecRun2018B,
+    # "SingleElecRun2018C":SingleElecRun2018C,
+    # "SingleElecRun2018D":SingleElecRun2018D,
+    # "SingleMuonRun2016APVB":SingleMuonRun2016APVB,
+    # "SingleMuonRun2016APVC":SingleMuonRun2016APVC,
+    # "SingleMuonRun2016APVD":SingleMuonRun2016APVD,
+    # "SingleMuonRun2016APVE":SingleMuonRun2016APVE,
+    # "SingleMuonRun2016APVF":SingleMuonRun2016APVF,
+    # "SingleMuonRun2016F":SingleMuonRun2016F,
+    # "SingleMuonRun2016G":SingleMuonRun2016G,
+    # "SingleMuonRun2016H":SingleMuonRun2016H,
+    # "SingleMuonRun2017B":SingleMuonRun2017B,
+    # "SingleMuonRun2017C":SingleMuonRun2017C,
+    # "SingleMuonRun2017D":SingleMuonRun2017D,
+    # "SingleMuonRun2017E":SingleMuonRun2017E,
+    # "SingleMuonRun2017F":SingleMuonRun2017F,
+    # "SingleMuonRun2018A":SingleMuonRun2018A,
+    # "SingleMuonRun2018B":SingleMuonRun2018B,
+    # "SingleMuonRun2018C":SingleMuonRun2018C,
+    # "SingleMuonRun2018D":SingleMuonRun2018D,
     "STs2016APVUL":STs2016APVUL,
     "STs2016UL":STs2016UL,
     "STs2017UL":STs2017UL,
@@ -474,6 +519,7 @@ samples={
     "WJetsHT12002016UL":WJetsHT12002016UL,
     "WJetsHT12002017UL":WJetsHT12002017UL,
     "WJetsHT12002018UL":WJetsHT12002018UL,
+    "WJetsHT1200ext2018UL":WJetsHT1200ext2018UL,
     "WJetsHT2002016APVUL":WJetsHT2002016APVUL,
     "WJetsHT2002016UL":WJetsHT2002016UL,
     "WJetsHT2002017UL":WJetsHT2002017UL,
@@ -486,14 +532,17 @@ samples={
     "WJetsHT4002016UL":WJetsHT4002016UL,
     "WJetsHT4002017UL":WJetsHT4002017UL,
     "WJetsHT4002018UL":WJetsHT4002018UL,
+    "WJetsHT400ext2018UL":WJetsHT400ext2018UL,
     "WJetsHT6002016APVUL":WJetsHT6002016APVUL,
     "WJetsHT6002016UL":WJetsHT6002016UL,
     "WJetsHT6002017UL":WJetsHT6002017UL,
     "WJetsHT6002018UL":WJetsHT6002018UL,
+    "WJetsHT600ext2018UL":WJetsHT600ext2018UL,
     "WJetsHT8002016APVUL":WJetsHT8002016APVUL,
     "WJetsHT8002016UL":WJetsHT8002016UL,
     "WJetsHT8002017UL":WJetsHT8002017UL,
     "WJetsHT8002018UL":WJetsHT8002018UL,
+    "WJetsHT800ext2018UL":WJetsHT800ext2018UL,
     "WW2016APVUL":WW2016APVUL,
     "WW2016UL":WW2016UL,
     "WW2017UL":WW2017UL,
@@ -655,6 +704,7 @@ samples_2017UL = {
     "QCDHT20002017UL":QCDHT20002017UL,
     "QCDHT2002017UL":QCDHT2002017UL,
     "QCDHT3002017UL":QCDHT3002017UL,
+    "QCDHT5002017UL":QCDHT5002017UL,
     "QCDHT7002017UL":QCDHT7002017UL,
     "SingleElecRun2017B":SingleElecRun2017B,
     "SingleElecRun2017C":SingleElecRun2017C,
@@ -759,18 +809,23 @@ samples_2018UL = {
 
 
 samples_BPrime = {
-    "Bprime_M800_2018UL":Bprime_M800_2018UL,
+    #"Bprime_M800_2018UL":Bprime_M800_2018UL,
     "Bprime_M1400_2018UL":Bprime_M1400_2018UL,
-    "Bprime_M2000_2018UL":Bprime_M2000_2018UL,
+    #"Bprime_M2000_2018UL":Bprime_M2000_2018UL,
 }
 
 samples_WJets = {
     "WJetsHT12002018UL":WJetsHT12002018UL,
-    "WJetsHT2002018UL":WJetsHT2002018UL,
-    "WJetsHT25002018UL":WJetsHT25002018UL,
+    "WJetsHT1200ext2018UL":WJetsHT1200ext2018UL,
     "WJetsHT4002018UL":WJetsHT4002018UL,
+    "WJetsHT400ext2018UL":WJetsHT400ext2018UL,
     "WJetsHT6002018UL":WJetsHT6002018UL,
-    "WJetsHT8002018UL":WJetsHT8002018UL,
+    "WJetsHT600ext2018UL":WJetsHT600ext2018UL,
+    "WJetsHT8002017UL":WJetsHT8002017UL,
+    "WJetsHT800ext2018UL":WJetsHT800ext2018UL,
 }
-
+samples_missing500 = {
+    "TTMT10002016APVUL":TTMT10002016APVUL,
+    "TTMT7002016APVUL":TTMT7002016APVUL,
+}
 
