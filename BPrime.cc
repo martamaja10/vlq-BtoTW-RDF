@@ -31,9 +31,11 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
   int HighestPt = ArgMax(gcOSFatJet_pt);
   bool ttag = false, wtag = false;
   if (gcOSFatJet_tag[HighestPt] == 1) {
-    ttag = true;
+    ttag = true; // jet passes only top
   } else if (gcOSFatJet_tag[HighestPt] == 2) {
-    wtag = true;
+    wtag = true; // jet passes only W
+  } else if (gcOSFatJet_tag[HighestPt] == 3) {
+    ttag = true; wtag = true; // jet passes both individually, so SSB will divide the selection
   }
   if(debug) std::cout << "Building OSFatJet from pt/eta/phi/mass = " << gcOSFatJet_pt[HighestPt] << ", " << gcOSFatJet_eta[HighestPt] << ", " << gcOSFatJet_phi[HighestPt] << ", " << gcOSFatJet_mass[HighestPt] << std::endl;
   fatJet.SetPtEtaPhiM(gcOSFatJet_pt[HighestPt], gcOSFatJet_eta[HighestPt], gcOSFatJet_phi[HighestPt], gcOSFatJet_mass[HighestPt]);
@@ -88,6 +90,12 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
     }
   }
   
+  // chi2 simulation values from B2G-17-018
+  float chi2_mtophad = 170.1; float chi2_sigtophad = 14.29;
+  float chi2_mtoplep = 172.6; float chi2_sigtoplep = 19.1;
+  float chi2_mWhad = 85.5; float chi2_sigWhad = 8.7;
+  float chi2_mWlep = 80.4; float chi2_sigWlep = 1e9; // to 0 out that term, large sigma 
+  float chi2_mtop, chi2_sigtop, chi2_mW, chi2_sigW;
   
   // --- 5 Cases --- This is where we split into the four different cases and make our canidates
   if (ttag && !SSbJet) {
@@ -96,9 +104,14 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
     Wcand_lv = W_lv;
     Tcand_lv = fatJet;
     Bdecay_obs = 1;
+    chi2_mtop = chi2_mtophad;
+    chi2_sigtop = chi2_sigtophad;
+    chi2_mW = chi2_mWlep;
+    chi2_sigW = chi2_sigWlep;
     if(debug) std::cout << "Finished case 1" << std::endl;
   }
-  else if ((wtag || ttag) && SSbJet){
+  //  else if ((wtag || ttag) && SSbJet){
+  else if (wtag && SSbJet){
     if(debug) std::cout << "Building case 2" << std::endl;
     // Checking Case 2: requires highest-pt other side w-tagged AK8 (fat jet), requires a good same side b-tagged jet or min_M_lep_Jet < 173
     Wcand_lv = fatJet;
@@ -108,6 +121,10 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
     //   Tcand_lv = top_lv;
     // }
     Bdecay_obs = 2;
+    chi2_mtop = chi2_mtoplep;
+    chi2_sigtop = chi2_sigtoplep;
+    chi2_mW = chi2_mWhad;
+    chi2_sigW = chi2_sigWhad;
     if(debug) std::cout << "Finished case 2" << std::endl;
   }
   
@@ -127,6 +144,10 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
       Wcand_lv = fatJet;
       Tcand_lv = W_lv + BjetSS_lv;
       Bdecay_obs = 3;
+      chi2_mtop = chi2_mtoplep;
+      chi2_sigtop = chi2_sigtoplep;
+      chi2_mW = chi2_mWhad;
+      chi2_sigW = chi2_sigWhad;
       if(debug) std::cout << "Finished case 3" << std::endl;
     } else {
       if(debug) std::cout << "Building case 4" << std::endl;
@@ -138,13 +159,17 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
       }
       Wcand_lv = W_lv;
       Bdecay_obs = 4;
+      chi2_mtop = chi2_mtophad;
+      chi2_sigtop = chi2_sigtophad;
+      chi2_mW = chi2_mWlep;
+      chi2_sigW = chi2_sigWlep;
       if(debug) std::cout << "Finished case 4" << std::endl;
     }
   }
   
   // Setting the value of Bdecay_true depending on inputs to this method if it is a BPrime sample
   // W_gen_pt > 200: 1, W_gen_pt <= 200: 2, t_gen_pt > 400: 3, t_gen_pt <= 400: 4
-
+  
   // Using the canidates from above, make a BPrime and store various attributes of it
   if(debug) std::cout << "Building Bprime" << std::endl;
   TLorentzVector Bprime_lv = Wcand_lv + Tcand_lv;
@@ -156,10 +181,13 @@ RVec<float> BPrime_reco_new(TLorentzVector W_lv, int NOSJets_DeepFlavM, int NSSJ
   float Bprime_DR = Wcand_lv.DeltaR(Tcand_lv);
   if(debug) std::cout << "Found DR W-t" << std::endl;
   float Bprime_ptbal = Wcand_lv.Pt() / Tcand_lv.Pt();
-  float Bprime_chi2 = pow(Tcand_lv.M() - 172.6, 2) / (19.1 * 19.1) + pow(Wcand_lv.M() - 85.5, 2) / (8.7 * 8.7) + pow(Bprime_DR - TMath::Pi(), 2) / (0.2 * 0.2) + pow(Bprime_ptbal - 1, 2) / (0.8 * 0.8); // leptonic t, hadronic W chi2 with values from 2016 B2G-17-018
+  float Bprime_chi2 = pow(Tcand_lv.M() - chi2_mtop, 2) / pow(chi2_sigtop,2) + pow(Wcand_lv.M() - chi2_mW, 2) / pow(chi2_sigW,2) + pow(Bprime_DR - TMath::Pi(), 2) / (0.2 * 0.2) + pow(1 - Bprime_ptbal, 2) / (0.8 * 0.8); 
+  float Bprime_chi2_discrete = 0.0;
+  if (Bprime_chi2 > 25 && Bprime_chi2 < 75) Bprime_chi2_discrete = 1.0;
+  else if (Bprime_chi2 > 75) Bprime_chi2_discrete = 2.0;
 
   // // Make a vector with the stored values and return it
-  RVec<float> BPrimeVec = {Bprime_mass, Bprime_pt, Bprime_eta, Bprime_phi, Bprime_DR, Bprime_ptbal, Bprime_chi2, Bdecay_obs};
+  RVec<float> BPrimeVec = {Bprime_mass, Bprime_pt, Bprime_eta, Bprime_phi, Bprime_DR, Bprime_ptbal, Bprime_chi2, Bdecay_obs, Bprime_chi2_discrete};
   return BPrimeVec;
 }
 
