@@ -141,8 +141,8 @@ SingleElecRun2017E  = sample("SingleElecRun2017E", "2017", "SingleElecRun2017E20
 SingleElecRun2017F  = sample("SingleElecRun2017F", "2017", "SingleElecRun2017F2017ULNanoList.txt", "/SingleElectron/Run2017F-UL2017_MiniAODv2_NanoAODv9-v1/NANOAOD")
 SingleElecRun2018A  = sample("SingleElecRun2018A", "2018", "SingleElecRun2018A2018ULNanoList.txt", "/EGamma/Run2018A-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
 SingleElecRun2018B  = sample("SingleElecRun2018B", "2018", "SingleElecRun2018B2018ULNanoList.txt", "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleElecRun2018C  = sample("SingleElecRun2018C", "2018", "SingleElecRun2018C2018ULNanoList.txt", "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleElecRun2018D  = sample("SingleElecRun2018D", "2018", "SingleElecRun2018D2018ULNanoList.txt", "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
+SingleElecRun2018C  = sample("SingleElecRun2018C", "2018", "SingleElecRun2018C2018ULNanoList.txt", "/EGamma/Run2018C-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
+SingleElecRun2018D  = sample("SingleElecRun2018D", "2018", "SingleElecRun2018D2018ULNanoList.txt", "/EGamma/Run2018D-UL2018_MiniAODv2_NanoAODv9-v3/NANOAOD")
 SingleMuonRun2016APVA = sample("SingleMuonRun2016APVA", "2016APV", "SingleMuonRun2016APVA2016APVULNanoList.txt", "/SingleMuon/Run2016B-ver1_HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleMuonRun2016APVB = sample("SingleMuonRun2016APVB", "2016APV", "SingleMuonRun2016APVB2016APVULNanoList.txt", "/SingleMuon/Run2016B-ver2_HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
 SingleMuonRun2016APVC = sample("SingleMuonRun2016APVC", "2016APV", "SingleMuonRun2016APVC2016APVULNanoList.txt", "/SingleMuon/Run2016C-HIPM_UL2016_MiniAODv2_NanoAODv9-v2/NANOAOD")
@@ -824,8 +824,11 @@ samples_WJets = {
     "WJetsHT8002017UL":WJetsHT8002017UL,
     "WJetsHT800ext2018UL":WJetsHT800ext2018UL,
 }
-samples_missing500 = {
-    "TTMT10002016APVUL":TTMT10002016APVUL,
-    "TTMT7002016APVUL":TTMT7002016APVUL,
+samples_redo = {
+    "SingleElecRun2018B":SingleElecRun2018B,
+    "SingleElecRun2018C":SingleElecRun2018C,
+    #"SingleElecRun2018D":SingleElecRun2018D,
+    #"TTMT10002016APVUL":TTMT10002016APVUL,
+    #"TTMT7002016APVUL":TTMT7002016APVUL,
 }
 
