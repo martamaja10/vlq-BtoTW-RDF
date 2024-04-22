@@ -28,8 +28,8 @@ if len(sys.argv) >= 4:
     textlist = prefix + "NanoList.txt"
     
 relbase = '/uscms/home/jmanagan/nobackup/BtoTW/CMSSW_12_4_8/'
-outDir='/store/user/jmanagan/BtoTW_Jan2024_pNetEffs/'
-condorDir='/uscms/home/jmanagan/nobackup/BtoTW/rdfjobs_Jan2024_pNetEffs/' # recommend this be outside git area!
+outDir='/store/user/jmanagan/BtoTW_Apr2024_pNetEffs_tWseparate/'
+condorDir='/uscms/home/jmanagan/nobackup/BtoTW/rdfjobs_Apr2024_pNetEffs_tWseparate/' # recommend this be outside git area!
 tarfile = '/uscms/home/jmanagan/nobackup/rdfjobs.tar' # outside the CMSSW
 
 runDir=os.getcwd()
@@ -85,6 +85,8 @@ if runanalyzer:
         prefix = v.prefix;
         textlist = "NanoList/" + v.textlist;
         year = v.year;
+
+        if 'TTWq2016APV' not in prefix: continue
 
         print('Submitting ' + prefix)
             

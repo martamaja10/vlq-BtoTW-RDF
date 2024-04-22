@@ -157,9 +157,10 @@ void rdf::analyzer_pnetEff(TString testNum, TString jesvar)
     else if(year == "2018"){wpT = 0.580; wpW = 0.700;}
     RVec<int> tag;
     for(int i=0; i<dnnT.size(); i++){
-      if(dnnT[i] > wpT) tag.push_back(1);
-      else if(dnnW[i] > wpW) tag.push_back(2);
-      else tag.push_back(0);
+      int tagval = 0;
+      if(dnnT[i] > wpT) tagval += 1;
+      if(dnnW[i] > wpW) tagval += 2;
+      tag.push_back(tagval);
     }
     return tag;
   };
@@ -348,29 +349,47 @@ void rdf::analyzer_pnetEff(TString testNum, TString jesvar)
   auto Efficiency = Taggers.Define("t_match","gcOSFatJet_pt[gcOSFatJet_genmatch == 6]")
     .Define("W_match","gcOSFatJet_pt[gcOSFatJet_genmatch == 24]")
     .Define("J_match","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) < 6]")
-    .Define("t_match_t_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 6 && gcOSFatJet_pNetTag_alt == 1]")
-    .Define("t_match_W_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 6 && gcOSFatJet_pNetTag_alt == 2]")
+    .Define("J_match","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) == 4 || abs(gcOSFatJet_genmatch) == 5]")
+    .Define("J_match","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) == 0]")
+    .Define("t_match_t_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 6 && (gcOSFatJet_pNetTag_alt == 1 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("t_match_W_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 6 && (gcOSFatJet_pNetTag_alt == 2 || gcOSFatJet_pNetTag_alt == 3)]")
     .Define("t_match_J_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 6 && gcOSFatJet_pNetTag_alt == 0]")
-    .Define("W_match_t_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 24 && gcOSFatJet_pNetTag_alt == 1]")
-    .Define("W_match_W_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 24 && gcOSFatJet_pNetTag_alt == 2]")
+    .Define("W_match_t_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 24 && (gcOSFatJet_pNetTag_alt == 1 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("W_match_W_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 24 && (gcOSFatJet_pNetTag_alt == 2 || gcOSFatJet_pNetTag_alt == 3)]")
     .Define("W_match_J_tag","gcOSFatJet_pt[gcOSFatJet_genmatch == 24 && gcOSFatJet_pNetTag_alt == 0]")
-    .Define("J_match_t_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) < 6 && gcOSFatJet_pNetTag_alt == 1]")
+    .Define("J_match_t_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) < 6 && (gcOSFatJet_pNetTag_alt == 1 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("J_match_W_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) < 6 && (gcOSFatJet_pNetTag_alt == 2 || gcOSFatJet_pNetTag_alt == 3)]")
     .Define("J_match_J_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) < 6 && gcOSFatJet_pNetTag_alt == 0]")
+    .Define("B_match_t_tag","gcOSFatJet_pt[(abs(gcOSFatJet_genmatch) == 4 || abs(gcOSFatJet_genmatch) == 5) && (gcOSFatJet_pNetTag_alt == 1 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("B_match_W_tag","gcOSFatJet_pt[(abs(gcOSFatJet_genmatch) == 4 || abs(gcOSFatJet_genmatch) == 5) && (gcOSFatJet_pNetTag_alt == 2 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("B_match_J_tag","gcOSFatJet_pt[(abs(gcOSFatJet_genmatch) == 4 || abs(gcOSFatJet_genmatch) == 5) && gcOSFatJet_pNetTag_alt == 0]")
+    .Define("L_match_t_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) == 0 && (gcOSFatJet_pNetTag_alt == 1 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("L_match_W_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) == 0 && (gcOSFatJet_pNetTag_alt == 2 || gcOSFatJet_pNetTag_alt == 3)]")
+    .Define("L_match_J_tag","gcOSFatJet_pt[abs(gcOSFatJet_genmatch) == 0 && gcOSFatJet_pNetTag_alt == 0]")
     .Define("weight","genWeight/abs(genWeight)");
 
   double ptbins[10] = {200,300,400,500,600,800,1000,1200,1500,2000};
 
   auto h01 = Efficiency.Histo1D({"PNEff_Dptbins_t",";Jet p_T (GeV);",9,ptbins},"t_match","weight");
   auto h02 = Efficiency.Histo1D({"PNEff_Dptbins_W",";Jet p_T (GeV);",9,ptbins},"W_match","weight");
-  auto h03 = Efficiency.Histo1D({"PNEff_Dptbins_J",";Jet p_T (GeV);",9,ptbins},"J_match","weight");
-  auto h04 = Efficiency.Histo1D({"PNEff_Nptbins_t_t",";Jet p_T (GeV);t efficiency",9,ptbins},"t_match_t_tag","weight");
-  auto h05 = Efficiency.Histo1D({"PNEff_Nptbins_t_W",";Jet p_T (GeV);t-as-W rate",9,ptbins},"t_match_W_tag","weight");
-  auto h06 = Efficiency.Histo1D({"PNEff_Nptbins_t_J",";Jet p_T (GeV);t-as-QCD rate",9,ptbins},"t_match_J_tag","weight");
-  auto h07 = Efficiency.Histo1D({"PNEff_Nptbins_W_t",";Jet p_T (GeV);W-as-t rate",9,ptbins},"W_match_t_tag","weight");
-  auto h08 = Efficiency.Histo1D({"PNEff_Nptbins_W_W",";Jet p_T (GeV);W efficiency",9,ptbins},"W_match_W_tag","weight");
-  auto h09 = Efficiency.Histo1D({"PNEff_Nptbins_W_J",";Jet p_T (GeV);W-as-QCD rate",9,ptbins},"W_match_J_tag","weight");
-  auto h10 = Efficiency.Histo1D({"PNEff_Nptbins_J_t",";Jet p_T (GeV);QCD-as-t rate",9,ptbins},"J_match_t_tag","weight");
-  auto h11 = Efficiency.Histo1D({"PNEff_Nptbins_J_J",";Jet p_T (GeV);QCD efficiency",9,ptbins},"J_match_J_tag","weight");
+  auto h04 = Efficiency.Histo1D({"PNEff_Dptbins_J",";Jet p_T (GeV);",9,ptbins},"J_match","weight");
+  auto h05 = Efficiency.Histo1D({"PNEff_Dptbins_B",";Jet p_T (GeV);",9,ptbins},"B_match","weight");
+  auto h06 = Efficiency.Histo1D({"PNEff_Dptbins_L",";Jet p_T (GeV);",9,ptbins},"L_match","weight");
+  auto h07 = Efficiency.Histo1D({"PNEff_Nptbins_t_t",";Jet p_T (GeV);t efficiency",9,ptbins},"t_match_t_tag","weight");
+  auto h08 = Efficiency.Histo1D({"PNEff_Nptbins_t_W",";Jet p_T (GeV);t-as-W rate",9,ptbins},"t_match_W_tag","weight");
+  auto h09 = Efficiency.Histo1D({"PNEff_Nptbins_t_J",";Jet p_T (GeV);t-as-QCD rate",9,ptbins},"t_match_J_tag","weight");
+  auto h10 = Efficiency.Histo1D({"PNEff_Nptbins_W_t",";Jet p_T (GeV);W-as-t rate",9,ptbins},"W_match_t_tag","weight");
+  auto h11 = Efficiency.Histo1D({"PNEff_Nptbins_W_W",";Jet p_T (GeV);W efficiency",9,ptbins},"W_match_W_tag","weight");
+  auto h12 = Efficiency.Histo1D({"PNEff_Nptbins_W_J",";Jet p_T (GeV);W-as-QCD rate",9,ptbins},"W_match_J_tag","weight");
+  auto h13 = Efficiency.Histo1D({"PNEff_Nptbins_J_t",";Jet p_T (GeV);QCD-as-t rate",9,ptbins},"J_match_t_tag","weight");
+  auto h14 = Efficiency.Histo1D({"PNEff_Nptbins_J_W",";Jet p_T (GeV);QCD-as-W rate",9,ptbins},"J_match_W_tag","weight");
+  auto h15 = Efficiency.Histo1D({"PNEff_Nptbins_J_J",";Jet p_T (GeV);QCD efficiency",9,ptbins},"J_match_J_tag","weight");
+  auto h16 = Efficiency.Histo1D({"PNEff_Nptbins_B_t",";Jet p_T (GeV);bc-as-t rate",9,ptbins},"B_match_t_tag","weight");
+  auto h17 = Efficiency.Histo1D({"PNEff_Nptbins_B_W",";Jet p_T (GeV);bc-as-W rate",9,ptbins},"B_match_W_tag","weight");
+  auto h18 = Efficiency.Histo1D({"PNEff_Nptbins_B_J",";Jet p_T (GeV);bc-as-J rate",9,ptbins},"B_match_J_tag","weight");
+  auto h19 = Efficiency.Histo1D({"PNEff_Nptbins_L_t",";Jet p_T (GeV);udsg-as-t rate",9,ptbins},"L_match_t_tag","weight");
+  auto h20 = Efficiency.Histo1D({"PNEff_Nptbins_L_W",";Jet p_T (GeV);udsg-as-W rate",9,ptbins},"L_match_W_tag","weight");
+  auto h21 = Efficiency.Histo1D({"PNEff_Nptbins_L_J",";Jet p_T (GeV);udsg-as-J rate",9,ptbins},"L_match_J_tag","weight");
   
   // -------------------------------------------------
   // 		Save histos to file
@@ -393,6 +412,16 @@ void rdf::analyzer_pnetEff(TString testNum, TString jesvar)
   h09->Write();
   h10->Write();
   h11->Write();
+  h12->Write();
+  h13->Write();
+  h14->Write();
+  h15->Write();
+  h16->Write();
+  h17->Write();
+  h18->Write();
+  h19->Write();
+  h20->Write();
+  h21->Write();
 
   time.Stop();
   time.Print();
