@@ -41,12 +41,13 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   TStopwatch time;
   time.Start();
   string sample = this->sample;
+  int samplebin = this->samplebin;
   string year = this->year;
   bool isMC = this->isMC;
 
   bool debug = false;
   
-  cout << "Sample in cc: " << sample << endl;
+  cout << "Sample in cc: " << sample << ", bin # " << samplebin << endl;
   cout << "Year in cc: " << year << endl;
   cout << "isMC? " << isMC << ", jesvar = " << jesvar << endl;
   if(!isMC) cout << "Data era = " << era << ", for jec " << jecera << endl;
@@ -98,6 +99,15 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   // DeepJet Loose efficiencies
   std::vector<float> btagpts = this->btagpts;
   std::vector<std::vector<float>> btageffs = this->btageffs;
+
+  // ParticleNet Top and W efficiencies
+  std::vector<float> pnetpts = this->pnetpts;
+  std::vector<std::vector<float>> pnet_t_t = this->pnet_t_t;
+  std::vector<std::vector<float>> pnet_t_W = this->pnet_t_W;
+  std::vector<std::vector<float>> pnet_W_t = this->pnet_W_t;
+  std::vector<std::vector<float>> pnet_W_W = this->pnet_W_W;
+  std::vector<std::vector<float>> pnet_J_t = this->pnet_J_t;
+  std::vector<std::vector<float>> pnet_J_W = this->pnet_J_W;
   
   // -------------------------------------------------------
   //               correctionLib corrections
@@ -117,6 +127,8 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   auto muoncorrset = CorrectionSet::from_file("jsonpog-integration/POG/MUO/"+yrstr+"_UL/muon_Z.json");
   auto btagcorrset = CorrectionSet::from_file("jsonpog-integration/POG/BTV/"+yrstr+"_UL/btagging.json");
   auto jetvetocorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/jetvetomaps.json");
+  auto jmarcorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/jmar.json");
+  auto metcorrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/met.json");
 
   auto pileupcorr = pileupcorrset->at("Collisions"+yr+"_UltraLegacy_goldenJSON"); std::cout << "\t loaded pileup" << std::endl;
   auto electroncorr = electroncorrset->at("UL-Electron-ID-SF"); std::cout << "\t loaded elec id" << std::endl;
@@ -127,6 +139,11 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   auto btagwpbccorr = btagcorrset->at("deepJet_comb"); std::cout << "\t loaded btags" << std::endl;
   auto btagwplcorr = btagcorrset->at("deepJet_incl"); std::cout << "\t loaded btags" << std::endl;
   auto jetvetocorr = jetvetocorrset->at("Summer19UL"+yr+"_V1"); std::cout << "\t loaded jet veto" << std::endl;
+  auto topcorr = jmarcorrset->at("ParticleNet_Top_Nominal"); std::cout << "\t loaded ParticleNet top" << std::endl;
+  auto Wcorr = jmarcorrset->at("ParticleNet_W_Nominal"); std::cout << "\t loaded ParticleNet W" << std::endl;
+  auto metptcorr = metcorrset->at("pt_metphicorr_pfmet_mc"); std::cout << "\t loaded met pt xy" << std::endl;
+  auto metphicorr = metcorrset->at("phi_metphicorr_pfmet_mc"); std::cout << "\t loaded met phi xy" << std::endl;
+  if(!isMC){metptcorr = metcorrset->at("pt_metphicorr_pfmet_data"); metphicorr = metcorrset->at("phi_metphicorr_pfmet_data");}
 
   auto ak4corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/jet_jerc.json"); 
   auto ak8corrset = CorrectionSet::from_file("jsonpog-integration/POG/JME/"+yrstr+"_UL/fatJet_jerc.json"); 
@@ -142,22 +159,32 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   auto ak8corrUnc = ak8corrset->at("Summer19"+jecyr+"_"+jecver+"_MC_Total_AK8PFPuppi"); std::cout << "\t loaded fat jec unc" << std::endl;
   
   auto pnetWPs = [year](const RVec<float> &dnnT, const RVec<float> &dnnW){
+    float wpT, wpW;
     if(year == "2016APV"){wpT = 0.490; wpW = 0.677;}
     else if(year == "2016"){wpT = 0.495; wpW = 0.668;}
     else if(year == "2017"){wpT = 0.581; wpW = 0.709;}
     else{wpT = 0.580; wpW = 0.700;}
     RVec<int> tag;
     for(int i=0; i<dnnT.size(); i++){
-      if(dnnT[i] > wpT) tag.push_back(1);
-      else if(dnnW[i] > wpW) tag.push_back(2);
-      else tag.push_back(0);
+      int tagval = 0; // will stay 0 if not t, W
+      if(dnnT[i] > wpT) tagval += 1; // 1 if only top, 3 if top or W
+      if(dnnW[i] > wpW) tagval += 2; // 2 if only W, 3 if top or W
+      tag.push_back(tagval);
     }
-    return tag
+    return tag;
   };
 
   auto pufunc = [pileupcorr](const float &numTrueInt){
     RVec<double> pu = {pileupcorr->evaluate({numTrueInt, "nominal"}), pileupcorr->evaluate({numTrueInt, "up"}), pileupcorr->evaluate({numTrueInt, "down"})};
     return pu;
+  };
+  auto metfunc = [metptcorr,metphicorr](const float &met, const float &phi, const int &npvs, const unsigned int &run){
+    float floatrun = run;
+    float floatnpvs = npvs;
+    float tmpmet = met; if(tmpmet > 6500) tmpmet = 6499;
+    RVec<float> corrmet = {static_cast<float>(metptcorr->evaluate({tmpmet, phi, floatnpvs, floatrun})),
+			   static_cast<float>(metphicorr->evaluate({tmpmet, phi, floatnpvs, floatrun}))};
+    return corrmet;
   };
   auto recofunc = [electroncorr,muoncorr,yrstr](const float &pt, const float &eta, const bool &isEl){
     RVec<double> reco;
@@ -259,7 +286,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
       }
 
       if(disc.at(ijet) > deepjetL){
-	weights[17] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
+	weights[17] *= wpcorr->evaluate({"central","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}); // seemed like P(Data)/P(MC) reduces to SF
 	weights[18+shift[0]] *= wpcorr->evaluate({"up_correlated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)}); 
 	weights[19+shift[0]] *= wpcorr->evaluate({"down_correlated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
 	weights[20+shift[0]] *= wpcorr->evaluate({"up_uncorrelated","L",flav.at(ijet),abs(eta.at(ijet)), pt.at(ijet)});
@@ -281,6 +308,41 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
       }
     }
     return weights;      
+  };
+
+  auto pnetfunc = [samplebin,pnetpts,pnet_t_t,pnet_W_t,pnet_J_t,pnet_t_W,pnet_W_W,pnet_J_W,topcorr,Wcorr](const RVec<float> &eta, const RVec<float> &pt, const RVec<int> &match){
+    // This is different from b-tagging. We don't want to actually apply the cut on tagged / untagged. Rather we want to use the
+    // efficiencies and SFs to divide a superset into tagged/untagged. So I believe we want to build the P(DATA) weight from Method 1a
+    // I don't believe we want to divide that by P(MC) -- imagining a "tagged" case we don't want SF*eff/eff = SF, but really SF*eff
+    // ParticleNet SFs exist for top jets and W jets. I don't believe there are "mistagging" SFs like in btagging.
+
+    int HighestPt = ArgMax(pt);
+    int ptbin = (std::upper_bound(pnetpts.begin(), pnetpts.end(), pt[HighestPt]) - pnetpts.begin())-1;
+    std::vector<float> topsf = {1.0,1.0,1.0};
+    std::vector<float> Wsf = {1.0,1.0,1.0};
+    RVec<float> case1, case2, case3, case4;
+    std::vector<std::vector<float> > tmppnetT;
+    std::vector<std::vector<float> > tmppnetW;
+    if(match[HighestPt] == 6){
+      tmppnetT = pnet_t_t; tmppnetW = pnet_t_W; 
+      if(pt[HighestPt] > 300 && pt[HighestPt] < 1200 && abs(eta[HighestPt]) < 2.4){
+	topsf = {static_cast<float>(topcorr->evaluate({eta[HighestPt], pt[HighestPt], "nom", "1p0"})),static_cast<float>(topcorr->evaluate({eta[HighestPt], pt[HighestPt], "up", "1p0"})),static_cast<float>(topcorr->evaluate({eta[HighestPt], pt[HighestPt], "down", "1p0"}))};
+      }
+    }else if(match[HighestPt] == 24){
+      tmppnetT = pnet_W_t; tmppnetW = pnet_W_W;
+      if(pt[HighestPt] > 200 && pt[HighestPt] < 800 && abs(eta[HighestPt]) < 2.4){
+	Wsf = {static_cast<float>(Wcorr->evaluate({eta[HighestPt], pt[HighestPt], "nom", "5p0"})),static_cast<float>(Wcorr->evaluate({eta[HighestPt], pt[HighestPt], "up", "1p0"})),static_cast<float>(Wcorr->evaluate({eta[HighestPt], pt[HighestPt], "down", "1p0"}))};
+      }
+    }else{tmppnetT = pnet_J_t; tmppnetW = pnet_J_W;}// if(match[HighestPt] < 0) std::cout << "OS FatJet 1 matched leptonic: " << match[HighestPt] << std::endl;}
+
+    float one = 1.0;
+    case1 = {tmppnetT[samplebin][ptbin]*topsf.at(0),tmppnetT[samplebin][ptbin]*topsf.at(2),tmppnetT[samplebin][ptbin]*topsf.at(2)};
+    case4 = {one - tmppnetT[samplebin][ptbin]*topsf.at(0),one - tmppnetT[samplebin][ptbin]*topsf.at(1),one - tmppnetT[samplebin][ptbin]*topsf.at(2)};
+    case2 = {tmppnetW[samplebin][ptbin]*Wsf.at(0),tmppnetW[samplebin][ptbin]*Wsf.at(1),tmppnetW[samplebin][ptbin]*Wsf.at(2)};
+    case3 = {one - tmppnetW[samplebin][ptbin]*Wsf.at(0),one - tmppnetW[samplebin][ptbin]*Wsf.at(1),one - tmppnetW[samplebin][ptbin]*Wsf.at(2)};
+
+    RVec<RVec<float>> weights = {case1,case2,case3,case4};
+    return weights;
   };
 
   auto cleanJets = [debug,jesvar,isMC,ak4corr,ak4corrL1,ak4corrUnc,ak4ptres,ak4jer,ak8corr,ak8corrUnc](const RVec<TLorentzVector> &jt_p4, const RVec<float> &jt_rf, const RVec<float> &jt_murf, const RVec<float> &jt_area, const RVec<float> &jt_em, const RVec<int> &jt_id, const RVec<TLorentzVector> &genjt_p4, const RVec<int> &jt_genidx, const RVec<TLorentzVector> &mu_p4, const RVec<int> mu_jetid, const RVec<TLorentzVector> &el_p4, const RVec<int> &el_jetid, const float &rho, const float &met, const float &phi){
@@ -535,8 +597,8 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
       .Define("cleanFatJets", cleanJets, {"FatJet_P4","FatJet_rawFactor","FatJet_rawFactor","FatJet_area","FatJet_area","FatJet_jetId","FatJet_P4","FatJet_jetId","SMuon_P4","SMuon_jetIdx","SElectron_P4","SElectron_jetIdx","fixedGridRhoFastjetAll","DummyZero","DummyZero"}); // args 2, 4, 6, 7 are dummies
   }
   
-  auto JetAssign = CleanJets.Define("corrMET_pt","cleanMets[5][0]")
-    .Define("corrMET_phi","cleanMets[5][1]")
+  auto JetAssign = CleanJets.Define("corrMETnoxy_pt","cleanMets[5][0]")
+    .Define("corrMETnoxy_phi","cleanMets[5][1]")
     .Define("cleanJet_pt", "cleanJets[0]")
     .Define("cleanJet_eta", "cleanJets[1]")
     .Define("cleanJet_phi", "cleanJets[2]")
@@ -553,7 +615,10 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   // ---------------------------------------------------------
   
   
-  auto METSelect = JetAssign.Filter("corrMET_pt > 60", "Pass corr MET > 60")
+  auto METSelect = JetAssign.Define("metxyoutput",metfunc,{"corrMETnoxy_pt","corrMETnoxy_phi","PV_npvs","run"})
+    .Define("corrMET_pt","metxyoutput[0]")
+    .Define("corrMET_phi","metxyoutput[1]")
+    .Filter("corrMET_pt > 60", "Pass corr MET > 60")
     .Filter("isMu || corrMET_pt>((130/1.5)*DeltaPhi(lepton_phi, corrMET_phi)-130)", "Electron Triangle Cut");
   
   // ---------------------------------------------------------
@@ -645,8 +710,14 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
   
   if (isMC) {
     scaleFactors = FatJetVars.Define("genttbarMass", Form("genttbarMassCalc(\"%s\", nGenPart, GenPart_pdgId, GenPart_mass, GenPart_pt, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, GenPart_status)",sample.c_str()))
-      .Define("gcFatJet_subJetIdx1","reorder(FatJet_subJetIdx1[goodcleanFatJets == true],gcFatJet_ptargsort)")
-      .Define("gcFatJet_genmatch", Form("FatJet_matching_bkg(\"%s\", gcFatJet_eta, gcFatJet_phi, NFatJets, gcFatJet_subJetIdx1, nSubJet, SubJet_hadronFlavour, nGenPart, GenPart_pdgId, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, t_bkg_idx, W_bkg_idx)",sample.c_str()))
+      .Define("gcFatJet_hadronFlavour","reorder(FatJet_hadronFlavour[goodcleanFatJets == true],gcFatJet_ptargsort)")
+      .Define("gcFatJet_genmatch", Form("FatJet_matching(\"%s\", gcFatJet_eta, gcFatJet_phi, NFatJets, gcFatJet_hadronFlavour, nGenPart, GenPart_pdgId, GenPart_phi, GenPart_eta, GenPart_genPartIdxMother, t_bkg_idx, W_bkg_idx)",sample.c_str()))
+      .Define("gcOSFatJet_genmatch", "gcFatJet_genmatch[OS_gcFatJets==true]")
+      .Define("pnetoutput", pnetfunc, {"gcOSFatJet_eta","gcOSFatJet_pt","gcOSFatJet_genmatch"})
+      .Define("case1weights","pnetoutput[0]")
+      .Define("case4weights","pnetoutput[1]")
+      .Define("case2weights","pnetoutput[2]")
+      .Define("case3weights","pnetoutput[3]")
       .Define("leptonRecoSF", recofunc, {"lepton_pt","lepton_eta","isEl"})
       .Define("leptonIDSF", idfunc, {"lepton_pt","lepton_eta","isEl"})
       .Define("leptonIsoSF", isofunc, {"lepton_pt","lepton_eta","isEl"})
@@ -671,10 +742,8 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("gcFatJet_pNetW", "(gcFatJet_pNetWvsQCD * gcFatJet_pNetJ) / (1 - gcFatJet_pNetWvsQCD)")
     .Define("gcOSFatJet_pNetT", "gcFatJet_pNetT[OS_gcFatJets == true]")
     .Define("gcOSFatJet_pNetW", "gcFatJet_pNetW[OS_gcFatJets == true]")
-    .Define("gcFatJet_pNetTag", "maxFxn(gcFatJet_pNetJ,gcFatJet_pNetT,gcFatJet_pNetW)")
-    .Define("gcFatJet_pNetTag_alt", pnetWPs, {"gcFatJet_pNetTvsQCD", "gcFatJet_pNetWvsQCD"})
+    .Define("gcFatJet_pNetTag", pnetWPs, {"gcFatJet_pNetTvsQCD", "gcFatJet_pNetWvsQCD"})
     .Define("gcOSFatJet_pNetTag", "gcFatJet_pNetTag[OS_gcFatJets==true]")
-    .Define("gcOSFatJet_pNetTag_alt", "gcFatJet_pNetTag_alt[OS_gcFatJets==true]")
     .Define("gcFatJet_nJ", "Sum(gcFatJet_pNetTag == 0)")
     .Define("gcFatJet_nT", "Sum(gcFatJet_pNetTag == 1)")
     .Define("gcFatJet_nW", "Sum(gcFatJet_pNetTag == 2)")
@@ -703,29 +772,21 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("minM_lep_Jet_jetID", "(int) minMlj_output[1]")
     .Define("minM_lep_Jet_TorW", "isLeptonic_X(minM_lep_Jet)")
     .Define("t_output", "t_reco(minM_lep_Jet_TorW,gcJet_DeepFlavL,gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass,W_lv,minM_lep_Jet_jetID,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")
-    .Define("t_pt_minMlj", "t_output[0]")
-    .Define("t_eta_minMlj", "t_output[1]")
-    .Define("t_phi_minMlj", "t_output[2]")
-    .Define("t_mass_minMlj", "t_output[3]")
-    .Define("DR_W_b_minMlj", "t_output[4]")
     .Define("t_pt_SSb", "t_output[5]")
     .Define("t_eta_SSb", "t_output[6]")
     .Define("t_phi_SSb", "t_output[7]")
     .Define("t_mass_SSb", "t_output[8]")
     .Define("DR_W_b_SSb", "t_output[9]")
     .Define("Bprime_output", "BPrime_reco_new(W_lv,NOS_gcJets_DeepFlavL,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcOSJet_DeepFlavL,gcOSFatJet_pt,gcOSFatJet_eta,gcOSFatJet_phi,gcOSFatJet_mass,gcOSFatJet_pNetTag,gcOSJet_pt,gcOSJet_eta,gcOSJet_phi,gcOSJet_mass,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")
-    .Define("Bprime_output_alt", "BPrime_reco_new(W_lv,NOS_gcJets_DeepFlavL,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcOSJet_DeepFlavL,gcOSFatJet_pt,gcOSFatJet_eta,gcOSFatJet_phi,gcOSFatJet_mass,gcOSFatJet_pNetTag_alt,gcOSJet_pt,gcOSJet_eta,gcOSJet_phi,gcOSJet_mass,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")
     .Define("Bprime_mass", "Bprime_output[0]")
-    .Define("Bprime_mass_alt", "Bprime_output_alt[0]")
     .Define("Bprime_pt", "Bprime_output[1]")
     .Define("Bprime_eta", "Bprime_output[2]")
     .Define("Bprime_phi", "Bprime_output[3]")
     .Define("Bprime_DR", "Bprime_output[4]")
     .Define("Bprime_ptbal", "Bprime_output[5]")
     .Define("Bprime_chi2", "Bprime_output[6]")
-    .Define("Bprime_chi2_alt", "Bprime_output_alt[6]")
     .Define("Bdecay_obs", "Bprime_output[7]")
-    .Define("Bdecay_obs_alt", "Bprime_output_alt[7]");
+    .Define("Bprime_chi2_discrete", "Bprime_output[8]");
   
   // -------------------------------------------------
   // 		Save Snapshot to file
@@ -755,8 +816,8 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
       if(colName.BeginsWith("Corr") || colName.BeginsWith("Fsr") || colName.BeginsWith("Iso") || colName.BeginsWith("Tau")) continue;
       if(colName.BeginsWith("SV") || colName.BeginsWith("Puppi") || colName.BeginsWith("Photon") || colName.BeginsWith("Low")) continue;
       if(colName.BeginsWith("HLT") || colName.BeginsWith("HT") || colName.BeginsWith("boosted") || colName.BeginsWith("Deep")) continue;
-      if(colName.BeginsWith("Flag") || colName == "Bprime_gen_info" || colName == "t_gen_info" || colName == "W_gen_info") continue;
-      if(colName == "assignleps" || colName == "t_output" || colName == "Bprime_output" || colName.BeginsWith("Other")) continue;
+      if(colName.BeginsWith("Flag") || colName == "Bprime_gen_info" || colName == "t_gen_info" || colName == "W_gen_info" || colName == "metxyoutput") continue;
+      if(colName == "assignleps" || colName == "pnetoutput" || colName == "t_output" || colName == "Bprime_output" || colName.BeginsWith("Other")) continue;
       if(colName.BeginsWith("PS") || colName.BeginsWith("PV") || colName.BeginsWith("Tk") || colName.BeginsWith("Trig")) continue;
       if(colName.BeginsWith("nCorr") || colName.BeginsWith("nFsr")) continue;
       if(colName.BeginsWith("nGen") || colName.BeginsWith("nIso") || colName.BeginsWith("nLow")) continue;
