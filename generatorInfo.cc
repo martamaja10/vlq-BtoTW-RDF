@@ -49,6 +49,7 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
   if (sample.find("Bprime") == std::string::npos)
   {
     return t_gen_info;
+    std::cout << "skipping t gen info" << std::endl;
   }
 
   int trueLeptonicT = -1;
@@ -161,6 +162,9 @@ auto t_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
     }
   }
   t_gen_info[29] = trueLeptonicT;
+
+  // std::cout << "**********************************************************************" << std::endl;
+  // std::cout << "trueLeptonicT = " << trueLeptonicT << std::endl;
 
   return t_gen_info;
 };
@@ -321,6 +325,8 @@ auto W_gen_info(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, 
   // }
   W_gen_info[18] = trueLeptonicW;
 
+  //  std::cout << "trueLeptonicW = " << trueLeptonicW << std::endl;
+
   return W_gen_info;
 };
 
@@ -480,15 +486,13 @@ auto W_bkg_idx(string sample, unsigned int nGenPart, RVec<int> &GenPart_pdgId, R
 
 // The following functions could probably all go to the plotting marco
 // Commented Method Only
-auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &FatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, RVec<int> &GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId)
+auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &gcFatJet_hadronFlavour, RVec<int> &GenPart_pdgId, double daughterb_gen_eta, double daughterb_gen_phi, double tDaughter1_gen_eta, double tDaughter1_gen_phi, int tDaughter1_gen_pdgId, double tDaughter2_gen_eta, double tDaughter2_gen_phi, int tDaughter2_gen_pdgId, double WDaughter1_gen_eta, double WDaughter1_gen_phi, int WDaughter1_gen_pdgId, double WDaughter2_gen_eta, double WDaughter2_gen_phi, int WDaughter2_gen_pdgId)
 {
   RVec<int> matched_GenPart(NFatJets, -9);
   if (sample.find("Bprime") == std::string::npos)
   {
     return matched_GenPart;
   }
-
-  RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets];
 
   // cout << "Event: " << endl;
   for (unsigned int i = 0; i < NFatJets; i++)
@@ -544,24 +548,14 @@ auto FatJet_matching_sig(string sample, RVec<float> &goodcleanFatJets, RVec<floa
       continue;
     }
 
-    int firstsub = gcFatJet_subJetIdx1[i];
-    for (int isub = firstsub; isub < nSubJet; isub++)
-    {
-      if (SubJet_hadronFlavour[isub] != 0)
-      {
-        matched_GenPart[i] = SubJet_hadronFlavour[isub];
-      }
-      else
-      {
-        matched_GenPart[i] = 0;
-      }
-    }
+    matched_GenPart[i] = gcFatJet_hadronFlavour[i];
+
   }
   return matched_GenPart;
 };
 
 // Commented Method Only
-auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &gcFatJet_subJetIdx1, unsigned int nSubJet, RVec<int> &SubJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx)
+auto FatJet_matching(string sample, RVec<float> &gcFatJet_eta, RVec<float> &gcFatJet_phi, int NFatJets, RVec<int> &gcFatJet_hadronFlavour, unsigned int nGenPart, RVec<int> &GenPart_pdgId, RVec<float> &GenPart_phi, RVec<float> &GenPart_eta, RVec<int> &GenPart_genPartIdxMother, RVec<int> &t_bkg_idx, RVec<int> &W_bkg_idx) //, int trueLeptonicT, int trueLeptonicW)
 {
   RVec<int> matched_GenPart(NFatJets, -9);
   // if (sample.find("Bprime") != std::string::npos)
@@ -569,7 +563,7 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
   //   return matched_GenPart;
   // }
   
-  //  RVec<int> gcFatJet_subJetIdx1 = FatJet_subJetIdx1[goodcleanFatJets]; //done in the analyzer now for pt ordering
+  //  std::cout << "Event has leptonic T? " << trueLeptonicT << ". Or leptonic W? " << trueLeptonicW << std::endl;
   
   int ntD = t_bkg_idx.size(); // really the daughters of t and W
   int nWD = W_bkg_idx.size();
@@ -624,7 +618,8 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
 	  W_phi[i] = GenPart_phi[igen];
 	}
     }
-  
+
+  //  std::cout << "------------------------------------------" << std::endl;  
   for (unsigned int i = 0; i < NFatJets; i++)
     {
       double fatjet_eta = gcFatJet_eta[i];
@@ -632,38 +627,50 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
       
       for (unsigned int j = 0; j < t_bkg_idx.size() / 3; j++)
 	{
+	  // first reject tops with daughters 2 and 3 that are in the leptonic range
+	  if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) > 10 && abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 17) continue;
+	  if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 2]]) > 10 && abs(GenPart_pdgId[t_bkg_idx[j * 3 + 2]]) < 17) continue;
+
 	  double dR_b = DeltaR(fatjet_eta, t_eta[j * 3], fatjet_phi, t_phi[j * 3]);
 	  double dR_q1 = DeltaR(fatjet_eta, t_eta[j * 3 + 1], fatjet_phi, t_phi[j * 3 + 1]);
 	  double dR_q2 = DeltaR(fatjet_eta, t_eta[j * 3 + 2], fatjet_phi, t_phi[j * 3 + 2]);
 	  
-	  if (dR_b < 0.8 && dR_q1 < 0.8 && dR_q2 < 0.8)
+	  if (std::min({dR_b,dR_q1,dR_q2}) < 0.8 && std::max({dR_b,dR_q1,dR_q2}) < 1.2)
+	    //	  if (dR_b < 0.8 && dR_q1 < 0.8 && dR_q2 < 0.8)
 	    {
 	      if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
 		{
+		  //std::cout << "hadronic t matched: dRb = " << dR_b << ", dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;
 		  matched_GenPart[i] = 6;
 		  break;
 		} // pos stands for hadronic t
 	      else
 		{
+		  std::cout << "leptonic t matched: weird!" << std::endl; //dRb = " << dR_b << ", dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;
 		  //		  std::cout << "Check 661, t daughter is a lepton: " << GenPart_pdgId[t_bkg_idx[j * 3 + 1]] << std::endl;
 		  matched_GenPart[i] = -6;
 		  break;
 		} // neg stands for leptonic t
 	    }
-	  else if (dR_q1 < 0.8 && dR_q2 < 0.8)
+	  else if (std::min({dR_q1,dR_q2}) < 0.8 && std::max({dR_q1,dR_q2}) < 1.2)
+	    //	  else if (dR_q1 < 0.8 && dR_q2 < 0.8)
 	    {
 	      if (abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6)
 		{
+		  //if(dR_b < 1.5) std::cout << "hadronic t didn't match the b, but W's work: dRb = " << dR_b << ", dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;
+		  //else std::cout << "hadronic t partially merged" << std::endl;
 		  matched_GenPart[i] = 24;
 		  break;
 		}
 	      else
 		{
+		  std::cout << "t didn't match the b, but leptonic W's work: weird!" << std::endl; //dRb = " << dR_b << ", dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;
 		  //		  std::cout << "Check 661, W daughter is a lepton: " << GenPart_pdgId[t_bkg_idx[j * 3 + 1]] << std::endl;
 		  matched_GenPart[i] = -24;
 		  break;
 		}
 	    }
+	  //	  else{if ((dR_b < 1.5 || dR_q1 < 1.5 || dR_q2 < 1.5) && abs(GenPart_pdgId[t_bkg_idx[j * 3 + 1]]) < 6) std::cout << "hadronic t didn't match: dRb = " << dR_b << ", dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl; }
 	}
       
       if (matched_GenPart[i] != -9)
@@ -672,41 +679,39 @@ auto FatJet_matching_bkg(string sample, RVec<float> &gcFatJet_eta, RVec<float> &
 	}
       for (unsigned int j = 0; j < W_bkg_idx.size() / 2; j++) // check tops first, then W's on remaining -9s
 	{
+	  // first reject leptonic W's
+	  if (abs(GenPart_pdgId[W_bkg_idx[j * 2]]) > 10 && abs(GenPart_pdgId[W_bkg_idx[j * 2]]) < 17) continue;
+	  if (abs(GenPart_pdgId[W_bkg_idx[j * 2 + 1]]) > 10 && abs(GenPart_pdgId[W_bkg_idx[j * 2 + 1]]) < 17) continue;
+
 	  double dR_q1 = DeltaR(fatjet_eta, W_eta[j * 2], fatjet_phi, W_phi[j * 2]);
 	  double dR_q2 = DeltaR(fatjet_eta, W_eta[j * 2 + 1], fatjet_phi, W_phi[j * 2 + 1]);
 	  
-	  if (dR_q1 < 0.8 && dR_q2 < 0.8)
+	  if (std::min(dR_q1,dR_q2) < 0.8 && std::max(dR_q1,dR_q2) < 1.2)
+	    //	  if (dR_q1 < 0.8 && dR_q2 < 0.8)
 	    {
 	      if (abs(GenPart_pdgId[W_bkg_idx[j * 2]]) < 6)
 		{
+		  //std::cout << "hadronic W matched: dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;
 		  matched_GenPart[i] = 24;
 		  break;
 		}
 	      else
 		{
+		  std::cout << "leptonic W matched: weird!" << std::endl; //dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;
 		  //		  std::cout << "Check 686, W daughter is a lepton: " << GenPart_pdgId[W_bkg_idx[j * 2]] << std::endl;
 		  matched_GenPart[i] = -24;
 		  break;
 		}
 	    }
+	  //	  else{if(abs(GenPart_pdgId[W_bkg_idx[j * 2]]) < 6) std::cout << "hadronic W didn't match: dRq1 = " << dR_q1 << ", dRq2 = " << dR_q2 << std::endl;}
 	}
       
       if (matched_GenPart[i] != -9)
 	{
 	  continue;
 	}
-      int firstsub = gcFatJet_subJetIdx1[i];
-      for (int isub = firstsub; isub < nSubJet; isub++)
-	{
-	  if (SubJet_hadronFlavour[isub] != 0)
-	    {
-	      matched_GenPart[i] = SubJet_hadronFlavour[isub];
-	    }
-	  else
-	    {
-	      matched_GenPart[i] = 0;
-	    }
-	}
+
+      matched_GenPart[i] = gcFatJet_hadronFlavour[i]; // 0, 4, 5. Matches highest Subjet_hadronFlavour and has 0 where no subjets.
     }
   return matched_GenPart;
 };
