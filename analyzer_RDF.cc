@@ -240,17 +240,17 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     }
     return hlt;
   }; 
-  auto jetvetofunc = [jetvetocorr,year,isMC](const RVec<float> &eta, const RVec<float> &phi, const RVec<int> id){
-    RVec<double> map;    
-    for(unsigned int ijet = 0; ijet < eta.size(); ijet++){
-      float phitemp = phi.at(ijet);
-      if(phitemp < -3.14159) phitemp = -3.14159;
-      else if(phitemp > 3.14159) phitemp = 3.14159;
-      if(year != "2018" || abs(eta.at(ijet)) > 3.5 || phitemp > -0.8 || phitemp < -1.6 || id.at(ijet) < 2) map.push_back(0.0);
-      else{
-	TRandom3 rand(0);
-	if(isMC && rand.Rndm() < 0.35) map.push_back(0.0); // bril: preHEM = 21.094, postHEM = 38.739
-	else map.push_back(jetvetocorr->evaluate({"jetvetomap_hem1516",eta.at(ijet),phitemp}));
+  auto jetvetofunc = [jetvetocorr,year,isMC](const RVec<float> &eta, const RVec<float> &phi, const RVec<int> id, const RVec<int> run){
+    RVec<double> map(eta.size(), 0.0);
+    TRandom3 rand(0);
+    if(run > 319077 || (run == 1 && rand.Rndm() > 0.35)){
+      for(unsigned int ijet = 0; ijet < eta.size(); ijet++){
+	float phitemp = phi[ijet];
+	if(phitemp < -3.14159) phitemp = -3.14159;
+	else if(phitemp > 3.14159) phitemp = 3.14159;
+	if(eta[ijet] < -1.5 && eta[ijet] > -3.5 && phitemp > -0.8 && phitemp < -1.7 && id.at(ijet) > 1){
+	  map.push_back(jetvetocorr->evaluate({"jetvetomap_hem1516",eta.at(ijet),phitemp}));
+	}
       }
     }
     return map;
@@ -677,13 +677,13 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("cleanJet_phi", "cleanJets[2]")
     .Define("cleanJet_mass", "cleanJets[3]")
     .Define("cleanJet_rawFactor", "cleanJets[4]")
-    .Define("cleanJet_vetomap", jetvetofunc, {"cleanJet_eta","cleanJet_phi","Jet_jetId"})
+    .Define("cleanJet_vetomap", jetvetofunc, {"cleanJet_eta","cleanJet_phi","Jet_jetId","run"})
     .Define("cleanFatJet_pt", "cleanFatJets[0]")
     .Define("cleanFatJet_eta", "cleanFatJets[1]")
     .Define("cleanFatJet_phi", "cleanFatJets[2]")
     .Define("cleanFatJet_mass", "cleanFatJets[3]")
     .Define("cleanFatJet_rawFactor", "cleanFatJets[4]")
-    .Define("cleanFatJet_vetomap", jetvetofunc, {"cleanFatJet_eta","cleanFatJet_phi","FatJet_jetId"});
+    .Define("cleanFatJet_vetomap", jetvetofunc, {"cleanFatJet_eta","cleanFatJet_phi","FatJet_jetId","run"});
 
   // ---------------------------------------------------------
   //                    MET Selection
@@ -750,7 +750,7 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
     .Define("NOS_gcJets_DeepFlavL","(int) Sum(gcOSJet_DeepFlavL)")
     .Define("NSS_gcJets_DeepFlavL","(int) Sum(gcSSJet_DeepFlavL)");
 
-  auto ForwardJetVars = JetVars.Define("goodcleanForwardJets", "cleanJet_pt > 30 && abs(cleanJet_eta) >= 2.5 && Jet_jetId > 1")
+  auto ForwardJetVars = JetVars.Define("goodcleanForwardJets", "cleanJet_pt > 30 && abs(cleanJet_eta) >= 2.5 && Jet_jetId > 1 && cleanJet_vetomap == 0")
     .Define("NJets_forward", "(int) Sum(goodcleanForwardJets)")
     .Define("gcforwJet_pt_unsort", "cleanJet_pt[goodcleanForwardJets == true]")
     .Define("gcforwJet_ptargsort","ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(gcforwJet_pt_unsort))")
