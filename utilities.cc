@@ -15,7 +15,7 @@ RVec<T> reorder(const RVec<T> &v, const RVec<int> &idx){
     vnew[i] = v[idx[i]];
   }
   return vnew;
-}
+};
 
 // The following functions could probably all go to the plotting marco
 auto leptonicCheck(string sample, int trueLeptonicT, int trueLeptonicW)
@@ -47,21 +47,42 @@ auto leptonicCheck(string sample, int trueLeptonicT, int trueLeptonicW)
   return trueLeptonicMode;
 };
 
-auto Electron_cutBasedIdNoIso_tight(unsigned int nElectron, RVec<int> &Electron_vidNestedWPBitmap)
+auto Electron_cutBasedIdNoIso_tight(unsigned int nElectron, RVec<int> &Electron_vidNestedWPBitmap, RVec<int> &Electron_cutBased, RVec<float> &Electron_pfRelIso03_all, RVec<float> &eta, RVec<float> &pt, RVec<float> &sieie, RVec<float> &ooemoop)
 {
-    RVec<int> noIso_tight(nElectron, 0);
-    for (unsigned int i = 0; i < nElectron; i++)
-    {
-        list<int> vars{0, 1, 2, 3, 4, 5, 6, 8, 9}; // checking this
-        for (int x : vars)
-        {
-            if (((Electron_vidNestedWPBitmap[i] >> (x * 3)) & 0x7) >= 4)
-            {
-                noIso_tight[i] = 1;
-            }
-        }
+  // VID compressed bitmap (MinPtCut,GsfEleSCEtaMultiRangeCut,GsfEleDEtaInSeedCut,GsfEleDPhiInCut,GsfEleFull5x5SigmaIEtaIEtaCut,GsfEleHadronicOverEMEnergyScaledCut,GsfEleEInverseMinusPInverseCut,GsfEleRelPFIsoScaledCut,GsfEleConversionVetoCut,GsfEleMissingHitsCut), 3 bits per cut
+
+  RVec<int> noIso_tight(nElectron, 0);
+  for (unsigned int i = 0; i < nElectron; i++){
+    //std::cout << "------------------------------" << std::endl;
+    list<int> vars{0, 1, 2, 3, 4, 5, 6, 8, 9}; // checking this
+    noIso_tight[i] = 1;
+    for (int x : vars){
+      if (((Electron_vidNestedWPBitmap[i] >> (x * 3)) & 0x7) < 4){
+	noIso_tight[i] = 0;
+      }
+      // These printouts were helpful to convince me that we understand the ordering
+      // if(x == 0){
+      // 	std::cout << "pt = " << pt[i] << " and eta = " << eta[i] << ", compared to limit of 10? (barrel) 10? (endcap)" << std::endl;
+      // 	std::cout << "value for this bit group: " << ((Electron_vidNestedWPBitmap[i] >> (x * 3)) & 0x7) << std::endl;
+      // }
+      // if(x == 4){
+      // 	std::cout << "sieie = " << sieie[i] << " and eta = " << eta[i] << ", compared to limit of 0.0104 (barrel) 0.0353 (endcap)" << std::endl;
+      // 	std::cout << "value for this bit group: " << ((Electron_vidNestedWPBitmap[i] >> (x * 3)) & 0x7) << std::endl;
+      // }
+      // if(x == 6){
+      // 	std::cout << "ooemoop = " << abs(ooemoop[i]) << " and eta = " << eta[i] << ", compared to limit of 0.159 (barrel) 0.0197 (endcap)" << std::endl;
+      // 	std::cout << "value for this bit group: " << ((Electron_vidNestedWPBitmap[i] >> (x * 3)) & 0x7) << std::endl;
+      // }
     }
-    return noIso_tight;
+    // int passCBtight = 0;
+    // if(Electron_cutBased[i] == 4) passCBtight = 1;    
+    // if(passCBtight != noIso_tight[i]){
+    //   float cut = 0.0287+0.506/pt[i];
+    //   if(abs(eta[i]) > 1.479) cut = 0.0445+0.963/pt[i]; 
+    //   std::cout << "CBtight = " << passCBtight << ", noIso = " << noIso_tight[i] << ", rel iso = " << Electron_pfRelIso03_all[i] << ", which fails iso < " << cut << std::endl;
+    // }      
+  }
+  return noIso_tight;
 };
 
 
