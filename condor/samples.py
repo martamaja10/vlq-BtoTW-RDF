@@ -152,15 +152,15 @@ SingleMuonRun2016APVF = sample("SingleMuonRun2016APVF", "2016APV", "SingleMuonRu
 SingleMuonRun2016F  = sample("SingleMuonRun2016F", "2016", "SingleMuonRun2016F2016ULNanoList.txt", "/SingleMuon/Run2016F-UL2016_MiniAODv2_NanoAODv9-v1/NANOAOD")
 SingleMuonRun2016G  = sample("SingleMuonRun2016G", "2016", "SingleMuonRun2016G2016ULNanoList.txt", "/SingleMuon/Run2016G-UL2016_MiniAODv2_NanoAODv9-v1/NANOAOD")
 SingleMuonRun2016H  = sample("SingleMuonRun2016H", "2016", "SingleMuonRun2016H2016ULNanoList.txt", "/SingleMuon/Run2016H-UL2016_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleMuonRun2017B  = sample("SingleMuonRun2017B", "2017", "SingleMuonRun2017B2017ULNanoList.txt", "/SingleMuon/Run2017B-UL2017_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleMuonRun2017C  = sample("SingleMuonRun2017C", "2017", "SingleMuonRun2017C2017ULNanoList.txt", "/SingleMuon/Run2017C-UL2017_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleMuonRun2017D  = sample("SingleMuonRun2017D", "2017", "SingleMuonRun2017D2017ULNanoList.txt", "/SingleMuon/Run2017D-UL2017_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleMuonRun2017E  = sample("SingleMuonRun2017E", "2017", "SingleMuonRun2017E2017ULNanoList.txt", "/SingleMuon/Run2017E-UL2017_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleMuonRun2017F  = sample("SingleMuonRun2017F", "2017", "SingleMuonRun2017F2017ULNanoList.txt", "/SingleMuon/Run2017F-UL2017_MiniAODv2_NanoAODv9-v1/NANOAOD")
-SingleMuonRun2018A  = sample("SingleMuonRun2018A", "2018", "SingleMuonRun2018A2018ULNanoList.txt", "/SingleMuon/Run2018A-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD")
-SingleMuonRun2018B  = sample("SingleMuonRun2018B", "2018", "SingleMuonRun2018B2018ULNanoList.txt", "/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD")
-SingleMuonRun2018C  = sample("SingleMuonRun2018C", "2018", "SingleMuonRun2018C2018ULNanoList.txt", "/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD")
-SingleMuonRun2018D  = sample("SingleMuonRun2018D", "2018", "SingleMuonRun2018D2018ULNanoList.txt", "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD")
+SingleMuonRun2017B  = sample("SingleMuonRun2017B", "2017", "SingleMuonRun2017B2017ULNanoList.txt", "/SingleMuon/Run2017B-UL2017_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2017C  = sample("SingleMuonRun2017C", "2017", "SingleMuonRun2017C2017ULNanoList.txt", "/SingleMuon/Run2017C-UL2017_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2017D  = sample("SingleMuonRun2017D", "2017", "SingleMuonRun2017D2017ULNanoList.txt", "/SingleMuon/Run2017D-UL2017_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2017E  = sample("SingleMuonRun2017E", "2017", "SingleMuonRun2017E2017ULNanoList.txt", "/SingleMuon/Run2017E-UL2017_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2017F  = sample("SingleMuonRun2017F", "2017", "SingleMuonRun2017F2017ULNanoList.txt", "/SingleMuon/Run2017F-UL2017_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2018A  = sample("SingleMuonRun2018A", "2018", "SingleMuonRun2018A2018ULNanoList.txt", "/SingleMuon/Run2018A-UL2018_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2018B  = sample("SingleMuonRun2018B", "2018", "SingleMuonRun2018B2018ULNanoList.txt", "/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2018C  = sample("SingleMuonRun2018C", "2018", "SingleMuonRun2018C2018ULNanoList.txt", "/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
+SingleMuonRun2018D  = sample("SingleMuonRun2018D", "2018", "SingleMuonRun2018D2018ULNanoList.txt", "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9_GT36-v1/NANOAOD")
 STs2016APVUL = sample("STs2016APVUL", "2016APV", "STs2016APVULNanoList.txt", "/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")
 STs2016UL = sample("STs2016UL", "2016", "STs2016ULNanoList.txt", "/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")
 STs2017UL = sample("STs2017UL", "2017", "STs2017ULNanoList.txt", "/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")
@@ -417,40 +417,40 @@ samples={
     "QCDHT7002016UL":QCDHT7002016UL,
     "QCDHT7002017UL":QCDHT7002017UL,
     "QCDHT7002018UL":QCDHT7002018UL,
-    # "SingleElecRun2016APVB":SingleElecRun2016APVB,
-    # "SingleElecRun2016APVC":SingleElecRun2016APVC,
-    # "SingleElecRun2016APVD":SingleElecRun2016APVD,
-    # "SingleElecRun2016APVE":SingleElecRun2016APVE,
-    # "SingleElecRun2016APVF":SingleElecRun2016APVF,
-    # "SingleElecRun2016F":SingleElecRun2016F,
-    # "SingleElecRun2016G":SingleElecRun2016G,
-    # "SingleElecRun2016H":SingleElecRun2016H,
-    # "SingleElecRun2017B":SingleElecRun2017B,
-    # "SingleElecRun2017C":SingleElecRun2017C,
-    # "SingleElecRun2017D":SingleElecRun2017D,
-    # "SingleElecRun2017E":SingleElecRun2017E,
-    # "SingleElecRun2017F":SingleElecRun2017F,
-    # "SingleElecRun2018A":SingleElecRun2018A,
-    # "SingleElecRun2018B":SingleElecRun2018B,
-    # "SingleElecRun2018C":SingleElecRun2018C,
-    # "SingleElecRun2018D":SingleElecRun2018D,
-    # "SingleMuonRun2016APVB":SingleMuonRun2016APVB,
-    # "SingleMuonRun2016APVC":SingleMuonRun2016APVC,
-    # "SingleMuonRun2016APVD":SingleMuonRun2016APVD,
-    # "SingleMuonRun2016APVE":SingleMuonRun2016APVE,
-    # "SingleMuonRun2016APVF":SingleMuonRun2016APVF,
-    # "SingleMuonRun2016F":SingleMuonRun2016F,
-    # "SingleMuonRun2016G":SingleMuonRun2016G,
-    # "SingleMuonRun2016H":SingleMuonRun2016H,
-    # "SingleMuonRun2017B":SingleMuonRun2017B,
-    # "SingleMuonRun2017C":SingleMuonRun2017C,
-    # "SingleMuonRun2017D":SingleMuonRun2017D,
-    # "SingleMuonRun2017E":SingleMuonRun2017E,
-    # "SingleMuonRun2017F":SingleMuonRun2017F,
-    # "SingleMuonRun2018A":SingleMuonRun2018A,
-    # "SingleMuonRun2018B":SingleMuonRun2018B,
-    # "SingleMuonRun2018C":SingleMuonRun2018C,
-    # "SingleMuonRun2018D":SingleMuonRun2018D,
+    "SingleElecRun2016APVB":SingleElecRun2016APVB,
+    "SingleElecRun2016APVC":SingleElecRun2016APVC,
+    "SingleElecRun2016APVD":SingleElecRun2016APVD,
+    "SingleElecRun2016APVE":SingleElecRun2016APVE,
+    "SingleElecRun2016APVF":SingleElecRun2016APVF,
+    "SingleElecRun2016F":SingleElecRun2016F,
+    "SingleElecRun2016G":SingleElecRun2016G,
+    "SingleElecRun2016H":SingleElecRun2016H,
+    "SingleElecRun2017B":SingleElecRun2017B,
+    "SingleElecRun2017C":SingleElecRun2017C,
+    "SingleElecRun2017D":SingleElecRun2017D,
+    "SingleElecRun2017E":SingleElecRun2017E,
+    "SingleElecRun2017F":SingleElecRun2017F,
+    "SingleElecRun2018A":SingleElecRun2018A,
+    "SingleElecRun2018B":SingleElecRun2018B,
+    "SingleElecRun2018C":SingleElecRun2018C,
+    "SingleElecRun2018D":SingleElecRun2018D,
+    "SingleMuonRun2016APVB":SingleMuonRun2016APVB,
+    "SingleMuonRun2016APVC":SingleMuonRun2016APVC,
+    "SingleMuonRun2016APVD":SingleMuonRun2016APVD,
+    "SingleMuonRun2016APVE":SingleMuonRun2016APVE,
+    "SingleMuonRun2016APVF":SingleMuonRun2016APVF,
+    "SingleMuonRun2016F":SingleMuonRun2016F,
+    "SingleMuonRun2016G":SingleMuonRun2016G,
+    "SingleMuonRun2016H":SingleMuonRun2016H,
+    "SingleMuonRun2017B":SingleMuonRun2017B,
+    "SingleMuonRun2017C":SingleMuonRun2017C,
+    "SingleMuonRun2017D":SingleMuonRun2017D,
+    "SingleMuonRun2017E":SingleMuonRun2017E,
+    "SingleMuonRun2017F":SingleMuonRun2017F,
+    "SingleMuonRun2018A":SingleMuonRun2018A,
+    "SingleMuonRun2018B":SingleMuonRun2018B,
+    "SingleMuonRun2018C":SingleMuonRun2018C,
+    "SingleMuonRun2018D":SingleMuonRun2018D,
     "STs2016APVUL":STs2016APVUL,
     "STs2016UL":STs2016UL,
     "STs2017UL":STs2017UL,
@@ -830,5 +830,46 @@ samples_redo = {
     #"SingleElecRun2018D":SingleElecRun2018D,
     #"TTMT10002016APVUL":TTMT10002016APVUL,
     #"TTMT7002016APVUL":TTMT7002016APVUL,
+}
+
+samples_trig = {
+    "TTTo2L2Nu2016APVUL":TTTo2L2Nu2016APVUL,
+    "TTTo2L2Nu2016UL":TTTo2L2Nu2016UL,
+    "TTTo2L2Nu2017UL":TTTo2L2Nu2017UL,
+    "TTTo2L2Nu2018UL":TTTo2L2Nu2018UL,
+    # "SingleElecRun2016APVB":SingleElecRun2016APVB,
+    # "SingleElecRun2016APVC":SingleElecRun2016APVC,
+    # "SingleElecRun2016APVD":SingleElecRun2016APVD,
+    # "SingleElecRun2016APVE":SingleElecRun2016APVE,
+    # "SingleElecRun2016APVF":SingleElecRun2016APVF,
+    # "SingleElecRun2016F":SingleElecRun2016F,
+    # "SingleElecRun2016G":SingleElecRun2016G,
+    # "SingleElecRun2016H":SingleElecRun2016H,
+    # "SingleElecRun2017B":SingleElecRun2017B,
+    # "SingleElecRun2017C":SingleElecRun2017C,
+    # "SingleElecRun2017D":SingleElecRun2017D,
+    # "SingleElecRun2017E":SingleElecRun2017E,
+    # "SingleElecRun2017F":SingleElecRun2017F,
+    # "SingleElecRun2018A":SingleElecRun2018A,
+    # "SingleElecRun2018B":SingleElecRun2018B,
+    # "SingleElecRun2018C":SingleElecRun2018C,
+    # "SingleElecRun2018D":SingleElecRun2018D,
+    "SingleMuonRun2016APVB":SingleMuonRun2016APVB,
+    "SingleMuonRun2016APVC":SingleMuonRun2016APVC,
+    "SingleMuonRun2016APVD":SingleMuonRun2016APVD,
+    "SingleMuonRun2016APVE":SingleMuonRun2016APVE,
+    "SingleMuonRun2016APVF":SingleMuonRun2016APVF,
+    "SingleMuonRun2016F":SingleMuonRun2016F,
+    "SingleMuonRun2016G":SingleMuonRun2016G,
+    "SingleMuonRun2016H":SingleMuonRun2016H,
+    "SingleMuonRun2017B":SingleMuonRun2017B,
+    "SingleMuonRun2017C":SingleMuonRun2017C,
+    "SingleMuonRun2017D":SingleMuonRun2017D,
+    "SingleMuonRun2017E":SingleMuonRun2017E,
+    "SingleMuonRun2017F":SingleMuonRun2017F,
+    "SingleMuonRun2018A":SingleMuonRun2018A,
+    "SingleMuonRun2018B":SingleMuonRun2018B,
+    "SingleMuonRun2018C":SingleMuonRun2018C,
+    "SingleMuonRun2018D":SingleMuonRun2018D,
 }
 

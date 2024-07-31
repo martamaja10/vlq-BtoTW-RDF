@@ -1,7 +1,7 @@
 #!/bin/bash
 
 hostname
-export SCRAM_ARCH=slc7_amd64_gcc10
+export SCRAM_ARCH=el8_amd64_gcc10
 echo $SCRAM_ARCH
 
 # Take in Input Arguments
