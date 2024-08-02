@@ -1,4 +1,3 @@
-#include "lumiMask.cc"
 #include "analyzer_RDF.cc"
 #include "BPrime.cc"
 #include "cleanJet.cc"
@@ -7,7 +6,6 @@
 #include "generatorInfo.cc"
 #include "utilities.cc"
 #include "W_t_reco.cc"
-#include "scalefactors.cc"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -19,8 +17,6 @@ using namespace std;
 void runRDF(string testNum1, string testNum2, string inputFile, string year)
 {
   rdf t(inputFile, testNum1, testNum2, year); // names get set to class members, should be known w/o passing
-
-  //t.analyzer_RDF(testNum1);
 
   bool isData = false;
   if(inputFile.find("Single") != std::string::npos || inputFile.find("EGamma") != std::string::npos) isData = true;
