@@ -38,7 +38,7 @@ Once access is set up and the user has the github repository configured along wi
 
 To actually run the analysis, use the following command:
 ```
-$ root -l -b -q runRDF.C\(\"testNum1\",\"testNum2\",\"inputfile"\,\"year"\)`
+$ root -l -b -q runRDF.C\(\"testNum1\",\"testNum2\",\"inputfile.txt\",\"year\"\)
 ```
 
 - `testNum1` = An integer that states the number of the first file that will be included in the job
@@ -51,13 +51,13 @@ It's important to note that every parenthesis and quotation must be escaped for 
 To run the analysis as a condor job, use the following command to first make a list of the root files.  
 
 ```
-$ python2 runCondorJobs.py True False`
+$ python2 runCondorJobs.py True False
 ```
 
 Once this command has completed, switch the True and False as shown below to submit a condor job for the sample specified within runCondorJobs.py.  The list of all samples and lists of combinations of samples can be found in samples.py.  Remember to change to the output directories to include your username and path.
 
 ```
-$ python2 runCondorJobs.py False True`
+$ python2 runCondorJobs.py False True
 ```
 
 After you have submitted the condor job, you can use the following command to to check their status, runtime, and location.
