@@ -5,6 +5,9 @@
 // To Run on Command Line:   root -l callRDF.C\(\"Muon(OR)Electron\",\"testNumber\"\,\"root://cmsxrootd.fnal.gov//store/...file.root\")      //
 // --------------------------------------------------------------------------------------- //
 
+#ifndef CODE
+#define CODE 
+
 #define rdf_cxx
 #include "analyzer_RDF.h"
 #include "lumiMask.h"
@@ -22,6 +25,7 @@
 #include <TStyle.h>
 #include <TH3.h>
 #include <algorithm> 
+#include <ROOT/RDataFrame.hxx>
 #include <TFile.h>
 #include <TH1.h>
 #include <TF1.h>
@@ -29,6 +33,7 @@
 #include <TRandom3.h>
 #include <sstream>
 #include <chrono> // for high_resolution_clock
+
 
 
 using namespace std;
@@ -411,3 +416,5 @@ void rdf::analyzer_RDF(TString testNum, TString jesvar)
 
   cout << "Done!" << endl;
 }
+
+#endif
