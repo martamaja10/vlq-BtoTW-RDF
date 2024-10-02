@@ -4,18 +4,12 @@ import time
 cpp_files = [
     "BPrime.cc",
     "cleanJet.cc",
-    "cut_ptrel.cc",
-    "dnnPrep.cc",
     "generatorInfo.cc",
     "utilities.cc",
     "W_t_reco.cc",
     "analyzer_RDF.h",
-    "lumiMask.h",
-
-]
-
-# ROOT.gSystem.CompileMacro("functions.cpp", "kO")
-#ROOT.gInterpreter.Load("functions_cpp.so")
+    "lumiMask.h"
+    ]
 
 ROOT.gInterpreter.ProcessLine(
     '''
@@ -50,7 +44,6 @@ for cpp_file in cpp_files:
 class RDFAnalyzer:
     def __init__(self, inputFiles, year):
         self.sample = inputFiles
-        #self.samplebin = testNum1
         self.year = year
         self.isMC = not any(x in inputFiles for x in ["Single", "EGamma"])
         self.files = inputFiles  
@@ -64,27 +57,26 @@ class RDFAnalyzer:
         start_time = time.time()
 
         sample = self.sample
-        #samplebin = self.samplebin
         year = self.year
         isMC = self.isMC
 
-        #print(f"Sample in cc: {sample}, bin # {samplebin}")
         print(f"Year: {year}")
         print(f"isMC? {isMC}, jesvar = {jesvar}")
         if not isMC:
             print(f"Data era = {self.era}, for jec {self.jecera}")
 
         def get_year_settings(year):
-            deepjetL = None
-            mutrig = "TkMu50"
-            yrstr = ""
-            yr = ""
-            jecyr = ""
-            jeryr = ""
-            jecver = ""
+            # deepjetL = None
+            # mutrig = "TkMu50"
+            # yrstr = ""
+            # yr = ""
+            # jecyr = ""
+            # jeryr = ""
+            # jecver = ""
             
             if year == "2016":
                 deepjetL = 0.0480
+                mutrig = "TkMu50"
                 yrstr = "2016postVFP"
                 yr = "16"
                 jecyr = "UL16"
@@ -96,19 +88,21 @@ class RDFAnalyzer:
             return deepjetL, mutrig, yrstr, yr, jecyr, jeryr, jecver
 
         deepjetL, mutrig, yrstr, yr, jecyr, jeryr, jecver = get_year_settings("2016")
+        
+        #deepjetL = get_year_settings("2016")
 
         rdf_input = ROOT.RDataFrame("Events", self.files)
 
         # Apply MET filters
         METgeneralFilters = rdf_input.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 &&\
-                                             Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 &&\
-                                             Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 &&\
-                                             Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters") \
+                                            Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 &&\
+                                            Flag_eeBadScFilter == 1 && Flag_globalSuperTightHalo2016Filter == 1 &&\
+                                            Flag_BadPFMuonFilter == 1 && Flag_ecalBadCalibFilter == 1", "MET Filters") \
                                        .Filter("nJet > 0 && nFatJet > 0", "Event has > 1 AK4 and > 1 AK8")
 
         truth = METgeneralFilters
-        #print("Flag, all good here, here")
         
+                
         # Define Lepton definitions
         
         elHEMcut = ""
@@ -293,7 +287,23 @@ class RDFAnalyzer:
         .Define("DR_W_lep", "W_lv.DeltaR(lepton_lv)") \
         .Define("minM_lep_Jet", "minMlj_output[0]") \
         .Define("minM_lep_Jet_jetID", "(int) minMlj_output[1]") \
-        .Define("minM_lep_Jet_TorW", "isLeptonic_X(minM_lep_Jet)") \
+        .Define("minM_lep_Jet_TorW", "isLeptonic_X(minM_lep_Jet)")\
+        .Define("t_output", "t_reco(minM_lep_Jet_TorW,gcJet_DeepFlavL,gcJet_pt,gcJet_eta,gcJet_phi,gcJet_mass,W_lv,minM_lep_Jet_jetID,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")\
+        .Define("t_pt_SSb", "t_output[5]")\
+        .Define("t_eta_SSb", "t_output[6]")\
+        .Define("t_phi_SSb", "t_output[7]")\
+        .Define("t_mass_SSb", "t_output[8]")\
+        .Define("DR_W_b_SSb", "t_output[9]")\
+        .Define("Bprime_output", "BPrime_reco_new(W_lv,NOS_gcJets_DeepFlavL,NSS_gcJets_DeepFlavL,gcSSJet_DeepFlavL,gcOSJet_DeepFlavL,gcOSFatJet_pt,gcOSFatJet_eta,gcOSFatJet_phi,gcOSFatJet_mass,gcOSFatJet_pNetTag,gcOSJet_pt,gcOSJet_eta,gcOSJet_phi,gcOSJet_mass,gcSSJet_pt,gcSSJet_eta,gcSSJet_phi,gcSSJet_mass)")\
+        .Define("Bprime_mass", "Bprime_output[0]")\
+        .Define("Bprime_pt", "Bprime_output[1]")\
+        .Define("Bprime_eta", "Bprime_output[2]")\
+        .Define("Bprime_phi", "Bprime_output[3]")\
+        .Define("Bprime_DR", "Bprime_output[4]")\
+        .Define("Bprime_ptbal", "Bprime_output[5]")\
+        .Define("Bprime_chi2", "Bprime_output[6]")\
+        .Define("Bdecay_obs", "Bprime_output[7]")\
+        .Define("Bprime_chi2_discrete", "Bprime_output[8]")
 
         # Save Snapshot to file
         print(f"-------------------------------------------------")
@@ -301,13 +311,13 @@ class RDFAnalyzer:
         finalFile = "output_snapshot.root"
          #finalFile = f"RDF_{sample}_{year}_{testNum}.root"
          #finalFile = f"RDF_{sample}{self.era}_{year}_{testNum}.root"
-        snapCol = [] 
-
-        opts = ROOT.ROOT.RDF.RSnapshotOptions()
-        if jesvar != "Nominal":
-            opts.fMode = "UPDATE"
-
-        Reconstruction.Snapshot(f"Events_{jesvar}", finalFile, snapCol, opts)
+        #snapCol = [] 
+        
+        # opts = ROOT.RDF.RSnapshotOptions()
+        # if jesvar != "Nominal":
+        #     opts.fMode = "UPDATE"
+                
+        Reconstruction.Snapshot(f"Events_{jesvar}", finalFile, {"Bprime_mass", "Bprime_eta", "Bprime_pt"})
         print(f"Output File: {finalFile}")
         print(f"-------------------------------------------------")
 
@@ -317,10 +327,12 @@ class RDFAnalyzer:
         print("Cut statistics:")
         Reconstruction.Report().Print()
 
-        if jesvar == "Nominal":
-            print("Adding Counter tree to the file:")
-            rdf_runs = ROOT.RDataFrame("Runs", self.files)
-            rdf_runs.Snapshot("Runs", finalFile, rdf_runs.GetColumnNames(), opts)
+        #if jesvar == "Nominal":
+        print("Adding Counter tree to the file:")
+        rdf_runs = ROOT.RDataFrame("Runs", self.files)
+        opts = ROOT.RDF.RSnapshotOptions()
+        opts.fMode = "UPDATE"
+        rdf_runs.Snapshot("Runs", finalFile, rdf_runs.GetColumnNames(), opts)
 
         print("Done!")
 
@@ -335,14 +347,14 @@ def runRDF(inputFile, year):
         root_files = [inputFile]
 
     t = RDFAnalyzer(root_files, year)
-    isData = any(x in inputFile for x in ["Single", "EGamma"])
+    #isData = any(x in inputFile for x in ["Single", "EGamma"])
 
     t.analyzer_RDF("Nominal")
-    
     
     # if isData:
     #     t.analyzer_RDF("Nominal")
     # else:
+        
     #     shifts = ["Nominal", "JECup", "JECdn", "JERup", "JERdn"]
     #     for shift in shifts:
     #         print(f"\nRunning shift {shift}")
@@ -351,7 +363,4 @@ def runRDF(inputFile, year):
 
     print("\nFinished all analyzing")
 
-
 runRDF("inputfile.txt", "2016")
-
-# samplebin ??? 

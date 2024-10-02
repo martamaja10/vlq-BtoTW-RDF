@@ -14,8 +14,12 @@
 #include <stdlib.h>
 using namespace std;
 
-void runRDF(string testNum1, string testNum2, string inputFile, string year)
+void runRDF()
 {
+  string testNum1 = "0";
+  string testNum2 = "0";
+  string inputFile = "inputfile.txt";
+  string year = "2016";
   rdf t(inputFile, testNum1, testNum2, year); // names get set to class members, should be known w/o passing
 
   bool isData = false;
