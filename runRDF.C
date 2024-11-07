@@ -17,8 +17,8 @@ using namespace std;
 void runRDF()
 {
   string testNum1 = "0";
-  string testNum2 = "0";
-  string inputFile = "inputfile.txt";
+  string testNum2 = "100";
+  string inputFile = "samples_files.txt";
   string year = "2016";
   rdf t(inputFile, testNum1, testNum2, year); // names get set to class members, should be known w/o passing
 
@@ -27,7 +27,8 @@ void runRDF()
 
   if(isData) t.analyzer_RDF(testNum1,"Nominal");
   else{
-    vector<TString> shifts = {"Nominal","JECup","JECdn","JERup","JERdn"};
+    //vector<TString> shifts = {"Nominal","JECup","JECdn","JERup","JERdn"};
+    vector<TString> shifts = {"Nominal"};
     for(size_t i = 0; i < shifts.size(); i++){
       cout << "\nRunning shift " << shifts[i] << endl;
 

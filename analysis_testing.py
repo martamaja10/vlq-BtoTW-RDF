@@ -51,8 +51,8 @@ class RDFAnalyzer:
 
 
     def analyzer_RDF(self, jesvar):
-        ROOT.ROOT.EnableImplicitMT(4)
-        print(f"Number of threads: {ROOT.ROOT.GetThreadPoolSize()}")
+        ROOT.ROOT.EnableImplicitMT(8)
+        #print(f"Number of threads: {ROOT.ROOT.GetThreadPoolSize()}")
 
         start_time = time.time()
 
@@ -92,7 +92,7 @@ class RDFAnalyzer:
         #deepjetL = get_year_settings("2016")
 
         rdf_input = ROOT.RDataFrame("Events", self.files)
-
+        ROOT.RDF.Experimental.AddProgressBar(rdf_input)
         # Apply MET filters
         METgeneralFilters = rdf_input.Filter("Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_goodVertices == 1 &&\
                                             Flag_HBHENoiseFilter == 1 && Flag_HBHENoiseIsoFilter == 1 &&\
@@ -134,18 +134,12 @@ class RDFAnalyzer:
                         .Define("VetoIsoEl", "(VetoEl == true && Electron_pt < 55)") \
                         .Define("nVetoIsoLep", "(int) (Sum(VetoIsoMu)+Sum(VetoIsoEl))") \
         
-        tkmutrig = " || HLT_OldMu100 || HLT_TkMu100"
-        eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon200"
-        if year == "2016" or year == "2016APV":
-            tkmutrig = " || HLT_TkMu50"
-            eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon175"
-        if year == "2016APV" and (era == "A" or era == "B"):
-            tkmutrig = ""
-            eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon175"
+        tkmutrig = " || HLT_TkMu50"
+        eltrig = "HLT_Ele115_CaloIdVT_GsfTrkIdT || HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 || HLT_Photon175"
         
         LepSelect = LepDefs.Define("isMu", f"(nMuon > 0) && (HLT_Mu50{tkmutrig}) && (nSignalIsoMu == 1) && (nVetoIsoLep == 0) && (nElectron == 0 or nSignalIsoEl == 0)") \
-        .Define("isEl", f"(nElectron > 0) && ({eltrig}) && (nSignalIsoEl == 1) && (nVetoIsoLep == 0) && (nMuon == 0 or nSignalIsoMu == 0)") \
-        .Filter("isMu || isEl", "Event is either muon or electron") \
+                           .Define("isEl", f"(nElectron > 0) && ({eltrig}) && (nSignalIsoEl == 1) && (nVetoIsoLep == 0) && (nMuon == 0 or nSignalIsoMu == 0)") \
+                           .Filter("isMu || isEl", "Event is either muon or electron") \
         
 
         # Lep Assign
@@ -276,7 +270,6 @@ class RDFAnalyzer:
         # Continue with other processing steps
         # [place holder] 
         # Reconstruction
-
         Reconstruction = Taggers.Define("W_lv", "W_reco(MET_pt,MET_phi,lepton_lv)") \
         .Define("W_pt", "W_lv.Pt()") \
         .Define("W_eta", "W_lv.Eta()") \
@@ -304,12 +297,12 @@ class RDFAnalyzer:
         .Define("Bprime_chi2", "Bprime_output[6]")\
         .Define("Bdecay_obs", "Bprime_output[7]")\
         .Define("Bprime_chi2_discrete", "Bprime_output[8]")
-
+        
         # Save Snapshot to file
         print(f"-------------------------------------------------")
-        print(f">>> Saving {sample} Snapshot...")
-        finalFile = "output_snapshot.root"
-         #finalFile = f"RDF_{sample}_{year}_{testNum}.root"
+        #print(f">>> Saving {sample} Snapshot...")
+        finalFile = "output_snapshot_dataonly.root"
+        #finalFile = f"RDF_{sample}_{year}.root"
          #finalFile = f"RDF_{sample}{self.era}_{year}_{testNum}.root"
         #snapCol = [] 
         
@@ -363,4 +356,6 @@ def runRDF(inputFile, year):
 
     print("\nFinished all analyzing")
 
-runRDF("inputfile.txt", "2016")
+#runRDF("samples_files.txt", "2016")
+runRDF("rootfiles_dataonly.txt", "2016")
+
