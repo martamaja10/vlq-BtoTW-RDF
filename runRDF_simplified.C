@@ -1,9 +1,11 @@
 #include "analyzer_RDF.cc"
-#include "BPrime.cc"   // reco functions
-#include "cleanJet.cc" // assignleps
-#include "generatorInfo.cc" // generator truth
-#include "utilities.cc" // many things
-#include "W_t_reco.cc" // leptonic reco
+#include "BPrime.cc"
+#include "cleanJet.cc"
+#include "cut_ptrel.cc"
+#include "dnnPrep.cc"
+#include "generatorInfo.cc"
+#include "utilities.cc"
+#include "W_t_reco.cc"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -14,23 +16,19 @@ using namespace std;
 
 void runRDF()
 {
-  //rdf t(inputFile, testNum1, testNum2, year); // names get set to class members, should be known w/o passing
-
-  //t.analyzer_RDF(testNum1);
-
   string testNum1 = "0";
-  string testNum2 = "10";
+  string testNum2 = "100";
   string inputFile = "samples_files.txt";
   string year = "2016";
   rdf t(inputFile, testNum1, testNum2, year); // names get set to class members, should be known w/o passing
-
 
   bool isData = false;
   if(inputFile.find("Single") != std::string::npos || inputFile.find("EGamma") != std::string::npos) isData = true;
 
   if(isData) t.analyzer_RDF(testNum1,"Nominal");
   else{
-    vector<TString> shifts = {"Nominal","JECup","JECdn","JERup","JERdn"};
+    //vector<TString> shifts = {"Nominal","JECup","JECdn","JERup","JERdn"};
+    vector<TString> shifts = {"Nominal"};
     for(size_t i = 0; i < shifts.size(); i++){
       cout << "\nRunning shift " << shifts[i] << endl;
 
